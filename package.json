@@ -1,0 +1,23 @@
+{
+  "name": "jermin-odcheo.github.io",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jermin-Odcheo/Jermin-Odcheo.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jermin-Odcheo/Jermin-Odcheo.github.io/issues"
+  },
+  "homepage": "https://github.com/Jermin-Odcheo/Jermin-Odcheo.github.io#readme",
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "tailwindcss": "^4.1.10"
+  }
+}
