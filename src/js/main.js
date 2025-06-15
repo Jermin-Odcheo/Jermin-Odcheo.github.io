@@ -74,11 +74,16 @@ document.addEventListener('DOMContentLoaded', function() {
         let delay = 100;
         projectItems.forEach(item => {
             item.style.opacity = '0';
-            item.style.transform = 'translateY(20px)';
+            // Only transform the card itself, not the section
+            if (!item.classList.contains('section')) {
+                item.style.transform = 'translateY(20px)';
+            }
             
             setTimeout(() => {
                 item.style.opacity = '1';
-                item.style.transform = 'translateY(0)';
+                if (!item.classList.contains('section')) {
+                    item.style.transform = 'translateY(0)';
+                }
             }, delay);
             
             delay += 100;
@@ -96,13 +101,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Trigger any other section-specific animations
                 entry.target.classList.add('in-view');
+                
+                // Ensure section spacing is maintained
+                entry.target.style.transition = 'opacity 0.5s ease';
+                entry.target.style.opacity = '1';
+                
                 observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
     
-    // Observe sections for scroll animations
+    // Observe sections for scroll animations but preserve spacing
     document.querySelectorAll('section').forEach(section => {
+        // Set initial state but don't change the padding/margin
+        section.style.opacity = '0.95';
+        
+        // Ensure we don't mess with padding or margin via JS
+        const originalPadding = window.getComputedStyle(section).padding;
+        const originalMargin = window.getComputedStyle(section).margin;
+        
+        // Apply preserved spacing
+        section.setAttribute('data-original-padding', originalPadding);
+        section.setAttribute('data-original-margin', originalMargin);
+        
         observer.observe(section);
     });
     
@@ -139,6 +160,32 @@ document.addEventListener('DOMContentLoaded', function() {
             sectionObserver.observe(header.closest('section'));
         }
     });
+    
+    // Add explicit fix for section spacing
+    function ensureSectionSpacing() {
+        document.querySelectorAll('section').forEach(section => {
+            // Force the browser to respect our Tailwind spacing classes
+            const computedStyle = window.getComputedStyle(section);
+            const currentPaddingTop = computedStyle.paddingTop;
+            const currentPaddingBottom = computedStyle.paddingBottom;
+            const currentMarginTop = computedStyle.marginTop;
+            const currentMarginBottom = computedStyle.marginBottom;
+            
+            // Apply inline styles with !important to override any JS modifications
+            section.style.setProperty('padding-top', currentPaddingTop, 'important');
+            section.style.setProperty('padding-bottom', currentPaddingBottom, 'important');
+            section.style.setProperty('margin-top', currentMarginTop, 'important');
+            section.style.setProperty('margin-bottom', currentMarginBottom, 'important');
+        });
+    }
+    
+    // Call immediately and again after a short delay to ensure it's applied
+    ensureSectionSpacing();
+    setTimeout(ensureSectionSpacing, 500);
+    setTimeout(ensureSectionSpacing, 1000);
+    
+    // Also ensure spacing is maintained on window resize
+    window.addEventListener('resize', ensureSectionSpacing);
 });
 
 // Loading screen and animations
@@ -154,6 +201,19 @@ window.addEventListener('load', () => {
         const heroContent = document.getElementById('hero-content');
         heroContent.classList.remove('opacity-0', 'translate-y-10');
     }, 700);
+    
+    // Force section spacing again after everything is loaded
+    document.querySelectorAll('section').forEach(section => {
+        const originalPaddings = section.className.split(' ')
+            .filter(cls => cls.startsWith('p-') || cls.startsWith('pt-') || cls.startsWith('pb-') || 
+                   cls.startsWith('m-') || cls.startsWith('mt-') || cls.startsWith('mb-'));
+                   
+        // Re-add classes to enforce them
+        originalPaddings.forEach(cls => {
+            section.classList.remove(cls);
+            setTimeout(() => section.classList.add(cls), 10);
+        });
+    });
 });
 
 // Navbar behavior
