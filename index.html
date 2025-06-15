@@ -33,32 +33,7 @@
             animation: blink 1s step-end infinite;
         }
         
-        /* Explicit spacing for sections */
-        #hero {
-            padding-top: 6rem;
-            padding-bottom: 6rem;
-            margin-bottom: 5rem;
-        }
-        
-        #about {
-            padding-top: 8rem !important;
-            padding-bottom: 8rem !important;
-            margin-top: 5rem !important;
-            margin-bottom: 5rem !important;
-        }
-        
-        #skills {
-            padding-top: 8rem !important;
-            padding-bottom: 8rem !important;
-            margin-top: 5rem !important;
-            margin-bottom: 5rem !important;
-        }
-        
-        #projects {
-            padding-top: 8rem !important;
-            padding-bottom: 8rem !important;
-            margin-top: 5rem !important;
-        }
+
     </style>
 </head>
 
@@ -144,7 +119,7 @@
 
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="relative flex flex-col justify-center items-center h-screen w-full bg-gray-100">
+        <section id="hero" class="relative flex flex-col justify-center items-center h-screen w-full bg-gray-100 mb-24">
             <!-- Main content (stays centered) -->
             <div class="container max-w-4xl mx-auto p-16 text-center space-y-6 transform transition-all duration-700 opacity-0 translate-y-10"
                 id="hero-content">
@@ -161,7 +136,7 @@
             </div>
         </section>
 
-        <section id="about" class="flex flex-col min-h-screen bg-gray-50 px-12 pt-64 pb-48">
+        <section id="about" class="flex flex-col min-h-screen bg-gray-50 px-12 pt-40 pb-40 mt-24 mb-24 space-y-16">
             <!-- Heading at the top -->
             <div class="text-center mb-20">
                 <h1 class="text-4xl font-bold text-gray-900 mb-6 ">> About Me:~$ <span
@@ -169,7 +144,7 @@
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto">Learn about me and my skills</p>
             </div>
             <!-- Terminal in the middle -->
-            <div class="flex-grow flex items-center justify-center mt-12 mb-16">
+            <div class="flex-grow flex items-center justify-center mt-20 mb-20">
                 <div
                     class="w-full max-w-4xl rounded-lg shadow-xl overflow-hidden bg-gray-900 transition-shadow hover:shadow-2xl">
                     <!-- title bar -->
@@ -250,7 +225,7 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="pt-64 pb-48 bg-gradient-to-b from-gray-50 to-gray-100">
+        <section id="skills" class="pt-40 pb-40 mt-24 mb-24 space-y-16 bg-gradient-to-b from-gray-50 to-gray-100">
             <div class="container mx-auto px-6 max-w-7xl">
                 <!-- Header Section -->
                 <div class="text-center mb-24">
@@ -708,7 +683,7 @@
 
 
         <!-- Projects Section -->
-        <section id="projects" class="px-12 pt-48 pb-28 bg-gray-900 text-gray-50">
+        <section id="projects" class="px-12 pt-40 pb-40 mt-24 space-y-16 bg-gray-900 text-gray-50">
             <div class="container mx-auto px-4">
                 <!-- Section Header -->
                 <div class="text-center mb-28 ">
