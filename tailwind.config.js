@@ -3,6 +3,9 @@ module.exports = {
     content: ['./*.html', './dist/**/*.html', "./resources/**/*.blade.php", "./resources/**/*.js", "./resources/**/*.vue",],
     theme: {
         extend: {
+          spacing: {
+            '32': '8rem', // Ensure 32 is defined
+        },
             width: {
                 '7/10': '70%',
             },
@@ -48,7 +51,9 @@ module.exports = {
         'bg-purple-100', 'text-blue-800', 'text-green-800', 'text-yellow-800', 'text-orange-800',
         'text-indigo-200', 'text-indigo-300', 'text-teal-100', 'text-teal-200', 'text-teal-300',
         'text-pink-100', 'text-pink-200', 'text-amber-100', 'text-amber-200', 'text-amber-300',
+        'text-blue-500', 'text-blue-600', 'text-blue-700', 'text-blue-800', 'text-blue-900',
         'text-blue-100', 'text-blue-200', 'text-blue-300', 'text-purple-100', 'text-purple-200', 'text-purple-300',
+        'bg-gray-200', 'bg-gray-300', 'bg-gray-400', 'bg-gray-500', 'bg-gray-600', 'bg-gray-700', 'bg-gray-800', 'bg-gray-900',
         'shadow-indigo-500/20', 'shadow-indigo-500/30', 'shadow-indigo-600/20', 'shadow-indigo-700/30',
         'shadow-teal-500/20', 'shadow-teal-500/30', 'shadow-pink-500/20', 'shadow-pink-500/30',
         'shadow-amber-500/20', 'shadow-amber-500/30', 'shadow-blue-500/20', 'shadow-blue-500/30',
@@ -59,6 +64,9 @@ module.exports = {
         'from-pink-500', 'from-pink-600', 'to-pink-500', 'to-pink-600', 'to-pink-700',
         'from-amber-500', 'from-amber-600', 'to-amber-500', 'to-amber-600', 'to-amber-700',
         'from-blue-500', 'from-blue-600', 'to-blue-500', 'to-blue-600', 'to-blue-700',
-        'blur-lg', 'group-hover:opacity-20', 'group-hover:opacity-30', 'opacity-0', 'opacity-10', 'opacity-20'
+        'blur-lg', 'group-hover:opacity-20', 'group-hover:opacity-30', 'opacity-0', 'opacity-10', 'opacity-20',
+        'text-gray-50', 'text-gray-100', 'text-gray-200', 'text-gray-300', 'text-gray-400', 'bg-gray-900', 'bg-gray-950',
+        'text-yellow-300', 'text-green-300', 'text-blue-300', 'text-pink-300', 'text-purple-300', 'text-red-300', 
+        'bg-gray-800', 'bg-gray-850', 'py-32'
     ]
 }
