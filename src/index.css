@@ -1,1 +1,80 @@
 @import "tailwindcss";
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes skill-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(107, 114, 128, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(107, 114, 128, 0.3), 0 0 80px rgba(107, 114, 128, 0.1); }
+}
+
+.skill-card {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(156, 163, 175, 0.1);
+}
+
+.skill-card:hover {
+    animation: skill-glow 2s ease-in-out infinite;
+}
+
+.skill-icon {
+    background: linear-gradient(135deg, #111827 0%, #374151 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(156, 163, 175, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.group:hover .skill-icon::before {
+    animation: shimmer 1.5s ease-in-out infinite;
+    opacity: 1;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.skill-label {
+    background: linear-gradient(90deg, #374151, #6b7280);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.diamond {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.circle {
+    border-radius: 50%;
+}
+
+.octagon {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
