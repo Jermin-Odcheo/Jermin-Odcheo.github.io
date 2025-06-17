@@ -70,3 +70,4 @@ module.exports = {
         'bg-gray-800', 'bg-gray-850', 'py-32'
     ]
 }
+

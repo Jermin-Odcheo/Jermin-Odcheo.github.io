@@ -1,19 +1,6 @@
 @import "tailwindcss";
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(2.4); opacity: 0; }
-}
-
-@keyframes skill-glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(107, 114, 128, 0.1); }
-    50% { box-shadow: 0 0 40px rgba(107, 114, 128, 0.3), 0 0 80px rgba(107, 114, 128, 0.1); }
-}
+@import "flag-icons/css/flag-icons.min.css";
+/* Keyframes for float, pulse-ring, skill-glow, shimmer, fade-in-up, and gradient have been moved to tailwind.config.js */
 
 .skill-card {
     background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
@@ -22,7 +9,7 @@
 }
 
 .skill-card:hover {
-    animation: skill-glow 2s ease-in-out infinite;
+    animation: skill-glow 2s ease-in-out infinite; /* skill-glow keyframes now in tailwind.config.js */
 }
 
 .skill-icon {
@@ -45,13 +32,8 @@
 }
 
 .group:hover .skill-icon::before {
-    animation: shimmer 1.5s ease-in-out infinite;
+    animation: shimmer 1.5s ease-in-out infinite; /* shimmer keyframes now in tailwind.config.js */
     opacity: 1;
-}
-
-@keyframes shimmer {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .skill-label {
