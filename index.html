@@ -26,8 +26,8 @@
             animation: blink 1s step-end infinite;
         }
     </style>
-  <script type="module" crossorigin src="/assets/index-CU5yxw-E.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-Qkk0dE2F.css">
+  <script type="module" crossorigin src="/assets/index-nIDIs6QR.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DO-SLzi8.css">
 </head>
 
 <body class="font-sans bg-gray-50 ">
@@ -113,7 +113,7 @@
 
 <main>
     <!-- About Section -->
-    <section id="about" class="flex flex-col py-24 ">
+    <section id="about" class="flex flex-col pt-24">
         <div class="container mx-auto px-6">
             <!-- Heading at the top -->
             <div class="text-center mb-4.5">
@@ -197,7 +197,7 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="relative z-10 w-[80%] max-w-6xl mx-auto text-center py-20">
+    <section id="skills" class="relative z-10 w-[80%] max-w-6xl mx-auto text-center py-1.5 pb-24">
         <!-- Header with Creative Typography -->
         <div class="mb-16 relative">
             <h2 class="text-5xl font-black mb-4 relative">
@@ -351,7 +351,6 @@
             <!-- Filter Buttons -->
             <div class="flex justify-center mb-12">
                 <div class="inline-flex bg-[#374151] rounded-full divide-x divide-[#9ca3af] overflow-hidden">
-                    <!-- default "active" pill: -->
                     <button
                             class="filter-btn px-6 py-3 tracking-wide rounded-l-full font-medium bg-[#9ca3af] text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#9ca3af]"
                             data-filter="all">
@@ -374,22 +373,19 @@
                     </button>
                 </div>
             </div>
+
             <!-- Projects Container -->
             <div class="mt-8 container mx-auto">
                 <!-- Featured Project (Thesis) -->
                 <div class="project-card thesis mb-12" data-category="thesis">
-                    <div
-                            class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                         <div class="p-1.5 bg-gray-700 flex items-center">
-                                <span class="bg-gray-800 text-gray-200 px-3 py-1 text-sm font-mono rounded">Featured
-                                    Project</span>
-                            <span class="ml-2 bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Thesis
-                                    Project</span>
+                            <span class="bg-gray-800 text-gray-200 px-3 py-1 text-sm font-mono rounded">Featured Project</span>
+                            <span class="ml-2 bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Thesis Project</span>
                         </div>
                         <div class="grid md:grid-cols-5 gap-0">
                             <!-- Project Header/Image (Left side) -->
-                            <div
-                                    class="md:col-span-2 bg-gradient-to-br from-blue-900 to-blue-800 flex items-center justify-center p-8 min-h-[280px] border-r border-gray-700">
+                            <div class="md:col-span-2 bg-gradient-to-br from-blue-900 to-blue-800 flex items-center justify-center p-8 min-h-[280px] border-r border-gray-700">
                                 <div class="text-center">
                                     <h4 class="text-3xl font-bold text-white mb-3 drop-shadow-lg">NaviBot</h4>
                                     <p class="text-blue-100 text-lg font-medium">AI-Powered Chatbot</p>
@@ -409,61 +405,58 @@
                                     Technology (BSIT) program at Saint Louis University (SLU).
                                 </p>
 
-                                <!-- Technologies Used: -->
+                                <!-- Technologies Used -->
                                 <div class="technologies-used mt-6">
                                     <h4 class="text-sm font-semibold text-gray-400 mb-3">Technologies Used:</h4>
-                                    <div class="flex flex-wrap gap-2 mb-4">
-                                            <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Generative
-                                                AI</span>
-                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Natural
-                                                Language Processing</span>
-                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Chatbot
-                                                Framework</span>
-                                        <span
-                                                class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Python</span>
-                                        <span
-                                                class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">BART</span>
-                                        <span
-                                                class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">HTML/CSS</span>
+                                    <div class="flex flex-wrap gap-2 mb-6">
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Generative AI</span>
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Natural Language Processing</span>
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Chatbot Framework</span>
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">Python</span>
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">BART</span>
+                                        <span class="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">HTML/CSS</span>
                                     </div>
                                 </div>
 
-                                <a href="#"
-                                   class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 mt-auto">
-                                    <i class="fa-brands fa-github mr-2"></i>
-                                    View on GitHub
-                                </a>
+                                <!-- Action Buttons -->
+                                <div class="flex gap-4 items-center">
+                                    <button
+                                            class="screenshot-btn inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-300 font-medium"
+                                            data-project="navibot">
+                                        <i class="fas fa-images mr-2"></i>
+                                        View Screenshots
+                                    </button>
+                                    <button
+                                            class="like-btn inline-flex items-center text-gray-400 hover:text-red-400 transition-colors duration-300"
+                                            data-project="navibot">
+                                        <i class="far fa-heart mr-2"></i>
+                                        <span class="like-count">42</span>
+                                    </button>
+                                    <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300">
+                                        <i class="fa-brands fa-github mr-2"></i>
+                                        View on GitHub
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Other Projects Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Internship Project -->
                     <div class="project-card internship" data-category="internship">
-                        <div
-                                class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-[480px] hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-[520px] hover:shadow-xl transition-all duration-300">
                             <div class="p-1.5 bg-gray-700 flex items-center">
-                                    <span
-                                            class="bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Internship
-                                        Project</span>
+                                <span class="bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Internship Project</span>
                             </div>
 
                             <!-- Project Header -->
-                            <div
-                                    class="bg-gradient-to-br from-green-900 to-green-700 p-8 border-b border-gray-700 relative overflow-hidden min-h-[160px]">
+                            <div class="bg-gradient-to-br from-green-900 to-green-700 p-8 border-b border-gray-700 relative overflow-hidden min-h-[160px]">
                                 <div class="relative z-10">
-                                    <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-lg">Inventory
-                                        Management System</h3>
+                                    <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-lg">Inventory Management System</h3>
                                     <p class="text-green-100 font-medium">Web Application</p>
                                     <div class="mt-4 w-16 h-1 bg-green-300 rounded-full shadow-lg"></div>
-                                </div>
-                                <div
-                                        class="absolute top-0 right-0 w-24 h-24 bg-green-600 rounded-full opacity-20 -mr-8 -mt-8">
-                                </div>
-                                <div
-                                        class="absolute bottom-0 left-0 w-16 h-16 bg-green-600 rounded-full opacity-20 -ml-4 -mb-4">
                                 </div>
                             </div>
 
@@ -477,55 +470,49 @@
                                     control, real-time updates, and modern UI components for TMDD SLU.
                                 </p>
 
-                                <div class="mb-8">
+                                <div class="mb-6">
                                     <h4 class="text-md font-mono text-gray-200 mb-3">Technologies Used:</h4>
                                     <div class="flex flex-wrap gap-2">
-                                            <span
-                                                    class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">PHP</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">JavaScript</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">MySQL</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Bootstrap</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">PHP</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">JavaScript</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">MySQL</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Bootstrap</span>
                                     </div>
                                 </div>
 
-                                <a href="#"
-                                   class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 mt-auto">
-                                    <i class="fa-brands fa-github mr-2"></i>
-                                    View on GitHub
-                                </a>
+                                <!-- Action Buttons -->
+                                <div class="flex gap-4 items-center mt-auto">
+                                    <button
+                                            class="screenshot-btn inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                                            data-project="inventory">
+                                        <i class="fas fa-images mr-2"></i>
+                                        Screenshots
+                                    </button>
+
+                                    <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 text-sm">
+                                        <i class="fa-brands fa-github mr-2"></i>
+                                        GitHub
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Academic Project -->
                     <div class="project-card academic" data-category="academic">
-                        <div
-                                class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-[480px] hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-[520px] hover:shadow-xl transition-all duration-300">
                             <div class="p-1.5 bg-gray-700 flex items-center">
-                                    <span class="bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Academic
-                                        Project</span>
+                                <span class="bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Academic Project</span>
                             </div>
 
                             <!-- Project Header -->
-                            <div
-                                    class="bg-[url('/src/assets/academic-project/anime-rest-api/Anime.jpeg')] bg-cover  p-8 border-b border-gray-700 relative overflow-hidden min-h-[160px]">
+                            <div class="bg-[url('/src/assets/academic-project/anime-rest-api/Anime.jpeg')] bg-cover p-8 border-b border-gray-700 relative overflow-hidden min-h-[160px]">
                                 <div class="absolute inset-0 bg-black opacity-70"></div>
                                 <div class="relative z-10">
-                                    <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-lg">Anime Fetch API
-                                    </h3>
+                                    <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-lg">Anime Fetch API</h3>
                                     <p class="text-purple-100 font-medium">Web Application</p>
                                     <div class="mt-4 w-16 h-1 bg-purple-300 rounded-full shadow-lg"></div>
-                                </div>
-                                <div
-                                        class="absolute top-0 right-0 w-24 h-24 bg-purple-600 rounded-full opacity-20 -mr-8 -mt-8">
-                                </div>
-                                <div
-                                        class="absolute bottom-0 left-0 w-16 h-16 bg-purple-600 rounded-full opacity-20 -ml-4 -mb-4">
                                 </div>
                             </div>
 
@@ -539,92 +526,54 @@
                                     that fetches and displays anime data using external APIs with modern UI design.
                                 </p>
 
-                                <div class="mb-8">
+                                <div class="mb-6">
                                     <h4 class="text-md font-mono text-gray-200 mb-3">Technologies Used:</h4>
                                     <div class="flex flex-wrap gap-2">
-                                            <span
-                                                    class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">JavaScript</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">REST
-                                                API</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Fetch
-                                                API</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
-
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">JavaScript</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">REST API</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
+                                        <span class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Fetch API</span>
                                     </div>
                                 </div>
 
-                                <a href="https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly.git"
-                                   class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 mt-auto">
-                                    <i class="fa-brands fa-github mr-2"></i>
-                                    View on GitHub
-                                </a>
+                                <!-- Action Buttons -->
+                                <div class="flex gap-4 items-center mt-auto">
+                                    <button
+                                            class="screenshot-btn inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg transition-colors duration-300 text-sm font-medium"
+                                            data-project="anime">
+                                        <i class="fas fa-images mr-2"></i>
+                                        Screenshots
+                                    </button>
+
+                                    <a href="https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly.git"
+                                       class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 text-sm">
+                                        <i class="fa-brands fa-github mr-2"></i>
+                                        GitHub
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Personal Project -->
-                    <div class="project-card academic" data-category="academic">
-                        <div
-                                class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-[480px] hover:shadow-xl transition-all duration-300">
-                            <div class="p-1.5 bg-gray-700 flex items-center">
-                                <span class="bg-gray-800 text-gray-300 px-3 py-1 text-sm font-mono rounded">Personal Project</span>
-                            </div>
+                </div>
+            </div>
+        </div>
 
-                            <!-- Project Header -->
-                            <div
-                                    class="bg-gradient-to-br from-orange-900 to-orange-700 p-8 border-b border-gray-700 relative overflow-hidden min-h-[160px]">
-                                <div class="relative z-10">
-                                    <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-lg">Portfolio Website
-                                    </h3>
-                                    <p class="text-orange-100 font-medium">Personal Website</p>
-                                    <div class="mt-4 w-16 h-1 bg-orange-300 rounded-full shadow-lg"></div>
-                                </div>
-                                <div
-                                        class="absolute top-0 right-0 w-24 h-24 bg-orange-600 rounded-full opacity-20 -mr-8 -mt-8">
-                                </div>
-                                <div
-                                        class="absolute bottom-0 left-0 w-16 h-16 bg-orange-600 rounded-full opacity-20 -ml-4 -mb-4">
-                                </div>
-                            </div>
+        <!-- Screenshot Modal -->
+        <div id="screenshotModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-gray-800 rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-700">
+                    <h3 id="modalTitle" class="text-2xl font-bold text-white">Project Screenshots</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
 
-                            <div class="p-8 bg-gray-800 flex-1 flex flex-col">
-                                <div class="bg-gray-900 inline-block px-4 py-2 rounded-lg mb-4">
-                                    <h3 class="text-xl font-bold text-orange-300">Portfolio Website</h3>
-                                </div>
-
-                                <p class="text-gray-300 mb-6 leading-relaxed flex-grow">
-                                    A personal portfolio website showcasing my projects, skills, and experience.
-                                    Built with modern web technologies and featuring a clean, responsive design.
-                                </p>
-
-                                <div class="mb-8">
-                                    <h4 class="text-md font-mono text-gray-200 mb-3">Technologies Used:</h4>
-                                    <div class="flex flex-wrap gap-2">
-                                            <span
-                                                    class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">HTML/CSS</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">JavaScript</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Tailwind CSS</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">React</span>
-                                        <span
-                                                class="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs font-mono">Vite</span>
-                                    </div>
-                                </div>
-
-                                <a href="#"
-                                   class="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 mt-auto">
-                                    <i class="fa-brands fa-github mr-2"></i>
-                                    View on GitHub
-                                </a>
-                            </div>
-                        </div>
+                <!-- Modal Content -->
+                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <div id="screenshotContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Screenshots will be dynamically loaded here -->
                     </div>
                 </div>
             </div>
