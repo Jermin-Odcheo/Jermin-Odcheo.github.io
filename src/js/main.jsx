@@ -39,17 +39,6 @@ function Hero() {
         className={`container max-w-4xl mx-auto px-8 text-center space-y-8 transform transition-all duration-1000
 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       >
-        {/* Profile Avatar */}
-        <div className="relative mx-auto w-32 h-32 mb-8">
-          <div className="w-32 h-32 rounded-full bg-gradient-to-r from-[#6b7280] to-[#9ca3af] p-1 hover:scale-110 transition-transform duration-300">
-            <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-r from-[#111827] to-[#374151] flex items-center justify-center text-[#f9fafb] text-2xl font-bold">
-                JO
-              </div>
-            </div>
-          </div>
-          <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#9ca3af] rounded-full border-2 border-[#f9fafb] animate-pulse" />
-        </div>
 
         {/* Name & Location */}
         <h1 className="text-6xl md:text-7xl font-bold leading-tight text-[#f9fafb] hover:scale-105 transition-transform duration-300">
