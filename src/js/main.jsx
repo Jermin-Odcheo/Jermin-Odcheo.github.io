@@ -1,10 +1,13 @@
-
 // src/js/main.jsx
-
 import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../index.css';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+
+import inventoryLogin from '../../public/assets/internship-project/ims_login.png';
+import inventoryDashboard from '../../public/assets/internship-project/ims_dashboard.png';
+import animeHomepage from '../../public/assets/academic-project/anime-rest-api/Anime.jpeg';
+import mangaHomepage from '../../public/assets/academic-project/anime-rest-api/Manga.jpeg';
 
 // Hero section component
 function Hero() {
@@ -143,23 +146,17 @@ function App() {
     }, { threshold: 0.5 });
     document.querySelectorAll('section[id]').forEach((sec) => observer.observe(sec));
 
-    // Screenshot modal & lightbox setup data
+// Then in your projectScreenshots object
     const projectScreenshots = {
       navibot: [
-        { src: '/src/assets/project-screenshots/navibot/screenshot1.jpg', caption: 'NaviBot Interface' },
-        { src: '/src/assets/project-screenshots/navibot/screenshot2.jpg', caption: 'Chat Interaction' }
       ],
       inventory: [
-        { src: '/src/assets/internship-project/ims_login.png', caption: 'Login' },
-        { src: '/src/assets/internship-project/ims_dashboard.png', caption: 'Dashboard' }
+        { src: inventoryLogin, caption: 'Login' },
+        { src: inventoryDashboard, caption: 'Dashboard' }
       ],
       anime: [
-        { src: '/src/assets/academic-project/anime-rest-api/Anime.jpeg', caption: 'Anime Homepage' },
-        { src: '/src/assets/academic-project/anime-rest-api/Manga.jpeg', caption: 'Manga Homepage' }
-      ],
-      portfolio: [
-        { src: '/src/assets/project-screenshots/portfolio/screenshot1.jpg', caption: 'Portfolio Design' },
-        { src: '/src/assets/project-screenshots/portfolio/screenshot2.jpg', caption: 'Projects Section' }
+        { src: animeHomepage, caption: 'Anime Homepage' },
+        { src: mangaHomepage, caption: 'Manga Homepage' }
       ]
     };
 
