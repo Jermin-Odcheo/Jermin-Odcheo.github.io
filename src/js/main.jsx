@@ -55,6 +55,15 @@ function FloatingNavbar() {
     };
   }, []);
 
+  // Function to handle smooth scrolling without adding # to URL
+  const scrollToSection = (sectionId, e) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
       <header>
         <div id="floating-navbar" className="fixed top-6 inset-x-0 z-50 pointer-events-none">
@@ -64,7 +73,12 @@ function FloatingNavbar() {
             }`}>
               {/* Logo/Name on the left */}
               <div className="flex items-center space-x-6">
-                <a href="#" className="text-gray-50 font-bold text-xl">Jermin</a>
+                <a
+                  onClick={(e) => scrollToSection('hero', e)}
+                  className="text-gray-50 font-bold text-xl cursor-pointer"
+                >
+                  Jermin
+                </a>
                 <div className="flex items-center space-x-4">
                   <a href="https://www.linkedin.com/in/jerminodcheo" target="_blank" rel="noopener noreferrer"
                      className="text-gray-400 hover:text-gray-50 transition-colors p-2 rounded-lg hover:bg-gray-800">
@@ -85,8 +99,8 @@ function FloatingNavbar() {
                 {['about', 'projects', 'contact'].map((section) => (
                     <a
                         key={section}
-                        href={`#${section}`}
-                        className={`py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors ${
+                        onClick={(e) => scrollToSection(section, e)}
+                        className={`py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer ${
                             activeSection === section ? 'text-gray-50' : 'text-gray-400 hover:text-gray-50'
                         }`}
                     >
@@ -109,6 +123,15 @@ function Hero() {
     const timer = setTimeout(() => setLoaded(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Function to handle smooth scrolling without adding # to URL
+  const scrollToSection = (sectionId, e) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
       <section
@@ -186,7 +209,10 @@ function Hero() {
           </div>
 
           {/* Scroll Arrow */}
-          <a href="#about" className="mt-12 flex justify-center items-center animate-bounce hover:animate-pulse text-[#f9fafb] w-full">
+          <a
+            onClick={(e) => scrollToSection('about', e)}
+            className="mt-12 flex justify-center items-center animate-bounce hover:animate-pulse text-[#f9fafb] w-full cursor-pointer"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
@@ -348,7 +374,7 @@ function TerminalAbout() {
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-12">
               <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                &gt; About Me:~$ <span className="inline-block animate-pulse">▉</span>
+                &gt; About Me:~$ <span className="inline-block blink">▉</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">Learn about me and my skills</p>
             </div>
@@ -437,7 +463,7 @@ function Skills() {
               <span className="bg-gradient-to-r from-gray-900 via-gray-600 to-gray-900 bg-clip-text text-transparent">&gt; Languages</span>
               <span className="text-gray-400 mx-4">&</span>
               <span className="bg-gradient-to-r from-gray-900 via-gray-600 to-gray-900 bg-clip-text text-transparent">Tools:~$</span>
-              <span className="inline-block animate-pulse text-gray-900">▉</span>
+              <span className="inline-block blink text-gray-900">▉</span>
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto"></div>
           </div>
@@ -489,7 +515,7 @@ function Projects() {
       subtitle: 'AI-Powered Chatbot',
       description: 'An intelligent chatbot utilizing generative AI to efficiently handle and streamline enrollment-related FAQs for the Bachelor of Science in Information Technology (BSIT) program at Saint Louis University (SLU).',
       technologies: ['Generative AI', 'Natural Language Processing', 'Python', 'BART', 'HTML/CSS'],
-      github: '#',
+      github: '',
       gradient: 'from-blue-900/60 to-blue-800/60',
       buttonGradient: 'from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800',
       badgeColor: 'bg-blue-600'
@@ -500,8 +526,15 @@ function Projects() {
       title: 'Inventory Management System',
       subtitle: 'Web Application',
       description: 'A comprehensive inventory management system built with PHP, featuring role-based access control, real-time updates, and modern UI components for TMDD SLU.',
-      technologies: ['PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
-      github: '#',
+      technologies: [
+        'HTML/CSS',
+        'PHP',
+        'JavaScript',
+        'SQL',
+        'Bootstrap',
+        'WAMP/XAMPP'
+      ],
+      github: 'https://github.com/Jermin-Odcheo/Inventory-Management-System-TMDD',
       image: inventoryDashboard,
       gradient: 'from-green-900/60 to-green-800/60',
       buttonGradient: 'from-green-500 to-green-700 hover:from-green-600 hover:to-green-800',
@@ -551,7 +584,7 @@ function Projects() {
           {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-gray-50 mb-4">
-              &gt; My Projects:~$ <span className="inline-block animate-pulse">▉</span>
+              &gt; My Projects:~$ <span className="inline-block blink">▉</span>
             </h2>
             <p className="text-gray-300 text-xl max-w-3xl mx-auto">
               A collection of academic, internship, and thesis projects showcasing my development skills and experience.
@@ -752,6 +785,15 @@ function Projects() {
 
 // Footer Component
 function Footer() {
+  // Function to handle smooth scrolling without adding # to URL
+  const scrollToSection = (sectionId, e) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
       <footer className="bg-gray-900 text-gray-400 border-t border-gray-800">
         <div className="container max-w-7xl mx-auto px-6 py-16">
@@ -779,11 +821,10 @@ function Footer() {
             <div className="col-span-1">
               <h3 className="text-lg font-semibold text-gray-50 mb-6">Quick Links</h3>
               <ul className="space-y-4">
-                <li><a href="#about" className="hover:text-gray-50 transition-colors py-2 block">About</a></li>
-                <li><a href="#skills" className="hover:text-gray-50 transition-colors py-2 block">Skills</a></li>
-                <li><a href="#projects" className="hover:text-gray-50 transition-colors py-2 block">Projects</a></li>
-                <li><a href="#contact" className="hover:text-gray-50 transition-colors py-2 block">Contact</a></li>
-              </ul>
+                <li><a onClick={(e) => scrollToSection('about', e)} className="hover:text-gray-50 transition-colors py-2 block cursor-pointer">About</a></li>
+                <li><a onClick={(e) => scrollToSection('skills', e)} className="hover:text-gray-50 transition-colors py-2 block cursor-pointer">Skills</a></li>
+                <li><a onClick={(e) => scrollToSection('projects', e)} className="hover:text-gray-50 transition-colors py-2 block cursor-pointer">Projects</a></li>
+            </ul>
             </div>
 
             {/* Contact Info */}
@@ -842,3 +883,4 @@ function App() {
 // Bootstrap React
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
+
