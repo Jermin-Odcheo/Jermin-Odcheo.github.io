@@ -8,6 +8,9 @@ import inventoryLogin from '../../public/assets/internship-project/ims_login.png
 import inventoryDashboard from '../../public/assets/internship-project/ims_dashboard.png';
 import animeHomepage from '../../public/assets/academic-project/anime-rest-api/Anime.jpeg';
 import mangaHomepage from '../../public/assets/academic-project/anime-rest-api/Manga.jpeg';
+import thesisChat1 from '../../public/assets/thesis-project/Chat1.jpeg';
+import thesisChat2 from '../../public/assets/thesis-project/Chat2.jpeg';
+import thesisHomepage from '../../public/assets/thesis-project/homepage.jpeg';
 
 // Loading Screen Component
 function LoadingScreen() {
@@ -495,7 +498,11 @@ function Projects() {
   const [fullImage, setFullImage] = useState('');
 
   const projectScreenshots = {
-    navibot: [],
+    navibot: [
+      { src: thesisChat1, caption: 'Chatbot Interface 1' },
+      { src: thesisChat2, caption: 'Chatbot Interface 2' },
+      {src: thesisHomepage, caption: 'NaviBot Homepage' }
+    ],
     inventory: [
       { src: inventoryLogin, caption: 'Login' },
       { src: inventoryDashboard, caption: 'Dashboard' }
@@ -516,6 +523,7 @@ function Projects() {
       description: 'An intelligent chatbot utilizing generative AI to efficiently handle and streamline enrollment-related FAQs for the Bachelor of Science in Information Technology (BSIT) program at Saint Louis University (SLU).',
       technologies: ['Generative AI', 'Natural Language Processing', 'Python', 'BART', 'HTML/CSS'],
       github: '',
+      image: thesisHomepage,
       gradient: 'from-blue-900/60 to-blue-800/60',
       buttonGradient: 'from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800',
       badgeColor: 'bg-blue-600'
@@ -623,7 +631,15 @@ function Projects() {
                   <div className="grid md:grid-cols-5 gap-0">
                     <div className="md:col-span-2 bg-blue-900/40 flex items-center justify-center p-12 min-h-[320px] relative overflow-hidden">
                       <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} z-10`}></div>
+                      {project.image && (
+                          <img
+                              src={project.image}
+                              className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-normal"
+                              alt={project.title}
+                          />
+                      )}
                       <div className="text-center relative z-20">
+
                         <h4 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">{project.title.split(' ')[0]}</h4>
                         <p className="text-blue-100 text-xl font-medium">{project.subtitle}</p>
                         <div className="mt-6 w-20 h-1 bg-blue-300 mx-auto rounded-full"></div>
