@@ -3,6 +3,7 @@ import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../index.css';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import ExperienceTimeline from './ExperienceTimeline';
 
 import inventoryLogin from '../../public/assets/internship-project/ims_login.png';
 import inventoryDashboard from '../../public/assets/internship-project/ims_dashboard.png';
@@ -889,6 +890,7 @@ function App() {
           <TerminalAbout />
           <TransitionSection />
           <Skills />
+          <ExperienceTimeline />
           <Projects />
         </div>
         <Footer />
