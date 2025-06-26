@@ -702,7 +702,7 @@ function Projects() {
         { src: animeHomepage, title: 'Anime Homepage' },
         { src: mangaHomepage, title: 'Manga Section' }
       ],
-      github: 'https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly.git',
+      github: 'https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly/tree/main/activity_2_dom',
       category: 'Web App'
     }
   ];
