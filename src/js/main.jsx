@@ -11,6 +11,7 @@ import mangaHomepage from '../../public/assets/academic-project/anime-rest-api/M
 import thesisChat1 from '../../public/assets/thesis-project/Chat1.jpeg';
 import thesisChat2 from '../../public/assets/thesis-project/Chat2.jpeg';
 import thesisHomepage from '../../public/assets/thesis-project/homepage.jpeg';
+import cluster from '../../public/assets/academic-project/crime-pattern/cluster.png';
 
 // Color Palette Constants
 const colors = {
@@ -704,6 +705,16 @@ function Projects() {
       ],
       github: 'https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly/tree/main/activity_2_dom',
       category: 'Web App'
+    },
+    {
+      id: 'crime pattern',
+      title: 'Crime Pattern Analysis',
+      description: 'Data mining project focused on identifying and analyzing crime patterns using clustering algorithms and visualization techniques.',
+      technologies: ['Python', 'Pandas', 'Scikit-learn',' Matplotlib','Mlxtend','Tkinter'],
+      image: cluster,
+      screenshots: [],
+      github: 'https://github.com/Jermin-Odcheo/Team-Yor-OnTrack',
+      category: 'Data Mining'
     }
   ];
 
@@ -769,20 +780,25 @@ function Projects() {
                       </div>
 
                       <div className="flex space-x-3">
-                        <button
-                            onClick={() => openModal(project)}
-                            className="flex-1 bg-[#9ca3af]/20 hover:bg-[#9ca3af]/30 text-[#f9fafb] font-medium py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/30 hover:border-[#9ca3af]/50 hover:shadow-lg"
-                        >
-                          View Details
-                        </button>
+                        {project.screenshots && project.screenshots.length > 0 ? (
+                          <button
+                              onClick={() => openModal(project)}
+                              className="flex-1 bg-[#9ca3af]/20 hover:bg-[#9ca3af]/30 text-[#f9fafb] font-medium py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/30 hover:border-[#9ca3af]/50 hover:shadow-lg"
+                          >
+                            View Details
+                          </button>
+                        ) : (
+                          <div className="flex-1"></div>
+                        )}
                         {project.github && (
                             <a
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] p-2 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg"
+                                className={`${project.screenshots && project.screenshots.length > 0 ? '' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] p-1.5 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center`}
                             >
-                              <i className="fab fa-github"></i>
+                              <i className="fab fa-github m-1"></i>
+                              {project.screenshots && project.screenshots.length > 0 ? '' : 'View on GitHub'}
                             </a>
                         )}
                       </div>
@@ -814,7 +830,7 @@ function Projects() {
                   <p className="text-[#9ca3af] mb-6">{selectedProject.description}</p>
 
                   <div className="space-y-6">
-                    {selectedProject.screenshots.map((screenshot, index) => (
+                    {selectedProject.screenshots && selectedProject.screenshots.map((screenshot, index) => (
                         <div key={index} className="bg-[#111827]/50 rounded-lg p-4 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 transition-all duration-300">
                           <h4 className="text-[#f9fafb] font-medium mb-3">{screenshot.title}</h4>
                           <div className="flex justify-center group cursor-pointer" onClick={() => zoomImage(screenshot.src)}>
