@@ -196,6 +196,7 @@ function LoadingScreen() {
 function Navigation() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -225,14 +226,16 @@ function Navigation() {
   const scrollToSection = (sectionId, e) => {
     e.preventDefault();
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
 
   return (
-      <nav className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ${
+      <nav className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 px-4 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
       }`}>
-        <div className="bg-[#111827]/90 backdrop-blur-md rounded-full px-6 py-3 border border-[#374151] shadow-2xl">
-          <div className="flex items-center space-x-8">
+        <div className="bg-[#111827]/90 backdrop-blur-md rounded-full px-3 sm:px-6 py-2 sm:py-3 border border-[#374151] shadow-2xl">
+          {/* Desktop Navigation */}
+          <div className="hidden sm:flex items-center space-x-8">
             <button
                 onClick={(e) => scrollToSection('hero', e)}
                 className="text-[#f9fafb] font-bold text-lg hover:text-[#9ca3af] transition-colors"
@@ -256,7 +259,43 @@ function Navigation() {
               ))}
             </div>
           </div>
+
+          {/* Mobile Navigation */}
+          <div className="sm:hidden flex items-center justify-between">
+            <button
+                onClick={(e) => scrollToSection('hero', e)}
+                className="text-[#f9fafb] font-bold text-base hover:text-[#9ca3af] transition-colors"
+            >
+              Jermin
+            </button>
+
+            <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-[#f9fafb] p-2 hover:text-[#9ca3af] transition-colors"
+            >
+              <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+            <div className="sm:hidden absolute top-full left-0 right-0 mt-2 bg-[#111827]/95 backdrop-blur-md rounded-xl border border-[#374151] shadow-2xl overflow-hidden">
+              {['experience', 'projects', 'contact'].map((section) => (
+                  <button
+                      key={section}
+                      onClick={(e) => scrollToSection(section, e)}
+                      className={`w-full text-left px-4 py-3 transition-all border-b border-[#374151]/50 last:border-b-0 ${
+                          activeSection === section
+                              ? 'bg-[#374151] text-[#f9fafb]'
+                              : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'
+                      }`}
+                  >
+                    {section.charAt(0).toUpperCase() + section.slice(1)}
+                  </button>
+              ))}
+            </div>
+        )}
       </nav>
   );
 }
@@ -779,26 +818,27 @@ function Projects() {
                         ))}
                       </div>
 
-                      <div className="flex space-x-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         {project.screenshots && project.screenshots.length > 0 ? (
                           <button
                               onClick={() => openModal(project)}
-                              className="flex-1 bg-[#9ca3af]/20 hover:bg-[#9ca3af]/30 text-[#f9fafb] font-medium py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/30 hover:border-[#9ca3af]/50 hover:shadow-lg"
+                              className="flex-1 bg-[#9ca3af]/20 hover:bg-[#9ca3af]/30 text-[#f9fafb] font-medium py-3 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/30 hover:border-[#9ca3af]/50 hover:shadow-lg text-sm sm:text-base"
                           >
                             View Details
                           </button>
                         ) : (
-                          <div className="flex-1"></div>
+                          <div className="hidden sm:block flex-1"></div>
                         )}
                         {project.github && (
                             <a
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`${project.screenshots && project.screenshots.length > 0 ? '' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] p-1.5 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center`}
+                                className={`${project.screenshots && project.screenshots.length > 0 ? 'sm:flex-none' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-3 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
                             >
-                              <i className="fab fa-github m-1"></i>
-                              {project.screenshots && project.screenshots.length > 0 ? '' : 'View on GitHub'}
+                              <i className="fab fa-github"></i>
+                              <span className="sm:hidden">GitHub</span>
+                              <span className="hidden sm:inline">{project.screenshots && project.screenshots.length > 0 ? '' : 'View on GitHub'}</span>
                             </a>
                         )}
                       </div>
@@ -811,37 +851,37 @@ function Projects() {
 
         {/* Enhanced Modal with Zoomable Images */}
         {showModal && selectedProject && (
-            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-              <div className="bg-[#374151] rounded-xl max-w-6xl w-full max-h-[90vh] overflow-auto border border-[#6b7280] shadow-2xl">
-                <div className="p-6 border-b border-[#6b7280] flex justify-between items-center sticky top-0 bg-[#374151] z-10">
+            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-2 sm:p-4">
+              <div className="bg-[#374151] rounded-xl max-w-6xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-auto border border-[#6b7280] shadow-2xl">
+                <div className="p-4 sm:p-6 border-b border-[#6b7280] flex justify-between items-center sticky top-0 bg-[#374151] z-10">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#f9fafb]">{selectedProject.title}</h3>
-                    <p className="text-[#9ca3af] text-sm">{selectedProject.category}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-[#f9fafb]">{selectedProject.title}</h3>
+                    <p className="text-[#9ca3af] text-xs sm:text-sm">{selectedProject.category}</p>
                   </div>
                   <button
                       onClick={closeModal}
-                      className="text-[#9ca3af] hover:text-[#f9fafb] text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
+                      className="text-[#9ca3af] hover:text-[#f9fafb] text-xl sm:text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
                   >
                     <i className="fas fa-times"></i>
                   </button>
                 </div>
 
-                <div className="p-6">
-                  <p className="text-[#9ca3af] mb-6">{selectedProject.description}</p>
+                <div className="p-4 sm:p-6">
+                  <p className="text-[#9ca3af] mb-4 sm:mb-6 text-sm sm:text-base">{selectedProject.description}</p>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     {selectedProject.screenshots && selectedProject.screenshots.map((screenshot, index) => (
-                        <div key={index} className="bg-[#111827]/50 rounded-lg p-4 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 transition-all duration-300">
-                          <h4 className="text-[#f9fafb] font-medium mb-3">{screenshot.title}</h4>
+                        <div key={index} className="bg-[#111827]/50 rounded-lg p-3 sm:p-4 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 transition-all duration-300">
+                          <h4 className="text-[#f9fafb] font-medium mb-2 sm:mb-3 text-sm sm:text-base">{screenshot.title}</h4>
                           <div className="flex justify-center group cursor-pointer" onClick={() => zoomImage(screenshot.src)}>
                             <div className="relative">
                               <img
                                   src={screenshot.src}
                                   alt={screenshot.title}
-                                  className="max-w-full max-h-96 object-contain rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
+                                  className="max-w-full max-h-64 sm:max-h-96 object-contain rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
                               />
                               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 rounded-lg">
-                                <i className="fas fa-expand text-white text-xl"></i>
+                                <i className="fas fa-expand text-white text-lg sm:text-xl"></i>
                               </div>
                             </div>
                           </div>
@@ -849,13 +889,13 @@ function Projects() {
                     ))}
                   </div>
 
-                  <div className="mt-6 pt-6 border-t border-[#6b7280]/30">
-                    <h4 className="text-[#f9fafb] font-medium mb-3">Technologies Used:</h4>
+                  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-[#6b7280]/30">
+                    <h4 className="text-[#f9fafb] font-medium mb-2 sm:mb-3 text-sm sm:text-base">Technologies Used:</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.technologies.map((tech) => (
                           <span
                               key={tech}
-                              className="px-3 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-sm rounded-full border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
+                              className="px-2 sm:px-3 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-xs sm:text-sm rounded-full border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
                           >
                       {tech}
                     </span>
