@@ -4,14 +4,14 @@ import { createRoot } from 'react-dom/client';
 import '../index.css';
 
 // Import images
-import inventoryLogin from '../../public/assets/internship-project/ims_login.png';
-import inventoryDashboard from '../../public/assets/internship-project/ims_dashboard.png';
-import animeHomepage from '../../public/assets/academic-project/anime-rest-api/Anime.jpeg';
-import mangaHomepage from '../../public/assets/academic-project/anime-rest-api/Manga.jpeg';
-import thesisChat1 from '../../public/assets/thesis-project/Chat1.jpeg';
-import thesisChat2 from '../../public/assets/thesis-project/Chat2.jpeg';
-import thesisHomepage from '../../public/assets/thesis-project/homepage.jpeg';
-import cluster from '../../public/assets/academic-project/crime-pattern/cluster.png';
+import inventoryLogin from '/assets/internship-project/ims_login.png';
+import inventoryDashboard from '/assets/internship-project/ims_dashboard.png';
+import animeHomepage from '/assets/academic-project/anime-rest-api/Anime.jpeg';
+import mangaHomepage from '/assets/academic-project/anime-rest-api/Manga.jpeg';
+import thesisChat1 from '/assets/thesis-project/Chat1.jpeg';
+import thesisChat2 from '/assets/thesis-project/Chat2.jpeg';
+import thesisHomepage from '/assets/thesis-project/Homepage.jpeg';
+import cluster from '/assets/academic-project/crime-pattern/cluster.png';
 
 // Color Palette Constants
 const colors = {
@@ -329,9 +329,13 @@ function Hero() {
   const handleResumeDownload = () => {
     // Create a temporary link for download
     const link = document.createElement('a');
-    link.href = '/path/to/your/resume.pdf'; // Replace with actual resume path
-    link.download = 'Jermin_Odcheo_Resume.pdf';
+    link.href = '/assets/resume/odcheo_resume.pdf';
+    link.download = 'odcheo_resume.pdf';
     link.click();
+  };
+
+  const handleResumeViewInNewTab = () => {
+    window.open('/assets/resume/odcheo_resume.pdf', '_blank');
   };
 
   return (
@@ -508,105 +512,86 @@ function Hero() {
         {/* Resume Modal */}
         {showResume && (
             <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-              <div className="bg-[#374151] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-auto border border-[#6b7280] shadow-2xl">
-                <div className="p-6 border-b border-[#6b7280] flex justify-between items-center sticky top-0 bg-[#374151] z-10">
+              <div className="bg-[#374151] rounded-xl max-w-6xl w-full max-h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl">
+                <div className="p-4 sm:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#f9fafb]">Resume - Jermin Odcheo</h3>
+                    <h3 className="text-xl sm:text-2xl font-bold text-[#f9fafb]">Resume - Jermin Odcheo</h3>
                     <p className="text-[#9ca3af] text-sm">Full-Stack Developer</p>
                   </div>
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 sm:space-x-4">
+                    <button
+                        onClick={handleResumeViewInNewTab}
+                        className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-sm"
+                        title="Open in new tab"
+                    >
+                      <i className="fas fa-external-link-alt text-xs sm:text-sm"></i>
+                      <span className="hidden sm:inline">New Tab</span>
+                    </button>
                     <button
                         onClick={handleResumeDownload}
-                        className="flex items-center space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] px-4 py-2 rounded-lg transition-colors"
+                        className="flex items-center space-x-1 sm:space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] px-2 sm:px-4 py-2 rounded-lg transition-colors text-sm"
                     >
-                      <i className="fas fa-download"></i>
-                      <span>Download</span>
+                      <i className="fas fa-download text-xs sm:text-sm"></i>
+                      <span className="hidden sm:inline">Download</span>
                     </button>
                     <button
                         onClick={() => setShowResume(false)}
-                        className="text-[#9ca3af] hover:text-[#f9fafb] text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
+                        className="text-[#9ca3af] hover:text-[#f9fafb] text-xl sm:text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
                     >
                       <i className="fas fa-times"></i>
                     </button>
                   </div>
                 </div>
 
-                <div className="p-6">
-                  {/* Resume Content - You can replace this with an embedded PDF or detailed resume content */}
-                  <div className="bg-[#f9fafb] text-[#111827] p-8 rounded-lg min-h-[600px]">
-                    <div className="text-center mb-8">
-                      <h1 className="text-3xl font-bold mb-2">Jermin Odcheo</h1>
-                      <p className="text-lg text-[#6b7280] mb-4">Full-Stack Developer</p>
-                      <div className="flex justify-center space-x-6 text-sm text-[#6b7280]">
-                        <span>📧 jerminbodcheo@gmail.com</span>
-                        <span>📍 Philippines/Australia</span>
-                        <span>💼 Available for Employment</span>
+                <div className="relative w-full h-[calc(95vh-80px)] bg-[#f9fafb]">
+                  {/* PDF Embed - Primary method */}
+                  <embed
+                      src="/assets/resume/odcheo_resume.pdf#toolbar=1&navpanes=1&scrollbar=1"
+                      type="application/pdf"
+                      className="w-full h-full"
+                      onError={() => {
+                        // Fallback if embed fails
+                        console.log('Embed failed, trying iframe fallback');
+                        document.getElementById('resume-iframe-fallback').classList.remove('hidden');
+                      }}
+                  />
+
+                  {/* Fallback iframe */}
+                  <iframe
+                      src="/assets/resume/odcheo_resume.pdf"
+                      className="w-full h-full absolute top-0 left-0 hidden"
+                      id="resume-iframe-fallback"
+                      title="Resume PDF"
+                      onError={() => {
+                        // Show manual fallback message
+                        document.getElementById('resume-fallback-message').classList.remove('hidden');
+                      }}
+                  />
+
+                  {/* Manual fallback message */}
+                  <div id="resume-fallback-message" className="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                    <div className="bg-white rounded-lg p-6 shadow-lg max-w-md">
+                      <i className="fas fa-file-pdf text-red-500 text-4xl mb-4"></i>
+                      <h4 className="text-[#111827] font-bold text-lg mb-2">PDF Viewer Not Supported</h4>
+                      <p className="text-[#6b7280] mb-4 text-sm">
+                        Your browser doesn't support PDF viewing. Please use one of the options below:
+                      </p>
+                      <div className="space-y-2">
+                        <button
+                            onClick={handleResumeViewInNewTab}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                        >
+                          <i className="fas fa-external-link-alt"></i>
+                          <span>Open in New Tab</span>
+                        </button>
+                        <button
+                            onClick={handleResumeDownload}
+                            className="w-full bg-[#9ca3af] hover:bg-[#6b7280] text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                        >
+                          <i className="fas fa-download"></i>
+                          <span>Download PDF</span>
+                        </button>
                       </div>
-                    </div>
-
-                    <div className="space-y-6">
-                      <section>
-                        <h2 className="text-xl font-bold border-b-2 border-[#111827] pb-2 mb-4">Professional Summary</h2>
-                        <p className="text-[#6b7280]">
-                          Recent BSIT graduate with hands-on experience in full-stack web development, AI integration,
-                          and modern web technologies. Proven ability to develop scalable applications and innovative solutions.
-                        </p>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl font-bold border-b-2 border-[#111827] pb-2 mb-4">Education</h2>
-                        <div className="mb-4">
-                          <h3 className="font-semibold">Bachelor of Science in Information Technology</h3>
-                          <p className="text-[#6b7280]">Saint Louis University, Baguio City • 2020-2024</p>
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl font-bold border-b-2 border-[#111827] pb-2 mb-4">Technical Skills</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <h4 className="font-semibold mb-2">Frontend</h4>
-                            <p className="text-[#6b7280] text-sm">HTML5/CSS3, JavaScript, React, Tailwind CSS</p>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold mb-2">Backend</h4>
-                            <p className="text-[#6b7280] text-sm">Node.js, PHP, Python, SQL</p>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold mb-2">Languages</h4>
-                            <p className="text-[#6b7280] text-sm">Python, Java, JavaScript, PHP</p>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold mb-2">Tools</h4>
-                            <p className="text-[#6b7280] text-sm">Git, WAMP/XAMPP, Bootstrap</p>
-                          </div>
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl font-bold border-b-2 border-[#111827] pb-2 mb-4">Experience</h2>
-                        <div className="space-y-4">
-                          <div>
-                            <h3 className="font-semibold">Web Development Intern</h3>
-                            <p className="text-[#6b7280] text-sm">TMDD SLU • Jan 2025 - May 2025</p>
-                            <ul className="list-disc list-inside text-[#6b7280] text-sm mt-2">
-                              <li>Led development of comprehensive inventory management system</li>
-                              <li>Implemented role-based access control and real-time updates</li>
-                              <li>Utilized PHP, JavaScript, MySQL, and Bootstrap</li>
-                            </ul>
-                          </div>
-
-                          <div>
-                            <h3 className="font-semibold">Capstone Research Project</h3>
-                            <p className="text-[#6b7280] text-sm">SAMCIS, Saint Louis University • Aug 2024 - Dec 2024</p>
-                            <ul className="list-disc list-inside text-[#6b7280] text-sm mt-2">
-                              <li>Designed and implemented NaviBot AI-powered chatbot</li>
-                              <li>Achieved 72% accuracy rate using generative AI and BART models</li>
-                              <li>Specialized in academic assistance and FAQ handling</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </section>
                     </div>
                   </div>
                 </div>
@@ -1036,4 +1021,3 @@ function App() {
 // Bootstrap React
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
-
