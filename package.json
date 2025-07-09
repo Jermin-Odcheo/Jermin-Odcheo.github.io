@@ -13,6 +13,7 @@
     "deploy": "gh-pages -d docs"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.1.10",
     "flag-icons": "^7.5.0",
     "react": "^19.1.0",

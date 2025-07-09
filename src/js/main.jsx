@@ -1,6 +1,8 @@
 // src/js/main.jsx
 import React, { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs.js';
 import '../index.css';
 
 // Import images
@@ -916,49 +918,412 @@ function Projects() {
 
 // Contact Section
 function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+    honeypot: '' // Anti-spam field
+  });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('');
+  const [cooldownTime, setCooldownTime] = useState(0);
+
+  // Initialize EmailJS on component mount
+  useEffect(() => {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+    // Check for existing cooldown on component mount
+    checkCooldown();
+  }, []);
+
+  // Cooldown timer effect
+  useEffect(() => {
+    let interval;
+    if (cooldownTime > 0) {
+      interval = setInterval(() => {
+        setCooldownTime(prev => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [cooldownTime]);
+
+  const checkCooldown = () => {
+    const lastSubmission = localStorage.getItem('lastEmailSubmission');
+    if (lastSubmission) {
+      const now = Date.now();
+      const oneMinute = 1 * 60 * 1000; // Changed to 1 minute
+      const timePassed = now - parseInt(lastSubmission);
+
+      if (timePassed < oneMinute) {
+        const remainingTime = Math.ceil((oneMinute - timePassed) / 1000);
+        setCooldownTime(remainingTime);
+      }
+    }
+  };
+
+  // Email validation regex
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Check honeypot (anti-spam)
+    if (formData.honeypot) {
+      return false; // Bot detected
+    }
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    } else if (formData.name.trim().length > 50) {
+      newErrors.name = 'Name must be less than 50 characters';
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
+    } else if (formData.email.trim().length > 100) {
+      newErrors.email = 'Email must be less than 100 characters';
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters';
+    } else if (formData.message.trim().length > 1000) {
+      newErrors.message = 'Message must be less than 1000 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Check cooldown first
+    if (cooldownTime > 0) {
+      setSubmitStatus('cooldown');
+      return;
+    }
+
+    if (!validateForm()) {
+      if (formData.honeypot) {
+        // Silent fail for bots
+        return;
+      }
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('');
+
+    try {
+      // Rate limiting check (simple client-side protection)
+      const lastSubmission = localStorage.getItem('lastEmailSubmission');
+      const now = Date.now();
+      const oneMinute = 1 * 60 * 1000; // Changed to 1 minute
+
+      if (lastSubmission && (now - parseInt(lastSubmission)) < oneMinute) {
+        const remainingTime = Math.ceil((oneMinute - (now - parseInt(lastSubmission))) / 1000);
+        setCooldownTime(remainingTime);
+        throw new Error(`Please wait ${formatTime(remainingTime)} before sending another message.`);
+      }
+
+      // Send email using EmailJS
+      const templateParams = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        time: new Date().toLocaleString(),
+        message: formData.message.trim(),
+      };
+
+      const result = await emailjs.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        templateParams,
+        EMAILJS_CONFIG.PUBLIC_KEY
+      );
+
+      console.log('Email sent successfully:', result.text);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '', honeypot: '' });
+
+      // Store timestamp for rate limiting
+      localStorage.setItem('lastEmailSubmission', now.toString());
+      setCooldownTime(60); // Start 1-minute cooldown
+
+    } catch (error) {
+      console.error('Error sending email:', error);
+      if (error.message.includes('Please wait')) {
+        setSubmitStatus('cooldown');
+      } else {
+        setSubmitStatus('error');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isFormDisabled = isSubmitting || cooldownTime > 0;
+
   return (
       <section id="contact" className="py-20 relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
-        <div className="container mx-auto px-6 max-w-4xl text-center">
-          <h2 className="text-4xl font-bold text-[#f9fafb] mb-8">
-            Let's Connect
-          </h2>
-          <p className="text-[#9ca3af] text-lg mb-12">
-            I'm actively seeking new opportunities and exciting projects to contribute to.
-          </p>
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-[#f9fafb] mb-8">
+              Let's Connect
+            </h2>
+            <p className="text-[#9ca3af] text-lg mb-12">
+              I'm actively seeking new opportunities and exciting projects to contribute to.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <a
-                href="mailto:jerminbodcheo@gmail.com"
-                className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-            >
-              <i className="fas fa-envelope text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-              <h3 className="font-semibold text-[#f9fafb] mb-2">Email</h3>
-              <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">jerminbodcheo@gmail.com</p>
-            </a>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Information */}
+            <div className="space-y-8">
+              <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Get in Touch</h3>
 
-            <a
-                href="https://linkedin.com/in/jerminodcheo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-            >
-              <i className="fab fa-linkedin text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-              <h3 className="font-semibold text-[#f9fafb] mb-2">LinkedIn</h3>
-              <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">Connect with me</p>
-            </a>
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                <a
+                    href="mailto:jerminbodcheo@gmail.com"
+                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
+                >
+                  <i className="fas fa-envelope text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
+                  <h4 className="font-semibold text-[#f9fafb] mb-2">Email</h4>
+                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">jerminbodcheo@gmail.com</p>
+                </a>
 
-            <a
-                href="https://github.com/Jermin-Odcheo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-            >
-              <i className="fab fa-github text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-              <h3 className="font-semibold text-[#f9fafb] mb-2">GitHub</h3>
-              <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">View my code</p>
-            </a>
+                <a
+                    href="https://linkedin.com/in/jerminodcheo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
+                >
+                  <i className="fab fa-linkedin text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
+                  <h4 className="font-semibold text-[#f9fafb] mb-2">LinkedIn</h4>
+                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">Connect with me</p>
+                </a>
+
+                <a
+                    href="https://github.com/Jermin-Odcheo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
+                >
+                  <i className="fab fa-github text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
+                  <h4 className="font-semibold text-[#f9fafb] mb-2">GitHub</h4>
+                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">View my code</p>
+                </a>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="bg-[#374151]/20 backdrop-blur-sm p-8 rounded-xl border border-[#6b7280]/30">
+              <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Send Message</h3>
+
+              {/* Cooldown Warning */}
+              {cooldownTime > 0 && (
+                <div className="mb-6 p-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <i className="fas fa-clock text-yellow-400 mr-2"></i>
+                      <span className="text-yellow-400 font-medium">Rate limit active</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-yellow-400 text-sm">Next submission in:</span>
+                      <span className="text-yellow-400 font-mono text-lg bg-yellow-500/20 px-2 py-1 rounded">
+                        {formatTime(cooldownTime)}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-yellow-300 text-sm mt-2">
+                    To prevent spam, you can send one message per minute.
+                  </p>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot field for anti-spam (hidden) */}
+                <input
+                  type="text"
+                  name="honeypot"
+                  value={formData.honeypot}
+                  onChange={handleInputChange}
+                  style={{ display: 'none' }}
+                  tabIndex="-1"
+                  autoComplete="off"
+                />
+
+                {/* Name Field */}
+                <div>
+                  <label htmlFor="name" className="block text-[#f9fafb] font-medium mb-2">
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    maxLength="50"
+                    className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all ${
+                      errors.name 
+                        ? 'border-red-500 focus:ring-red-500' 
+                        : isFormDisabled
+                        ? 'border-[#4b5563] bg-[#1f2937]'
+                        : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
+                    }`}
+                    placeholder="Your full name"
+                    disabled={isFormDisabled}
+                  />
+                  {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="email" className="block text-[#f9fafb] font-medium mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    maxLength="100"
+                    className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all ${
+                      errors.email 
+                        ? 'border-red-500 focus:ring-red-500' 
+                        : isFormDisabled
+                        ? 'border-[#4b5563] bg-[#1f2937]'
+                        : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
+                    }`}
+                    placeholder="your.email@example.com"
+                    disabled={isFormDisabled}
+                  />
+                  {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+                </div>
+
+                {/* Message Field */}
+                <div>
+                  <label htmlFor="message" className="block text-[#f9fafb] font-medium mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    maxLength="1000"
+                    className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all resize-vertical ${
+                      errors.message 
+                        ? 'border-red-500 focus:ring-red-500' 
+                        : isFormDisabled
+                        ? 'border-[#4b5563] bg-[#1f2937]'
+                        : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
+                    }`}
+                    placeholder="Tell me about your project, job opportunity, or just say hello..."
+                    disabled={isFormDisabled}
+                  ></textarea>
+                  {errors.message && <p className="text-red-400 text-sm mt-1">{errors.message}</p>}
+                  <p className="text-xs text-[#6b7280] mt-1">{formData.message.length}/1000 characters</p>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isFormDisabled}
+                  className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+                    isFormDisabled
+                      ? 'bg-[#6b7280] cursor-not-allowed opacity-50'
+                      : 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/50'
+                  } text-white`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>Sending...</span>
+                    </>
+                  ) : cooldownTime > 0 ? (
+                    <>
+                      <i className="fas fa-clock"></i>
+                      <span>Wait {formatTime(cooldownTime)}</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-paper-plane"></i>
+                      <span>Send Message</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+                    <p className="text-green-400 text-center">
+                      <i className="fas fa-check-circle mr-2"></i>
+                      Message sent successfully! I'll get back to you soon.
+                    </p>
+                  </div>
+                )}
+
+                {submitStatus === 'cooldown' && (
+                  <div className="p-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+                    <p className="text-yellow-400 text-center">
+                      <i className="fas fa-hourglass-half mr-2"></i>
+                      Please wait before sending another message.
+                    </p>
+                  </div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <p className="text-red-400 text-center">
+                      <i className="fas fa-exclamation-circle mr-2"></i>
+                      There was an error sending your message. Please try again or email me directly.
+                    </p>
+                  </div>
+                )}
+              </form>
+            </div>
           </div>
         </div>
       </section>
