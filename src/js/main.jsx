@@ -317,7 +317,9 @@ function Hero() {
     { name: 'Tailwind CSS', icon: 'fas fa-wind', color: 'from-cyan-400 to-teal-500' },
     { name: 'PHP', icon: 'fab fa-php', color: 'from-indigo-500 to-purple-600' },
     { name: 'SQL', icon: 'fas fa-database', color: 'from-gray-500 to-gray-700' },
-    { name: 'Git', icon: 'fab fa-git-alt', color: 'from-orange-600 to-red-600' }
+    { name: 'Git', icon: 'fab fa-git-alt', color: 'from-orange-600 to-red-600' },
+    {name:"Wordpress", icon: "fab fa-wordpress", color: "from-blue-600 to-blue-800"},
+    {name:"Drupal", icon:"fab fa-drupal", color: "from-green-600 to-green-800"},
   ];
 
   const scrollToSection = (sectionId) => {
@@ -612,15 +614,79 @@ function Experience() {
       organization: 'TMDD SLU',
       period: 'Jan 2025 - May 2025',
       description: 'Led development of a comprehensive inventory management system using PHP, featuring role-based access control and modern UI components.',
-      skills: ['PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
+      detailedTasks: [
+        {
+          category: 'Database Architecture & Design',
+          description: 'Designed and implemented a comprehensive MySQL database schema for inventory and asset management, ensuring optimal data structure and relationships for scalable operations.',
+          icon: 'fas fa-database'
+        },
+        {
+          category: 'Security & Authentication',
+          description: 'Developed a robust role-based access control (RBAC) system with secure session-based authentication, input sanitization, and encrypted password hashing to ensure data security and user access management.',
+          icon: 'fas fa-shield-alt'
+        },
+        {
+          category: 'Frontend Development',
+          description: 'Built responsive interfaces using Bootstrap, JavaScript, and CSS, featuring dynamic data tables with pagination, interactive modals, and intuitive navigation components.',
+          icon: 'fas fa-laptop-code'
+        },
+        {
+          category: 'Backend Development',
+          description: 'Implemented server-side logic using PHP with comprehensive CRUD operations, data validation, and secure API endpoints for seamless data flow between frontend and database.',
+          icon: 'fas fa-server'
+        },
+        {
+          category: 'Real-time Table Updates',
+          description: 'Automatically refreshed table data after each SQL CRUD operation to show changes instantly.',
+          icon: 'fas fa-sync-alt'
+        },
+        {
+          category: 'Quality Assurance & Testing',
+          description: 'Conducted thorough testing of website performance, CRUD functionality, user interface elements, error handling, and data flow validation to ensure optimal system reliability.',
+          icon: 'fas fa-bug'
+        },
+        {
+          category: 'Advanced Integrations',
+          description: 'Implemented document generation capabilities using DomPDF and PHPOffice libraries, and managed dependencies with Composer for enhanced functionality.',
+          icon: 'fas fa-puzzle-piece'
+        },
+        {
+          category: 'Audit & Compliance',
+          description: 'Developed comprehensive logging systems to track all CRUD operations and data changes, ensuring full audit trails for inventory management compliance.',
+          icon: 'fas fa-clipboard-check'
+        },
+        {
+          category: 'UI/UX Enhancement',
+          description: 'Designed user-friendly interfaces with Font Awesome icons, consistent spacing, and intuitive placement of elements, resulting in improved user engagement and workflow efficiency.',
+          icon: 'fas fa-paint-brush'
+        }
+      ],
+      skills: ['HTML','CSS','PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
       icon: 'fas fa-briefcase'
     },
     {
       title: 'Capstone Research Project',
       organization: 'SAMCIS, Saint Louis University',
       period: 'Aug 2024 - Dec 2024',
-      description: 'Designed and implemented NaviBot, an AI-powered chatbot utilizing generative AI and BART models for academic assistance.',
-      skills: ['AI', 'Python', 'NLP', 'BART'],
+      description: 'Designed and implemented NaviBot, an AI-powered chatbot utilizing generative AI and BART models for academic assistance with 72% accuracy rate.',
+      detailedTasks: [
+        {
+          category: 'Data Engineering & Preprocessing',
+          description: 'Executed comprehensive data cleaning, processing, and augmentation workflows to prepare high-quality training datasets for machine learning model development.',
+          icon: 'fas fa-cogs'
+        },
+        {
+          category: 'Machine Learning Implementation',
+          description: 'Fine-tuned a BART (Bidirectional and Auto-Regressive Transformers) model using custom datasets, implementing transfer learning techniques to adapt the pre-trained model for domain-specific enrollment queries.',
+          icon: 'fas fa-brain'
+        },
+        {
+          category: 'Machine Learning Model Evaluation',
+          description: 'Implemented rigorous validation framework using industry-standard metrics: BERTScore for semantic similarity evaluation, BLEU Score for precision and quality assessment, and ROUGE Score for n-gram overlap measurement to ensure response accuracy and relevance.',
+          icon: 'fas fa-chart-line'
+        }
+      ],
+      skills: ['AI', 'Python', 'NLP', 'BART', 'Machine Learning', 'Data Science'],
       icon: 'fas fa-robot'
     },
     {
@@ -637,7 +703,7 @@ function Experience() {
       <section id="experience" className="py-20 relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
-        <div className="container mx-auto px-6 max-w-4xl">
+        <div className="container mx-auto px-6 max-w-5xl">
           <h2 className="text-4xl font-bold text-[#f9fafb] text-center mb-16">
             Experience
           </h2>
@@ -663,7 +729,22 @@ function Experience() {
                     </span>
                       </div>
 
-                      <p className="text-[#9ca3af] mb-4">{exp.description}</p>
+                      <p className="text-[#9ca3af] mb-4 whitespace-pre-line">{exp.description}</p>
+
+                      {/* Detailed Tasks */}
+                      {exp.detailedTasks && exp.detailedTasks.length > 0 && (
+                          <div className="space-y-4 mb-4">
+                            {exp.detailedTasks.map((task, index) => (
+                                <div key={index} className="flex items-start space-x-3">
+                                  <i className={`${task.icon} text-[#9ca3af] mt-1 text-lg`}></i>
+                                  <div>
+                                    <span className="text-[#f9fafb] font-medium text-sm">{task.category}</span>
+                                    <p className="text-[#9ca3af] text-sm">{task.description}</p>
+                                  </div>
+                                </div>
+                            ))}
+                          </div>
+                      )}
 
                       <div className="flex flex-wrap gap-2">
                         {exp.skills.map((skill) => (
