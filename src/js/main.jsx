@@ -1,9 +1,97 @@
 // src/js/main.jsx
-import React, { StrictMode, useState, useEffect } from 'react';
+import React, { StrictMode, useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import emailjs from '@emailjs/browser';
 import { EMAILJS_CONFIG } from '../config/emailjs.js';
+import { useInView } from 'react-intersection-observer';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import '../index.css';
+
+// Animation Variants for Framer Motion
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const fadeInUp = {
+  hidden: {
+    opacity: 0,
+    y: 60
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const fadeInLeft = {
+  hidden: {
+    opacity: 0,
+    x: -60
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const fadeInRight = {
+  hidden: {
+    opacity: 0,
+    x: 60
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.8
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const staggerItem = {
+  hidden: {
+    opacity: 0,
+    y: 20
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  }
+};
 
 // Import images
 import inventoryLogin from '/assets/internship-project/ims_login.png';
@@ -14,6 +102,94 @@ import thesisChat1 from '/assets/thesis-project/Chat1.jpeg';
 import thesisChat2 from '/assets/thesis-project/Chat2.jpeg';
 import thesisHomepage from '/assets/thesis-project/Homepage.jpeg';
 import cluster from '/assets/academic-project/crime-pattern/cluster.png';
+
+// Custom hook for scroll animations with direction detection
+function useScrollAnimation(threshold = 0.1) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState('down');
+  const ref = useRef(null);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY.current) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset visibility when element leaves viewport for re-animation
+          setIsVisible(false);
+        }
+      },
+      { threshold, rootMargin: '50px' }
+    );
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [threshold]);
+
+  return [ref, isVisible, scrollDirection];
+}
+
+// Animated wrapper component
+function AnimatedSection({ children, className = '', delay = 0, animation = 'fadeInUp' }) {
+  const [ref, isVisible] = useScrollAnimation();
+
+  return (
+    <div
+      ref={ref}
+      className={`${className} transition-all duration-700 ease-out ${
+        isVisible 
+          ? `opacity-100 ${animation === 'fadeInUp' ? 'translate-y-0' : animation === 'fadeInLeft' ? 'translate-x-0' : animation === 'fadeInRight' ? 'translate-x-0' : animation === 'scaleIn' ? 'scale-100' : 'translate-y-0'}`
+          : `opacity-0 ${animation === 'fadeInUp' ? 'translate-y-16' : animation === 'fadeInLeft' ? '-translate-x-16' : animation === 'fadeInRight' ? 'translate-x-16' : animation === 'scaleIn' ? 'scale-90' : 'translate-y-16'}`
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// Staggered children component
+function StaggeredContainer({ children, className = '', staggerDelay = 100 }) {
+  const [ref, isVisible] = useScrollAnimation();
+
+  return (
+    <div ref={ref} className={className}>
+      {React.Children.map(children, (child, index) => (
+        <div
+          className={`transition-all duration-700 ease-out ${
+            isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
+          }`}
+          style={{ transitionDelay: `${index * staggerDelay}ms` }}
+        >
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 // Color Palette Constants
 const colors = {
@@ -349,27 +525,27 @@ function Hero() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
 
             {/* Left Column - Main Introduction */}
-            <div className="text-center lg:text-left space-y-8">
+            <AnimatedSection animation="fadeInLeft" className="text-center lg:text-left space-y-8">
               {/* Employment Status Badge */}
-              <div className="flex justify-center lg:justify-start">
+              <AnimatedSection delay={200} className="flex justify-center lg:justify-start">
                 <div className="bg-green-500/20 border border-green-500/50 rounded-full px-6 py-2 flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
                   <span className="text-green-400 font-medium text-sm">Available for Employment</span>
                 </div>
-              </div>
+              </AnimatedSection>
 
               {/* Avatar */}
-              <div className="flex justify-center lg:justify-start">
+              <AnimatedSection animation="scaleIn" delay={400} className="flex justify-center lg:justify-start">
                 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300">
                   <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
                     <span className="text-4xl font-bold text-[#111827]">JO</span>
                   </div>
                 </div>
-              </div>
+              </AnimatedSection>
 
               {/* Name and Title */}
-              <div>
-                <h1 className="text-5xl lg:text-6xl font-bold text-[#f9fafb] mb-4 animate-fade-in">
+              <AnimatedSection delay={600}>
+                <h1 className="text-5xl lg:text-6xl font-bold text-[#f9fafb] mb-4">
                   Jermin Odcheo
                 </h1>
                 <p className="text-2xl text-[#9ca3af] mb-4">
@@ -385,10 +561,10 @@ function Hero() {
                     <span>BSIT Graduate</span>
                   </div>
                 </div>
-              </div>
+              </AnimatedSection>
 
               {/* Professional Summary */}
-              <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
+              <AnimatedSection delay={800} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-3 flex items-center">
                   <i className="fas fa-user mr-2"></i>
                   Professional Summary
@@ -396,10 +572,10 @@ function Hero() {
                 <p className="text-[#9ca3af] leading-relaxed">
                   I'm a full-stack developer skilled in modern web technologies and AI integration. I'm eager to build scalable web applications and contribute to innovative projects with a dynamic team.
                 </p>
-              </div>
+              </AnimatedSection>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <AnimatedSection delay={1000} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button
                     onClick={handleResumeView}
                     className="flex items-center justify-center space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
@@ -415,10 +591,10 @@ function Hero() {
                   <i className="fas fa-download"></i>
                   <span>Download Resume</span>
                 </button>
-              </div>
+              </AnimatedSection>
 
               {/* Social Links */}
-              <div className="flex justify-center lg:justify-start space-x-4">
+              <AnimatedSection delay={1200} className="flex justify-center lg:justify-start space-x-4">
                 {[
                   { icon: 'fab fa-github', href: 'https://github.com/Jermin-Odcheo', label: 'GitHub', color: 'hover:bg-gray-700' },
                   { icon: 'fab fa-linkedin', href: 'https://linkedin.com/in/jerminodcheo', label: 'LinkedIn', color: 'hover:bg-blue-600' },
@@ -435,23 +611,22 @@ function Hero() {
                       <i className={`${icon} text-lg`}></i>
                     </a>
                 ))}
-              </div>
-            </div>
+              </AnimatedSection>
+            </AnimatedSection>
 
             {/* Right Column - Skills & Education */}
-            <div className="space-y-8">
+            <AnimatedSection animation="fadeInRight" className="space-y-8">
               {/* Technical Skills */}
-              <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
+              <AnimatedSection delay={300} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-6 flex items-center text-lg">
                   <i className="fas fa-code mr-2"></i>
                   Technical Skills
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
+                <StaggeredContainer className="grid grid-cols-2 gap-3">
                   {skills.map((skill, index) => (
                       <div
                           key={skill.name}
                           className="group flex items-center space-x-3 bg-[#111827]/30 rounded-lg px-3 py-2 hover:bg-[#6b7280]/30 transition-all duration-300"
-                          style={{ animationDelay: `${index * 0.05}s` }}
                       >
                         <div className={`w-6 h-6 rounded bg-gradient-to-r ${skill.color} flex items-center justify-center flex-shrink-0`}>
                           <i className={`${skill.icon} text-white text-xs`}></i>
@@ -459,11 +634,11 @@ function Hero() {
                         <span className="text-[#f9fafb] font-medium text-sm">{skill.name}</span>
                       </div>
                   ))}
-                </div>
-              </div>
+                </StaggeredContainer>
+              </AnimatedSection>
 
               {/* Education & Certifications */}
-              <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
+              <AnimatedSection delay={500} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-4 flex items-center text-lg">
                   <i className="fas fa-graduation-cap mr-2"></i>
                   Education
@@ -475,15 +650,15 @@ function Hero() {
                     <p className="text-[#6b7280] text-sm">2021 - 2025</p>
                   </div>
                 </div>
-              </div>
+              </AnimatedSection>
 
               {/* Key Achievements */}
-              <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
+              <AnimatedSection delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-4 flex items-center text-lg">
                   <i className="fas fa-trophy mr-2"></i>
                   Key Achievements
                 </h3>
-                <div className="space-y-3">
+                <StaggeredContainer className="space-y-3">
                   {[
                     'Developed AI chatbot with 72% accuracy rate',
                     'Led inventory management system development',
@@ -495,13 +670,13 @@ function Hero() {
                         <span className="text-[#9ca3af] text-sm">{achievement}</span>
                       </div>
                   ))}
-                </div>
-              </div>
-            </div>
+                </StaggeredContainer>
+              </AnimatedSection>
+            </AnimatedSection>
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute -bottom-24 left-1/2 transform -translate-x-1/2">
+          <AnimatedSection delay={1400} className="absolute -bottom-24 left-1/2 transform -translate-x-1/2">
             <button
                 onClick={() => scrollToSection('experience')}
                 className="animate-bounce hover:animate-pulse transition-all duration-300 cursor-pointer group">
@@ -510,7 +685,7 @@ function Hero() {
                 <i className="fas fa-chevron-down text-[#9ca3af] text-xl group-hover:text-[#f9fafb] transition-colors"></i>
               </div>
             </button>
-          </div>
+          </AnimatedSection>
         </div>
 
         {/* Resume Modal */}
@@ -606,8 +781,20 @@ function Hero() {
   );
 }
 
-// Experience Section
+// Experience Section with Smooth Scroll-Based Animations
 function Experience() {
+  const containerRef = useRef(null);
+
+  // Use scroll-based animations with smooth progress tracking
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.9", "end 0.1"]
+  });
+
+  // Transform scroll progress to smooth opacity and position values
+  const sectionOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
+  const sectionY = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [50, 0, 0, -50]);
+
   const experiences = [
     {
       title: 'Web Development Internship',
@@ -699,70 +886,197 @@ function Experience() {
     }
   ];
 
-  return (
-      <section id="experience" className="py-20 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
+  // Individual experience item component with smooth scroll animations
+  const ExperienceItem = ({ exp, index }) => {
+    const itemRef = useRef(null);
 
-        <div className="container mx-auto px-6 max-w-5xl">
-          <h2 className="text-4xl font-bold text-[#f9fafb] text-center mb-16">
-            Experience
-          </h2>
+    const { scrollYProgress: itemProgress } = useScroll({
+      target: itemRef,
+      offset: ["start 0.9", "end 0.3"]
+    });
 
-          <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#6b7280] via-[#9ca3af] to-[#6b7280] opacity-50"></div>
+    // Smooth transforms for each item
+    const itemOpacity = useTransform(itemProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+    const itemX = useTransform(itemProgress, [0, 0.2, 0.8, 1], [-100, 0, 0, -50]);
+    const itemScale = useTransform(itemProgress, [0, 0.2, 0.8, 1], [0.9, 1, 1, 0.95]);
 
-            <div className="space-y-12">
-              {experiences.map((exp, index) => (
-                  <div key={index} className="relative flex items-start group">
-                    <div className="flex-shrink-0 w-16 h-16 bg-[#374151] rounded-full flex items-center justify-center relative z-10 border-4 border-[#111827] group-hover:bg-[#6b7280] transition-all duration-300 shadow-lg">
-                      <i className={`${exp.icon} text-[#f9fafb] text-xl`}></i>
-                    </div>
+    // Icon rotation based on scroll
+    const iconRotate = useTransform(itemProgress, [0, 0.5, 1], [0, 360, 720]);
 
-                    <div className="ml-8 bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30 flex-1 hover:border-[#9ca3af]/50 hover:bg-[#374151]/30 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="text-xl font-bold text-[#f9fafb] group-hover:text-[#9ca3af] transition-colors">{exp.title}</h3>
-                          <p className="text-[#9ca3af] font-medium">{exp.organization}</p>
-                        </div>
-                        <span className="text-sm text-[#9ca3af] bg-[#111827]/50 px-3 py-1 rounded-full">
-                      {exp.period}
-                    </span>
-                      </div>
+    return (
+      <motion.div
+        ref={itemRef}
+        className="relative flex items-start group"
+        style={{ opacity: itemOpacity, x: itemX, scale: itemScale }}
+        whileHover={{
+          scale: 1.02,
+          transition: { type: "spring", stiffness: 300, damping: 20 }
+        }}
+      >
+        <motion.div
+          className="flex-shrink-0 w-16 h-16 bg-[#374151] rounded-full flex items-center justify-center relative z-10 border-4 border-[#111827] group-hover:bg-[#6b7280] transition-all duration-300 shadow-lg"
+          style={{ rotate: iconRotate }}
+          whileHover={{
+            scale: 1.1,
+            transition: { duration: 0.3 }
+          }}
+        >
+          <i className={`${exp.icon} text-[#f9fafb] text-xl`}></i>
+        </motion.div>
 
-                      <p className="text-[#9ca3af] mb-4 whitespace-pre-line">{exp.description}</p>
-
-                      {/* Detailed Tasks */}
-                      {exp.detailedTasks && exp.detailedTasks.length > 0 && (
-                          <div className="space-y-4 mb-4">
-                            {exp.detailedTasks.map((task, index) => (
-                                <div key={index} className="flex items-start space-x-3">
-                                  <i className={`${task.icon} text-[#9ca3af] mt-1 text-lg`}></i>
-                                  <div>
-                                    <span className="text-[#f9fafb] font-medium text-sm">{task.category}</span>
-                                    <p className="text-[#9ca3af] text-sm">{task.description}</p>
-                                  </div>
-                                </div>
-                            ))}
-                          </div>
-                      )}
-
-                      <div className="flex flex-wrap gap-2">
-                        {exp.skills.map((skill) => (
-                            <span
-                                key={skill}
-                                className="px-3 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-sm rounded-full border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
-                            >
-                        {skill}
-                      </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-              ))}
+        <motion.div
+          className="ml-8 bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30 flex-1 hover:border-[#9ca3af]/50 hover:bg-[#374151]/30 transition-all duration-300 hover:shadow-lg"
+          whileHover={{
+            y: -5,
+            boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+            transition: { duration: 0.3 }
+          }}
+        >
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-xl font-bold text-[#f9fafb] group-hover:text-[#9ca3af] transition-colors">
+                {exp.title}
+              </h3>
+              <p className="text-[#9ca3af] font-medium">{exp.organization}</p>
             </div>
+            <span className="text-sm text-[#9ca3af] bg-[#111827]/50 px-3 py-1 rounded-full">
+              {exp.period}
+            </span>
+          </div>
+
+          <p className="text-[#9ca3af] mb-4 whitespace-pre-line">{exp.description}</p>
+
+          {/* Detailed Tasks with staggered scroll animations */}
+          {exp.detailedTasks && exp.detailedTasks.length > 0 && (
+            <div className="space-y-4 mb-4">
+              {exp.detailedTasks.map((task, taskIndex) => {
+                const taskProgress = useTransform(
+                  itemProgress,
+                  [0, 0.3 + (taskIndex * 0.05), 0.8, 1],
+                  [0, 1, 1, 0]
+                );
+                const taskX = useTransform(
+                  itemProgress,
+                  [0, 0.3 + (taskIndex * 0.05), 0.8, 1],
+                  [-30, 0, 0, -20]
+                );
+
+                return (
+                  <motion.div
+                    key={taskIndex}
+                    className="flex items-start space-x-3"
+                    style={{ opacity: taskProgress, x: taskX }}
+                    whileHover={{
+                      x: 10,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <motion.i
+                      className={`${task.icon} text-[#9ca3af] mt-1 text-lg`}
+                      whileHover={{
+                        scale: 1.2,
+                        color: "#f9fafb",
+                        transition: { duration: 0.2 }
+                      }}
+                    />
+                    <div>
+                      <span className="text-[#f9fafb] font-medium text-sm">{task.category}</span>
+                      <p className="text-[#9ca3af] text-sm">{task.description}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Skills with staggered animations */}
+          <div className="flex flex-wrap gap-2">
+            {exp.skills.map((skill, skillIndex) => {
+              const skillProgress = useTransform(
+                itemProgress,
+                [0, 0.5 + (skillIndex * 0.03), 0.8, 1],
+                [0, 1, 1, 0]
+              );
+              const skillScale = useTransform(
+                itemProgress,
+                [0, 0.5 + (skillIndex * 0.03), 0.8, 1],
+                [0.8, 1, 1, 0.9]
+              );
+
+              return (
+                <motion.span
+                  key={skill}
+                  className="px-3 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-sm rounded-full border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
+                  style={{ opacity: skillProgress, scale: skillScale }}
+                  whileHover={{
+                    scale: 1.1,
+                    y: -2,
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  {skill}
+                </motion.span>
+              );
+            })}
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  };
+
+  // Timeline component with smooth scroll animation
+  const Timeline = () => {
+    const timelineRef = useRef(null);
+
+    const { scrollYProgress: timelineProgress } = useScroll({
+      target: timelineRef,
+      offset: ["start 0.8", "end 0.2"]
+    });
+
+    const timelineHeight = useTransform(timelineProgress, [0, 1], ["0%", "100%"]);
+
+    return (
+      <div ref={timelineRef} className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#6b7280]/30">
+        <motion.div
+          className="w-full bg-gradient-to-b from-[#6b7280] via-[#9ca3af] to-[#6b7280]"
+          style={{ height: timelineHeight }}
+        />
+      </div>
+    );
+  };
+
+  return (
+    <motion.section
+      ref={containerRef}
+      id="experience"
+      className="py-20 relative"
+      style={{ opacity: sectionOpacity, y: sectionY }}
+    >
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
+
+      <div className="container mx-auto px-6 max-w-5xl">
+        <motion.h2
+          className="text-4xl font-bold text-[#f9fafb] text-center mb-16"
+          style={{
+            opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]),
+            y: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [30, 0, 0, -30])
+          }}
+        >
+          Experience
+        </motion.h2>
+
+        <div className="relative">
+          <Timeline />
+
+          <div className="space-y-12">
+            {experiences.map((exp, index) => (
+              <ExperienceItem key={index} exp={exp} index={index} />
+            ))}
           </div>
         </div>
-      </section>
+      </div>
+    </motion.section>
   );
 }
 
@@ -771,6 +1085,8 @@ function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, threshold: 0.1 });
 
   const projects = [
     {
@@ -841,17 +1157,35 @@ function Projects() {
   };
 
   return (
-      <section id="projects" className="py-20 relative">
+      <motion.section
+        ref={ref}
+        id="projects"
+        className="py-20 relative"
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        variants={staggerContainer}
+      >
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
         <div className="container mx-auto px-6 max-w-6xl">
-          <h2 className="text-4xl font-bold text-[#f9fafb] text-center mb-16">
+          <motion.h2
+            className="text-4xl font-bold text-[#f9fafb] text-center mb-16"
+            variants={fadeInUp}
+          >
             Featured Projects
-          </h2>
+          </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={staggerContainer}
+          >
             {projects.map((project, index) => (
-                <div key={project.id} className="group" style={{ animationDelay: `${index * 0.2}s` }}>
+                <motion.div
+                  key={project.id}
+                  className="group"
+                  variants={fadeInUp}
+                  custom={index}
+                >
                   <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-2xl hover:scale-105">
                     <div className="relative h-48 overflow-hidden">
                       <img
@@ -880,9 +1214,9 @@ function Projects() {
                             <span
                                 key={tech}
                                 className="px-2 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-xs rounded border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
-                            >
-                        {tech}
-                      </span>
+                        >
+                    {tech}
+                  </span>
                         ))}
                       </div>
 
@@ -912,9 +1246,9 @@ function Projects() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Enhanced Modal with Zoomable Images */}
@@ -993,7 +1327,7 @@ function Projects() {
               </div>
             </div>
         )}
-      </section>
+      </motion.section>
   );
 }
 
@@ -1009,6 +1343,8 @@ function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('');
   const [cooldownTime, setCooldownTime] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, threshold: 0.1 });
 
   // Initialize EmailJS on component mount
   useEffect(() => {
@@ -1183,60 +1519,68 @@ function Contact() {
   const isFormDisabled = isSubmitting || cooldownTime > 0;
 
   return (
-      <section id="contact" className="py-20 relative">
+      <motion.section
+        ref={ref}
+        id="contact"
+        className="py-20 relative"
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        variants={staggerContainer}
+      >
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
         <div className="container mx-auto px-6 max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+          >
             <h2 className="text-4xl font-bold text-[#f9fafb] mb-8">
               Let's Connect
             </h2>
             <p className="text-[#9ca3af] text-lg mb-12">
               I'm actively seeking new opportunities and exciting projects to contribute to.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Information */}
-            <div className="space-y-8">
+            <motion.div
+              className="space-y-8"
+              variants={fadeInLeft}
+            >
               <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Get in Touch</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-                <a
-                    href="mailto:jerminbodcheo@gmail.com"
-                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-                >
-                  <i className="fas fa-envelope text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-                  <h4 className="font-semibold text-[#f9fafb] mb-2">Email</h4>
-                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">jerminbodcheo@gmail.com</p>
-                </a>
-
-                <a
-                    href="https://linkedin.com/in/jerminodcheo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-                >
-                  <i className="fab fa-linkedin text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-                  <h4 className="font-semibold text-[#f9fafb] mb-2">LinkedIn</h4>
-                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">Connect with me</p>
-                </a>
-
-                <a
-                    href="https://github.com/Jermin-Odcheo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
-                >
-                  <i className="fab fa-github text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors"></i>
-                  <h4 className="font-semibold text-[#f9fafb] mb-2">GitHub</h4>
-                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">View my code</p>
-                </a>
-              </div>
-            </div>
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-1 gap-6"
+                variants={staggerContainer}
+              >
+                {[
+                  { href: "mailto:jerminbodcheo@gmail.com", icon: "fas fa-envelope", title: "Email", description: "jerminbodcheo@gmail.com" },
+                  { href: "https://linkedin.com/in/jerminodcheo", icon: "fab fa-linkedin", title: "LinkedIn", description: "Connect with me", target: "_blank" },
+                  { href: "https://github.com/Jermin-Odcheo", icon: "fab fa-github", title: "GitHub", description: "View my code", target: "_blank" }
+                ].map((contact, index) => (
+                  <motion.a
+                      key={contact.title}
+                      href={contact.href}
+                      target={contact.target}
+                      rel={contact.target ? "noopener noreferrer" : undefined}
+                      className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300"
+                      variants={staggerItem}
+                      custom={index}
+                  >
+                    <i className={`${contact.icon} text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors`}></i>
+                    <h4 className="font-semibold text-[#f9fafb] mb-2">{contact.title}</h4>
+                    <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">{contact.description}</p>
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.div>
 
             {/* Contact Form */}
-            <div className="bg-[#374151]/20 backdrop-blur-sm p-8 rounded-xl border border-[#6b7280]/30">
+            <motion.div
+              className="bg-[#374151]/20 backdrop-blur-sm p-8 rounded-xl border border-[#6b7280]/30"
+              variants={fadeInRight}
+            >
               <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Send Message</h3>
 
               {/* Cooldown Warning */}
@@ -1285,8 +1629,8 @@ function Contact() {
                     onChange={handleInputChange}
                     maxLength="50"
                     className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all ${
-                      errors.name 
-                        ? 'border-red-500 focus:ring-red-500' 
+                      errors.name
+                        ? 'border-red-500 focus:ring-red-500'
                         : isFormDisabled
                         ? 'border-[#4b5563] bg-[#1f2937]'
                         : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
@@ -1310,8 +1654,8 @@ function Contact() {
                     onChange={handleInputChange}
                     maxLength="100"
                     className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all ${
-                      errors.email 
-                        ? 'border-red-500 focus:ring-red-500' 
+                      errors.email
+                        ? 'border-red-500 focus:ring-red-500'
                         : isFormDisabled
                         ? 'border-[#4b5563] bg-[#1f2937]'
                         : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
@@ -1335,8 +1679,8 @@ function Contact() {
                     onChange={handleInputChange}
                     maxLength="1000"
                     className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all resize-vertical ${
-                      errors.message 
-                        ? 'border-red-500 focus:ring-red-500' 
+                      errors.message
+                        ? 'border-red-500 focus:ring-red-500'
                         : isFormDisabled
                         ? 'border-[#4b5563] bg-[#1f2937]'
                         : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'
@@ -1404,10 +1748,10 @@ function Contact() {
                   </div>
                 )}
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
   );
 }
 
