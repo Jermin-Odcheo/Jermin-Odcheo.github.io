@@ -892,7 +892,7 @@ function Experience() {
 
     const { scrollYProgress: itemProgress } = useScroll({
       target: itemRef,
-      offset: ["start 0.9", "end 0.3"]
+      offset: ["start 0.9", "end 0.1"]
     });
 
     // Smooth transforms for each item
@@ -908,29 +908,19 @@ function Experience() {
         ref={itemRef}
         className="relative flex items-start group"
         style={{ opacity: itemOpacity, x: itemX, scale: itemScale }}
-        whileHover={{
-          scale: 1.02,
-          transition: { type: "spring", stiffness: 300, damping: 20 }
-        }}
+
       >
         <motion.div
           className="flex-shrink-0 w-16 h-16 bg-[#374151] rounded-full flex items-center justify-center relative z-10 border-4 border-[#111827] group-hover:bg-[#6b7280] transition-all duration-300 shadow-lg"
           style={{ rotate: iconRotate }}
-          whileHover={{
-            scale: 1.1,
-            transition: { duration: 0.3 }
-          }}
+
         >
           <i className={`${exp.icon} text-[#f9fafb] text-xl`}></i>
         </motion.div>
 
         <motion.div
           className="ml-8 bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30 flex-1 hover:border-[#9ca3af]/50 hover:bg-[#374151]/30 transition-all duration-300 hover:shadow-lg"
-          whileHover={{
-            y: -5,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-            transition: { duration: 0.3 }
-          }}
+
         >
           <div className="flex justify-between items-start mb-4">
             <div>
@@ -958,7 +948,7 @@ function Experience() {
                 const taskX = useTransform(
                   itemProgress,
                   [0, 0.3 + (taskIndex * 0.05), 0.8, 1],
-                  [-30, 0, 0, -20]
+                  [0, 0, 0, -20]
                 );
 
                 return (
@@ -1031,7 +1021,7 @@ function Experience() {
 
     const { scrollYProgress: timelineProgress } = useScroll({
       target: timelineRef,
-      offset: ["start 0.8", "end 0.2"]
+      offset: ["start 0.9", "end 0.2"]
     });
 
     const timelineHeight = useTransform(timelineProgress, [0, 1], ["0%", "100%"]);
@@ -1060,7 +1050,7 @@ function Experience() {
           className="text-4xl font-bold text-[#f9fafb] text-center mb-16"
           style={{
             opacity: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]),
-            y: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [30, 0, 0, -30])
+            y: useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [30, 0, 0, 0])
           }}
         >
           Experience
