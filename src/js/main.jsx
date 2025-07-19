@@ -1128,6 +1128,16 @@ function Projects() {
       screenshots: [],
       github: 'https://github.com/Jermin-Odcheo/Team-Yor-OnTrack',
       category: 'Data Mining'
+    },
+    {
+      id: 'wordy game',
+      title: 'Wordy Game',
+      description: 'Wordy is a Java word game where players use a given set of letters to form the longest valid word and win by scoring the highest.',
+      technologies: ['Java'],
+      image: '',
+      screenshots: [],
+      github: 'https://github.com/Jermin-Odcheo/WordyGame',
+      category: 'Game'
     }
   ];
 
