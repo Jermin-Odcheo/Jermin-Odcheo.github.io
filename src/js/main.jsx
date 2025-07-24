@@ -1134,7 +1134,7 @@ function Projects() {
       title: 'Wordy Game',
       description: 'Wordy is a Java word game where players use a given set of letters to form the longest valid word and win by scoring the highest.',
       technologies: ['Java'],
-      image: '',
+      image: '', // No image available
       screenshots: [],
       github: 'https://github.com/Jermin-Odcheo/WordyGame',
       category: 'Game'
@@ -1154,6 +1154,39 @@ function Projects() {
 
   const zoomImage = (imageSrc) => {
     setZoomedImage(imageSrc);
+  };
+
+  // Helper function to create placeholder image
+  const createPlaceholderImage = (title, category) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 300;
+    const ctx = canvas.getContext('2d');
+
+    // Background gradient
+    const gradient = ctx.createLinearGradient(0, 0, 400, 300);
+    gradient.addColorStop(0, '#374151');
+    gradient.addColorStop(1, '#6b7280');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 400, 300);
+
+    // Title text
+    ctx.fillStyle = '#f9fafb';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(title, 200, 140);
+
+    // Category text
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#9ca3af';
+    ctx.fillText(category, 200, 170);
+
+    // Icon (simple geometric shape)
+    ctx.strokeStyle = '#9ca3af';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(150, 100, 100, 60);
+
+    return canvas.toDataURL();
   };
 
   return (
@@ -1182,32 +1215,48 @@ function Projects() {
             {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
-                  className="group"
+                  className="group h-full"
                   variants={fadeInUp}
                   custom={index}
                 >
-                  <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-2xl hover:scale-105">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
-                          onClick={() => zoomImage(project.image)}
-                      />
+                  <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-2xl hover:scale-105 h-full flex flex-col">
+                    <div className="relative h-48 overflow-hidden flex-shrink-0">
+                      {project.image ? (
+                        <>
+                          <img
+                              src={project.image}
+                              alt={project.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
+                              onClick={() => zoomImage(project.image)}
+                          />
+                          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300"
+                               onClick={() => zoomImage(project.image)}>
+                            <i className="fas fa-search-plus text-white text-2xl"></i>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#374151] to-[#6b7280] flex flex-col items-center justify-center text-center p-6 group-hover:from-[#6b7280] group-hover:to-[#9ca3af] transition-all duration-300">
+                          <div className="bg-[#111827]/30 rounded-full p-4 mb-3 group-hover:bg-[#111827]/50 transition-all duration-300">
+                            <i className={`fas ${project.category === 'Game' ? 'fa-gamepad' : project.category === 'AI/ML' ? 'fa-brain' : project.category === 'Web App' ? 'fa-globe' : project.category === 'Data Mining' ? 'fa-chart-bar' : 'fa-code'} text-3xl text-[#f9fafb]`}></i>
+                          </div>
+                          <h4 className="text-[#f9fafb] font-bold text-lg mb-1">{project.title}</h4>
+                          <p className="text-[#9ca3af] text-sm">{project.category}</p>
+                          <div className="absolute bottom-3 right-3 text-[#9ca3af]/50 text-xs">
+                            <i className="fas fa-image"></i>
+                            <span className="ml-1">No preview</span>
+                          </div>
+                        </div>
+                      )}
                       <div className="absolute top-4 left-4">
-                    <span className="bg-[#111827]/80 text-[#9ca3af] px-3 py-1 rounded-full text-sm">
-                      {project.category}
-                    </span>
-                      </div>
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300"
-                           onClick={() => zoomImage(project.image)}>
-                        <i className="fas fa-search-plus text-white text-2xl"></i>
+                        <span className="bg-[#111827]/80 text-[#9ca3af] px-3 py-1 rounded-full text-sm">
+                          {project.category}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="p-6">
+                    <div className="p-6 flex-1 flex flex-col">
                       <h3 className="text-xl font-bold text-[#f9fafb] mb-3 group-hover:text-[#9ca3af] transition-colors">{project.title}</h3>
-                      <p className="text-[#9ca3af] mb-4 text-sm">{project.description}</p>
+                      <p className="text-[#9ca3af] mb-4 text-sm flex-1">{project.description}</p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.technologies.map((tech) => (
@@ -1220,7 +1269,7 @@ function Projects() {
                         ))}
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3 mt-auto">
                         {project.screenshots && project.screenshots.length > 0 ? (
                           <button
                               onClick={() => openModal(project)}
