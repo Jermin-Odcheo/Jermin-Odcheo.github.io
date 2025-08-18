@@ -102,6 +102,8 @@ import thesisChat1 from '/assets/thesis-project/Chat1.jpeg';
 import thesisChat2 from '/assets/thesis-project/Chat2.jpeg';
 import thesisHomepage from '/assets/thesis-project/Homepage.jpeg';
 import cluster from '/assets/academic-project/crime-pattern/cluster.png';
+// Profile image with Vite hashing - will generate secure hash-based filename
+import profileImageUrl from '../assets/profile/profile.png';
 
 // Custom hook for scroll animations with direction detection
 function useScrollAnimation(threshold = 0.1) {
@@ -158,7 +160,7 @@ function AnimatedSection({ children, className = '', delay = 0, animation = 'fad
     <div
       ref={ref}
       className={`${className} transition-all duration-700 ease-out ${
-        isVisible 
+        isVisible
           ? `opacity-100 ${animation === 'fadeInUp' ? 'translate-y-0' : animation === 'fadeInLeft' ? 'translate-x-0' : animation === 'fadeInRight' ? 'translate-x-0' : animation === 'scaleIn' ? 'scale-100' : 'translate-y-0'}`
           : `opacity-0 ${animation === 'fadeInUp' ? 'translate-y-16' : animation === 'fadeInLeft' ? '-translate-x-16' : animation === 'fadeInRight' ? 'translate-x-16' : animation === 'scaleIn' ? 'scale-90' : 'translate-y-16'}`
       }`}
@@ -178,8 +180,8 @@ function StaggeredContainer({ children, className = '', staggerDelay = 100 }) {
       {React.Children.map(children, (child, index) => (
         <div
           className={`transition-all duration-700 ease-out ${
-            isVisible 
-              ? 'opacity-100 translate-y-0' 
+            isVisible
+              ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: `${index * staggerDelay}ms` }}
@@ -538,7 +540,7 @@ function Hero() {
               <AnimatedSection animation="scaleIn" delay={400} className="flex justify-center lg:justify-start">
                 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300">
                   <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
-                    <span className="text-4xl font-bold text-[#111827]">JO</span>
+                    <img src={profileImageUrl} alt="Profile" className="w-full h-full rounded-full object-cover" />
                   </div>
                 </div>
               </AnimatedSection>
@@ -663,7 +665,6 @@ function Hero() {
                     'Developed AI chatbot with 72% accuracy rate',
                     'Led inventory management system development',
                     'Completed full-stack web development projects',
-                    'Active contributor to open-source projects'
                   ].map((achievement, index) => (
                       <div key={index} className="flex items-start space-x-3">
                         <i className="fas fa-check-circle text-green-400 mt-1 text-sm"></i>
@@ -1687,7 +1688,7 @@ function Contact() {
                     placeholder="Your full name"
                     disabled={isFormDisabled}
                   />
-                  {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-red-400 textsm mt-1">{errors.name}</p>}
                 </div>
 
                 {/* Email Field */}
@@ -1848,7 +1849,7 @@ function App() {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .animate-fade-in {
           animation: fadeIn 1s ease-out;
         }

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build output (docs folder for GitHub Pages)
+docs/
+
+# Profile image - keep original HD file secure
+src/assets/profile/profile.png
