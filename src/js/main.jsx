@@ -94,14 +94,14 @@ const staggerItem = {
 };
 
 // Import images
-import inventoryLogin from '/assets/internship-project/ims_login.png';
-import inventoryDashboard from '/assets/internship-project/ims_dashboard.png';
-import animeHomepage from '/assets/academic-project/anime-rest-api/Anime.jpeg';
-import mangaHomepage from '/assets/academic-project/anime-rest-api/Manga.jpeg';
-import thesisChat1 from '/assets/thesis-project/Chat1.jpeg';
-import thesisChat2 from '/assets/thesis-project/Chat2.jpeg';
-import thesisHomepage from '/assets/thesis-project/Homepage.jpeg';
-import cluster from '/assets/academic-project/crime-pattern/cluster.png';
+import inventoryLogin from '../assets/internship-project/ims_login.png';
+import inventoryDashboard from '../assets/internship-project/ims_dashboard.png';
+import animeHomepage from '../assets/academic-project/anime-rest-api/Anime.jpeg';
+import mangaHomepage from '../assets/academic-project/anime-rest-api/Manga.jpeg';
+import thesisChat1 from '../assets/thesis-project/Chat1.jpeg';
+import thesisChat2 from '../assets/thesis-project/Chat2.jpeg';
+import thesisHomepage from '../assets/thesis-project/Homepage.jpeg';
+import cluster from '../assets/academic-project/crime-pattern/cluster.png';
 // Profile image with Vite hashing - will generate secure hash-based filename
 import profileImageUrl from '../assets/profile/profile.png';
 // Add certificate PDF imports
@@ -735,7 +735,7 @@ function Hero() {
                 <div className="relative w-full h-[calc(95vh-80px)] bg-[#f9fafb]">
                   {/* PDF Embed - Primary method */}
                   <embed
-                      src="/assets/resume/odcheo_resume.pdf#toolbar=1&navpanes=1&scrollbar=1"
+                      src="/src/assets/resume/odcheo_resume.pdf#toolbar=1&navpanes=1&scrollbar=1"
                       type="application/pdf"
                       className="w-full h-full"
                       onError={() => {
@@ -747,7 +747,7 @@ function Hero() {
 
                   {/* Fallback iframe */}
                   <iframe
-                      src="/assets/resume/odcheo_resume.pdf"
+                      src="/src/assets/resume/odcheo_resume.pdf"
                       className="w-full h-full absolute top-0 left-0 hidden"
                       id="resume-iframe-fallback"
                       title="Resume PDF"
@@ -1279,30 +1279,30 @@ function Projects() {
                         ))}
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                        {project.screenshots && project.screenshots.length > 0 ? (
-                          <button
-                              onClick={() => openModal(project)}
-                              className="flex-1 bg-[#9ca3af]/20 hover:bg-[#9ca3af]/30 text-[#f9fafb] font-medium py-3 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/30 hover:border-[#9ca3af]/50 hover:shadow-lg text-sm sm:text-base"
-                          >
-                            View Details
-                          </button>
-                        ) : (
-                          <div className="hidden sm:block flex-1"></div>
+                      <div className="flex gap-2">
+                        {project.details && (
+                            <a
+                                href={project.details}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-1 bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2"
+                            >
+                              View Details
+                            </a>
                         )}
                         {project.github && (
                             <a
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`${project.screenshots && project.screenshots.length > 0 ? 'sm:flex-none' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-3 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
+                                className="flex-1 bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2"
                             >
                               <i className="fab fa-github"></i>
-                              <span className="sm:hidden">GitHub</span>
-                              <span className="hidden sm:inline">{project.screenshots && project.screenshots.length > 0 ? '' : 'View on GitHub'}</span>
+                              <span>View on GitHub</span>
                             </a>
                         )}
                       </div>
+
                     </div>
                   </div>
                 </motion.div>

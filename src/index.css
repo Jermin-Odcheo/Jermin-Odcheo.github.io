@@ -95,3 +95,16 @@
 .blink {
     animation: blink 1s step-end infinite;
 }
+
+/* Global smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}
+
+/* Prevent anchored sections from sitting flush under fixed/floating nav */
+section { scroll-margin-top: 80px; }
