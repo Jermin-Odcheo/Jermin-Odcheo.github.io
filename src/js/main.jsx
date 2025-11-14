@@ -849,56 +849,36 @@ function Experience() {
             title: 'Web Development Internship',
             organization: 'TMDD SLU',
             period: 'Jan 2025 - May 2025',
-            description: 'Led development of a comprehensive inventory management system using PHP, featuring role-based access control and modern UI components.',
+            description: 'Built an inventory and asset management web app with secure access control and a modern responsive UI.',
             detailedTasks: [
                 {
-                    category: 'Database Architecture & Design',
-                    description: 'Designed and implemented a comprehensive MySQL database schema for inventory and asset management, ensuring optimal data structure and relationships for scalable operations.',
-                    icon: 'fas fa-database'
-                },
-                {
-                    category: 'Security & Authentication',
-                    description: 'Developed a robust role-based access control (RBAC) system with secure session-based authentication, input sanitization, and encrypted password hashing to ensure data security and user access management.',
-                    icon: 'fas fa-shield-alt'
-                },
-                {
-                    category: 'Frontend Development',
-                    description: 'Built responsive interfaces using Bootstrap, JavaScript, and CSS, featuring dynamic data tables with pagination, interactive modals, and intuitive navigation components.',
-                    icon: 'fas fa-laptop-code'
-                },
-                {
-                    category: 'Backend Development',
-                    description: 'Implemented server-side logic using PHP with comprehensive CRUD operations, data validation, and secure API endpoints for seamless data flow between frontend and database.',
+                    category: 'Architecture & Backend',
+                    description: 'Designed the MySQL schema and PHP backend with validated CRUD operations and audit-ready activity logging.',
                     icon: 'fas fa-server'
                 },
                 {
-                    category: 'Real-time Table Updates',
-                    description: 'Automatically refreshed table data after each SQL CRUD operation to show changes instantly.',
-                    icon: 'fas fa-sync-alt'
+                    category: 'Security & Authentication',
+                    description: 'Implemented RBAC, secure session-based login, input validation, and password hashing to protect data.',
+                    icon: 'fas fa-shield-alt'
                 },
                 {
-                    category: 'Quality Assurance & Testing',
-                    description: 'Conducted thorough testing of website performance, CRUD functionality, user interface elements, error handling, and data flow validation to ensure optimal system reliability.',
-                    icon: 'fas fa-bug'
+                    category: 'Frontend & UX',
+                    description: 'Developed responsive Bootstrap interfaces with dynamic tables, modals, and intuitive navigation.',
+                    icon: 'fas fa-laptop-code'
                 },
                 {
-                    category: 'Advanced Integrations',
-                    description: 'Implemented document generation capabilities using DomPDF and PHPOffice libraries, and managed dependencies with Composer for enhanced functionality.',
+                    category: 'Integrations & Documents',
+                    description: 'Integrated DomPDF and PHPOffice for automated reports and managed PHP dependencies with Composer.',
                     icon: 'fas fa-puzzle-piece'
                 },
                 {
-                    category: 'Audit & Compliance',
-                    description: 'Developed comprehensive logging systems to track all CRUD operations and data changes, ensuring full audit trails for inventory management compliance.',
-                    icon: 'fas fa-clipboard-check'
-                },
-                {
-                    category: 'UI/UX Enhancement',
-                    description: 'Designed user-friendly interfaces with Font Awesome icons, consistent spacing, and intuitive placement of elements, resulting in improved user engagement and workflow efficiency.',
-                    icon: 'fas fa-paint-brush'
+                    category: 'Testing & Reliability',
+                    description: 'Tested core flows (login, CRUD, reporting) to ensure stability, usability, and consistent data.',
+                    icon: 'fas fa-bug'
                 }
             ],
-            skills: ['HTML', 'CSS', 'PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
-            icon: 'fas fa-briefcase'
+            skills: ['HTML', 'CSS', 'PHP', 'JavaScript', 'MySQL', 'Bootstrap', 'Composer', 'DomPDF', 'PHPOffice'],
+            icon: 'fas fa-laptop-code'
         },
         {
             title: 'Capstone Research Project',
@@ -930,7 +910,7 @@ function Experience() {
             organization: 'Professional Development',
             period: '2024 - Present',
             description: 'Continuously expanding expertise in modern web development technologies through structured self-learning and project building.',
-            skills: ['React', 'Tailwind CSS', 'Vite', 'Git'],
+            skills: ['React', 'Tailwind CSS', 'Vite', 'Git','JavaScript','Node.js'],
             icon: 'fas fa-code'
         }
     ];
