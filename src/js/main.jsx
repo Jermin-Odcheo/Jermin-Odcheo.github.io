@@ -63,20 +63,6 @@ const fadeInRight = {
     }
 };
 
-const scaleIn = {
-    hidden: {
-        opacity: 0,
-        scale: 0.8
-    },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            duration: 0.6,
-            ease: "easeOut"
-        }
-    }
-};
 
 const staggerItem = {
     hidden: {
@@ -173,7 +159,7 @@ function AnimatedSection({children, className = '', delay = 0, animation = 'fade
             className={`${className} transition-all duration-700 ease-out ${
                 isVisible
                     ? `opacity-100 ${animation === 'fadeInUp' ? 'translate-y-0' : animation === 'fadeInLeft' ? 'translate-x-0' : animation === 'fadeInRight' ? 'translate-x-0' : animation === 'scaleIn' ? 'scale-100' : 'translate-y-0'}`
-                    : `opacity-0 ${animation === 'fadeInUp' ? 'translate-y-16' : animation === 'fadeInLeft' ? '-translate-x-16' : animation === 'fadeInRight' ? 'translate-x-16' : animation === 'scaleIn' ? 'scale-90' : 'translate-y-16'}`
+                    : `opacity-0 ${animation === 'fadeInUp' ? 'translate-y-16' : animation === 'fadeInLeft' ? '-translate-x-16' : animation === 'fadeInRight' ? 'translate-x-16' : animation === 'scaleIn' ? 'scale-95' : 'translate-y-16'}`
             }`}
             style={{transitionDelay: `${delay}ms`}}
         >
@@ -204,14 +190,6 @@ function StaggeredContainer({children, className = '', staggerDelay = 100}) {
     );
 }
 
-// Color Palette Constants
-const colors = {
-    darkest: '#111827',   // Deep dark blue-gray
-    dark: '#374151',      // Dark gray
-    medium: '#6b7280',    // Medium gray
-    light: '#9ca3af',     // Light gray
-    lightest: '#f9fafb'   // Off-white
-};
 
 // Interactive Background Component with Diagonal Grid
 function InteractiveBackground() {
@@ -350,22 +328,6 @@ function InteractiveBackground() {
                     />
                 </svg>
             </div>
-
-            <style jsx>{`
-                .grid-base:hover ~ .grid-hover {
-                    opacity: 1;
-                }
-
-                @media (hover: hover) {
-                    .grid-hover {
-                        opacity: 0;
-                    }
-
-                    body:hover .grid-hover {
-                        opacity: 1;
-                    }
-                }
-            `}</style>
         </div>
     );
 }
@@ -666,7 +628,7 @@ function Hero() {
                                 Technical Skills
                             </h3>
                             <StaggeredContainer className="grid grid-cols-2 gap-3">
-                                {skills.map((skill, index) => (
+                                {skills.map((skill) => (
                                     <div
                                         key={skill.name}
                                         className="group flex items-center space-x-3 bg-[#111827]/30 rounded-lg px-3 py-2 hover:bg-[#6b7280]/30 transition-all duration-300"
@@ -791,13 +753,15 @@ function Hero() {
                                 title="Resume PDF"
                                 onError={() => {
                                     // Show manual fallback message
-                                    document.getElementById('resume-fallback-message').classList.remove('hidden');
+                                    const fallbackEl = document.getElementById('resume-fallback-message');
+                                    if (fallbackEl) fallbackEl.style.display = 'flex';
                                 }}
                             />
 
-                            {/* Manual fallback message */}
+                            {/* Manual fallback message - controlled by JS, initially hidden */}
                             <div id="resume-fallback-message"
-                                 className="hidden absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                                 className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center"
+                                 style={{display: 'none'}}>
                                 <div className="bg-white rounded-lg p-6 shadow-lg max-w-md">
                                     <i className="fas fa-file-pdf text-red-500 text-4xl mb-4"></i>
                                     <h4 className="text-[#111827] font-bold text-lg mb-2">PDF Viewer Not Supported</h4>
@@ -916,7 +880,7 @@ function Experience() {
     ];
 
     // Individual experience item component with smooth scroll animations
-    const ExperienceItem = ({exp, index}) => {
+    const ExperienceItem = ({exp}) => {
         const itemRef = useRef(null);
 
         const {scrollYProgress: itemProgress} = useScroll({
@@ -1175,10 +1139,6 @@ function Projects() {
         }
     ];
 
-    const openModal = (project) => {
-        setSelectedProject(project);
-        setShowModal(true);
-    };
 
     const closeModal = () => {
         setShowModal(false);
@@ -1190,38 +1150,6 @@ function Projects() {
         setZoomedImage(imageSrc);
     };
 
-    // Helper function to create placeholder image
-    const createPlaceholderImage = (title, category) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 400;
-        canvas.height = 300;
-        const ctx = canvas.getContext('2d');
-
-        // Background gradient
-        const gradient = ctx.createLinearGradient(0, 0, 400, 300);
-        gradient.addColorStop(0, '#374151');
-        gradient.addColorStop(1, '#6b7280');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 400, 300);
-
-        // Title text
-        ctx.fillStyle = '#f9fafb';
-        ctx.font = 'bold 24px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(title, 200, 140);
-
-        // Category text
-        ctx.font = '16px Arial';
-        ctx.fillStyle = '#9ca3af';
-        ctx.fillText(category, 200, 170);
-
-        // Icon (simple geometric shape)
-        ctx.strokeStyle = '#9ca3af';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(150, 100, 100, 60);
-
-        return canvas.toDataURL();
-    };
 
     return (
         <motion.section
@@ -1762,7 +1690,7 @@ function Contact() {
         const lastSubmission = localStorage.getItem('lastEmailSubmission');
         if (lastSubmission) {
             const now = Date.now();
-            const oneMinute = 1 * 60 * 1000; // Changed to 1 minute
+            const oneMinute = 60000; // 1 minute in milliseconds
             const timePassed = now - parseInt(lastSubmission);
 
             if (timePassed < oneMinute) {
@@ -1860,12 +1788,14 @@ function Contact() {
             // Rate limiting check (simple client-side protection)
             const lastSubmission = localStorage.getItem('lastEmailSubmission');
             const now = Date.now();
-            const oneMinute = 1 * 60 * 1000; // Changed to 1 minute
+            const oneMinute = 60000; // 1 minute in milliseconds
 
             if (lastSubmission && (now - parseInt(lastSubmission)) < oneMinute) {
                 const remainingTime = Math.ceil((oneMinute - (now - parseInt(lastSubmission))) / 1000);
                 setCooldownTime(remainingTime);
-                throw new Error(`Please wait ${formatTime(remainingTime)} before sending another message.`);
+                setSubmitStatus('cooldown');
+                setIsSubmitting(false);
+                return;
             }
 
             // Send email using EmailJS
@@ -2201,23 +2131,6 @@ function App() {
                     <Footer/>
                 </div>
             </div>
-
-            <style jsx>{`
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .animate-fade-in {
-                    animation: fadeIn 1s ease-out;
-                }
-            `}</style>
         </StrictMode>
     );
 }
