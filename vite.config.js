@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  // Use relative paths so that assets load correctly on GitHub Pages
-  base: '/',
+  // Use relative paths so that assets load correctly on GitHub Pages and IDE can resolve them
+  base: './',
   plugins: [tailwindcss(), react()],
   build: {
     // Output the production builds into the `docs/` folder
