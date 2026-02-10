@@ -229,7 +229,7 @@ function Hero() {
   };
 
   return (
-      <section id="hero" className="h-screen flex flex-col relative overflow-hidden">
+      <section id="hero" className="min-h-screen lg:h-screen flex flex-col relative overflow-visible lg:overflow-hidden">
         <div className="flex-1 flex items-center container mx-auto px-8 lg:px-12 relative z-10 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center w-full max-w-7xl mx-auto">
             <AnimatedSection animation="fadeInLeft" className="text-center lg:text-left space-y-6">
@@ -651,7 +651,7 @@ function Experience() {
       variants={sectionVariants}
       initial="hidden"
       whileInView="show"
-      viewport={{ amount: 0.2, margin: '0px 0px -10% 0px' }}
+      viewport={{ amount: 0.05, margin: '0px 0px -30% 0px', once: true }}
       style={{ willChange: 'transform, opacity' }}
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
@@ -668,7 +668,7 @@ function Experience() {
               className="w-full h-full bg-gradient-to-b from-[#6b7280] via-[#9ca3af] to-[#6b7280] origin-top"
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
-              viewport={{ amount: 0.4 }}
+              viewport={{ amount: 0.1, once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               style={{ willChange: 'transform' }}
             />
