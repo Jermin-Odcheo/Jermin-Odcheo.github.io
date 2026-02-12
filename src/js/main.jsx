@@ -285,11 +285,10 @@ function Hero() {
 
               <AnimatedSection delay={800} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-2 flex items-center text-base">
-                  <i className="fas fa-user mr-2"></i>Professional Summary
+                  <i className="fas fa-user mr-2"></i>Summary
                 </h3>
                 <p className="text-[#9ca3af] leading-relaxed text-sm">
-                  I'm a full-stack developer skilled in modern web technologies and AI integration. I'm eager to build scalable web
-                  applications and contribute to innovative projects with a dynamic team.
+                  Recent BS Information Technology graduate from Saint Louis University with proven expertise in full-stack development and AI implementation. Led the development of a production-ready inventory management system with role-based access control and real-time CRUD operations during my TMDD internship. Designed and fine-tuned NaviBot, an AI chatbot powered by BART models achieving 72% accuracy for enrollment queries. Proficient in modern web technologies including React, PHP, and Python, with hands-on experience in machine learning, data analytics, and RESTful API development. Passionate about creating scalable, user-centric solutions that solve real-world problems.
                 </p>
               </AnimatedSection>
 
