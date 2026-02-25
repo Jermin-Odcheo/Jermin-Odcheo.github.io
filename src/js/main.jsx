@@ -288,8 +288,7 @@ function Hero() {
                   <i className="fas fa-user mr-2"></i>Summary
                 </h3>
                 <p className="text-[#9ca3af] leading-relaxed text-sm">
-                  Recent BS Information Technology graduate from Saint Louis University with proven expertise in full-stack development and AI implementation. Led the development of a production-ready inventory management system with role-based access control and real-time CRUD operations during my TMDD internship. Designed and fine-tuned NaviBot, an AI chatbot powered by BART models achieving 72% accuracy for enrollment queries. Proficient in modern web technologies including React, PHP, and Python, with hands-on experience in machine learning, data analytics, and RESTful API development. Passionate about creating scalable, user-centric solutions that solve real-world problems.
-                </p>
+                  Recent Information Technology graduate from Saint Louis University with strong full-stack development and AI experience. During my TMDD internship, I led the development of a production-ready inventory management system with role-based access control and real-time CRUD functionality. I also built and fine-tuned NaviBot, an AI chatbot using BART models to handle enrollment-related questions. Skilled in React, PHP, and Python, with experience in machine learning, data analytics, RESTful APIs, and building scalable, user-focused solutions.</p>
               </AnimatedSection>
 
               <AnimatedSection delay={1000} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
@@ -825,7 +824,7 @@ function Contact() {
               </div>
               <div>
                 <label htmlFor="message" className="block text-[#f9fafb] font-medium mb-2">Message *</label>
-                <textarea id="message" name="message" rows="5" value={formData.message} onChange={handleInputChange} maxLength="1000" disabled={isFormDisabled} className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all resize-vertical ${errors.message ? 'border-red-500 focus:ring-red-500' : isFormDisabled ? 'border-[#4b5563] bg-[#1f2937]' : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'}`} placeholder="Tell me about your project, job opportunity, or just say hello..."></textarea>
+                <textarea id="message" name="message" rows="5" value={formData.message} onChange={handleInputChange} maxLength="1000" disabled={isFormDisabled} className={`w-full px-4 py-3 bg-[#111827] border rounded-lg text-[#f9fafb] placeholder-[#9ca3af] focus:outline-none focus:ring-2 transition-all resize-vertical ${errors.message ? 'border-red-500 focus:ring-red-500' : isFormDisabled ? 'border-[#4b5563] bg-[#1f2937]' : 'border-[#6b7280] focus:ring-blue-500 focus:border-blue-500'}`} placeholder="What’s on your mind?"></textarea>
                 {errors.message && <p className="text-red-400 text-sm mt-1">{errors.message}</p>}
                 <p className="text-xs text-[#6b7280] mt-1">{formData.message.length}/1000 characters</p>
               </div>

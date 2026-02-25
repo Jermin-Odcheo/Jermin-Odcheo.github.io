@@ -1,5 +1,5 @@
 // src/js/components/Projects.jsx
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { motion as Motion } from 'framer-motion';
 import { staggerContainer, fadeInUp } from './animations.js';
@@ -7,17 +7,94 @@ import { staggerContainer, fadeInUp } from './animations.js';
 // Asset imports
 import inventoryLogin from '../../assets/internship-project/ims_login.png';
 import inventoryDashboard from '../../assets/internship-project/ims_dashboard.png';
-import animeHomepage from '../../assets/academic-project/anime-rest-api/Anime.jpeg';
-import mangaHomepage from '../../assets/academic-project/anime-rest-api/Manga.jpeg';
+import mediaArchive from '../../assets/academic-project/media-rest-api/MediaArchive.jpeg';
+
 import thesisChat1 from '../../assets/thesis-project/Chat1.jpeg';
 import thesisChat2 from '../../assets/thesis-project/Chat2.jpeg';
 import thesisHomepage from '../../assets/thesis-project/Homepage.jpeg';
 import cluster from '../../assets/academic-project/crime-pattern/cluster.png';
 
 export default function Projects() {
+  // Restore in-view tracking used by the section (prevents ref/isInView undefined runtime crash)
+  const { ref, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: true });
+
   const [zoomedImage, setZoomedImage] = useState(null);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, threshold: 0.1 });
+
+  // Zoom state for the modal
+  const [zoomScale, setZoomScale] = useState(1);
+  const viewerRef = useRef(null);
+
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 4;
+  const ZOOM_STEP = 0.5;
+
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+
+  const resetZoom = useCallback(() => {
+    setZoomScale(1);
+    // Reset scroll position when resetting zoom
+    if (viewerRef.current) {
+      viewerRef.current.scrollTop = 0;
+      viewerRef.current.scrollLeft = 0;
+    }
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setZoomedImage(null);
+    resetZoom();
+  }, [resetZoom]);
+
+  const openModal = useCallback(
+    (imageSrc) => {
+      setZoomedImage(imageSrc);
+      setZoomScale(1);
+    },
+    []
+  );
+
+  // Lock body scroll + allow ESC to close when modal is open
+  useEffect(() => {
+    if (!zoomedImage) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [zoomedImage, closeModal]);
+
+  const zoomImage = (imageSrc) => openModal(imageSrc);
+
+  const applyZoom = useCallback(
+    (nextScale) => {
+      const clampedNext = clamp(nextScale, MIN_SCALE, MAX_SCALE);
+      setZoomScale(clampedNext);
+    },
+    []
+  );
+
+  const onWheelZoom = (e) => {
+    // Only zoom when Ctrl key is pressed (standard zoom behavior)
+    // Otherwise, allow normal scrolling of the content
+    if (!e.ctrlKey) {
+      return; // Allow default scroll behavior
+    }
+
+    e.preventDefault();
+
+    // Make wheel direction feel natural: wheel down => zoom out, wheel up => zoom in
+    const direction = e.deltaY < 0 ? 1 : -1;
+    const next = zoomScale + direction * ZOOM_STEP;
+
+    applyZoom(next);
+  };
 
   const projects = [
     {
@@ -55,13 +132,13 @@ export default function Projects() {
       description:
         'Web application that fetches and displays anime data using external APIs with modern UI design.',
       technologies: ['JavaScript', 'REST API', 'HTML/CSS'],
-      image: animeHomepage,
+      image: mediaArchive,
       screenshots: [
-        { src: animeHomepage, title: 'Anime Homepage' },
-        { src: mangaHomepage, title: 'Manga Section' },
+        { src: mediaArchive, title: 'MediaArchives Homepage' },
+
       ],
       github:
-        'https://github.com/JoefreyToriano/it312-9474-mt-teamburnersly/tree/main/activity_2_dom',
+        'https://github.com/Jermin-Odcheo/Anime-Manga-Fetch-API',
       category: 'Web App',
     },
     {
@@ -87,8 +164,6 @@ export default function Projects() {
       category: 'Game',
     },
   ];
-
-  const zoomImage = (imageSrc) => setZoomedImage(imageSrc);
 
   return (
     <Motion.section
@@ -196,23 +271,118 @@ export default function Projects() {
         </Motion.div>
       </div>
 
-      {/* Full-Screen Zoom Modal */}
+      {/* Full-Screen Zoom Modal (zoom + pan) - 16:9 Aspect Ratio Container */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 bg-black/95 flex items-center justify-center z-60 p-4 overflow-auto"
-          onClick={() => setZoomedImage(null)}
+          className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
+          onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image viewer"
         >
-          <div className="relative max-w-[90%] max-h-[90vh]">
-            <img src={zoomedImage} alt="Zoomed view" className="max-w-full max-h-[85vh] object-contain mx-auto" />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setZoomedImage(null);
+          <div
+            className="relative w-full max-w-7xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxHeight: '90vh' }}
+          >
+            {/* Toolbar */}
+            <div className="mb-3 flex items-center justify-between gap-2 bg-black/70 rounded-lg p-3">
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => applyZoom(zoomScale - ZOOM_STEP)}
+                  disabled={zoomScale <= MIN_SCALE}
+                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  aria-label="Zoom out"
+                  title="Zoom out"
+                >
+                  <i className="fas fa-search-minus"></i>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyZoom(zoomScale + ZOOM_STEP)}
+                  disabled={zoomScale >= MAX_SCALE}
+                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  aria-label="Zoom in"
+                  title="Zoom in"
+                >
+                  <i className="fas fa-search-plus"></i>
+                </button>
+                <button
+                  type="button"
+                  onClick={resetZoom}
+                  className="text-white bg-white/10 rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  aria-label="Reset zoom"
+                  title="Reset zoom and position"
+                >
+                  <i className="fas fa-undo-alt mr-1"></i>
+                  Reset
+                </button>
+                <div className="text-white/90 text-sm bg-white/10 rounded-lg px-4 py-2 select-none font-mono">
+                  {Math.round(zoomScale * 100)}%
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeModal}
+                className="text-white bg-red-600/80 rounded-lg px-4 py-2 hover:bg-red-600 transition-colors font-medium"
+                aria-label="Close"
+                title="Close (ESC)"
+              >
+                <i className="fas fa-times mr-1"></i>
+                Close
+              </button>
+            </div>
+
+            {/* 16:9 Aspect Ratio Container */}
+            <div
+              className="relative w-full bg-[#1a1a1a] rounded-lg overflow-hidden shadow-2xl"
+              style={{
+                aspectRatio: '16 / 9',
+                maxHeight: 'calc(90vh - 80px)',
               }}
-              className="absolute top-4 right-4 text-white bg-black/50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70 transition-colors"
             >
-              <i className="fas fa-times"></i>
-            </button>
+              {/* Viewer surface with scroll capability */}
+              <div
+                className="w-full h-full overflow-auto"
+                onWheel={onWheelZoom}
+                style={{
+                  touchAction: zoomScale > 1 ? 'none' : 'auto',
+                  scrollBehavior: 'smooth'
+                }}
+                ref={viewerRef}
+              >
+                <div
+                  className="min-w-full min-h-full flex items-center justify-center p-4"
+                  style={{
+                    transform: `scale(${zoomScale})`,
+                    transformOrigin: 'center center',
+                    transition: zoomScale === 1 ? 'transform 0.3s ease' : 'none',
+                  }}
+                >
+                  <img
+                    src={zoomedImage}
+                    alt="Zoomed view"
+                    draggable={false}
+                    className="max-w-full max-h-full object-contain select-none"
+                    style={{
+                      cursor: zoomScale > 1 ? 'grab' : 'default',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Helper text overlay */}
+              {zoomScale === 1 && (
+                <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+                  <div className="inline-block bg-black/70 text-white/80 text-xs px-4 py-2 rounded-full backdrop-blur-sm">
+                    <i className="fas fa-info-circle mr-2"></i>
+                    Use zoom buttons or Ctrl+Wheel to zoom • Scroll to navigate • Click outside or ESC to close
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
