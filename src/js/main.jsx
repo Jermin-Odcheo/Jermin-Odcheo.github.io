@@ -7,12 +7,13 @@ import { EMAILJS_CONFIG } from '../config/emailjs.js';
 import '../index.css';
 
 // Shared components/utilities
-import { AnimatedSection, StaggeredContainer } from './components/Animated.jsx';
+import { AnimatedSection, StaggeredContainer, AppReadyContext, HeroAnimated } from './components/Animated.jsx';
 import InteractiveBackground from './components/InteractiveBackground.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 import { staggerContainer, fadeInUp, fadeInLeft, fadeInRight, staggerItem } from './components/animations.js';
 
-// Lazy-loaded heavy sections
+// Lazy-loaded sections
+const Experience = React.lazy(() => import('./components/Experience.jsx'));
 const Projects = React.lazy(() => import('./components/Projects.jsx'));
 const Certifications = React.lazy(() => import('./components/Certifications.jsx'));
 
@@ -232,22 +233,22 @@ function Hero() {
       <section id="hero" className="min-h-screen lg:h-screen flex flex-col relative overflow-visible lg:overflow-hidden">
         <div className="flex-1 flex items-center container mx-auto px-8 lg:px-12 relative z-10 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center w-full max-w-7xl mx-auto">
-            <AnimatedSection animation="fadeInLeft" className="text-center lg:text-left space-y-6">
-              <AnimatedSection delay={200} className="flex justify-center lg:justify-start">
+            <HeroAnimated animation="fadeInLeft" className="text-center lg:text-left space-y-6">
+              <HeroAnimated delay={200} className="flex justify-center lg:justify-start">
                 <div className="bg-green-500/20 border border-green-500/50 rounded-full px-5 py-2 flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
                   <span className="text-green-400 font-medium text-sm">Available for Employment</span>
                 </div>
-              </AnimatedSection>
+              </HeroAnimated>
 
-              <AnimatedSection animation="scaleIn" delay={400} className="flex justify-center lg:justify-start">
+              <HeroAnimated animation="scaleIn" delay={400} className="flex justify-center lg:justify-start">
                 <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300">
                   <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
                     <img src={profileImageUrl} alt="Profile" className="w-full h-full rounded-full object-cover" />
                   </div>
                 </div>
 
-                <AnimatedSection delay={1200} className="flex items-center space-x-3 ml-5">
+                <HeroAnimated delay={600} className="flex items-center space-x-3 ml-5">
                   {[
                     { icon: 'fab fa-github', href: 'https://github.com/Jermin-Odcheo', label: 'GitHub', color: 'hover:bg-gray-700' },
                     { icon: 'fab fa-linkedin', href: 'https://linkedin.com/in/jerminodcheo', label: 'LinkedIn', color: 'hover:bg-blue-600' },
@@ -264,10 +265,10 @@ function Hero() {
                         <i className={`${icon} text-base`}></i>
                       </a>
                   ))}
-                </AnimatedSection>
-              </AnimatedSection>
+                </HeroAnimated>
+              </HeroAnimated>
 
-              <AnimatedSection delay={600}>
+              <HeroAnimated delay={500}>
                 <h1 className="text-4xl lg:text-5xl font-bold text-[#f9fafb] mb-2">Jermin Odcheo</h1>
                 <div className="h-[2px] bg-blue-50 mx-auto lg:mx-0 w-48 my-2"></div>
                 <p className="text-xl lg:text-2xl text-[#9ca3af] mb-3">Full-Stack Developer</p>
@@ -281,17 +282,17 @@ function Hero() {
                     <span>BSIT Graduate</span>
                   </div>
                 </div>
-              </AnimatedSection>
+              </HeroAnimated>
 
-              <AnimatedSection delay={800} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
+              <HeroAnimated delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-2 flex items-center text-base">
                   <i className="fas fa-user mr-2"></i>Summary
                 </h3>
-                <p className="text-[#9ca3af] leading-relaxed text-sm">
-                  Recent Information Technology graduate from Saint Louis University with strong full-stack development and AI experience. During my TMDD internship, I led the development of a production-ready inventory management system with role-based access control and real-time CRUD functionality. I also built and fine-tuned NaviBot, an AI chatbot using BART models to handle enrollment-related questions. Skilled in React, PHP, and Python, with experience in machine learning, data analytics, RESTful APIs, and building scalable, user-focused solutions.</p>
-              </AnimatedSection>
+                <p className="text-[#9ca3af] leading-relaxed text-sm justify-center">
+                  IT graduate from Saint Louis University with hands-on full-stack and AI experience. Led the development of a production-ready inventory system with role-based access and real-time CRUD during my TMDD internship. I fine-tuned NaviBot, an AI chatbot using BART models to handle enrollment-related questions. Skilled in React, PHP, and Python, with experience in machine learning, data analytics, and scalable solutions.</p>
+              </HeroAnimated>
 
-              <AnimatedSection delay={1000} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <HeroAnimated delay={900} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <button
                     onClick={handleResumeView}
                     className="flex items-center justify-center space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
@@ -306,12 +307,12 @@ function Hero() {
                   <i className="fas fa-download"></i>
                   <span>Download Resume</span>
                 </button>
-              </AnimatedSection>
-            </AnimatedSection>
+              </HeroAnimated>
+            </HeroAnimated>
 
-            <AnimatedSection animation="fadeInRight" className="space-y-5">
+            <HeroAnimated animation="fadeInRight" className="space-y-5">
               {/* --- Technical Skills (Compact) --- */}
-              <AnimatedSection delay={300} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
+              <HeroAnimated delay={300} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
                 <h3 className="text-[#f9fafb] font-semibold mb-4 flex items-center text-base">
                   <i className="fas fa-code mr-2"></i>Technical Skills
                 </h3>
@@ -339,11 +340,11 @@ function Hero() {
                           </div>
                       ))}
                 </div>
-              </AnimatedSection>
+              </HeroAnimated>
 
               {/* Education & Achievements Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <AnimatedSection delay={500} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 border border-[#6b7280]/30">
+                <HeroAnimated delay={500} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 border border-[#6b7280]/30">
                   <h3 className="text-[#f9fafb] font-semibold mb-3 flex items-center text-base">
                     <i className="fas fa-graduation-cap mr-2"></i>Education
                   </h3>
@@ -352,9 +353,9 @@ function Hero() {
                     <p className="text-[#9ca3af] text-xs">Saint Louis University</p>
                     <p className="text-[#6b7280] text-xs">2021 - 2025</p>
                   </div>
-                </AnimatedSection>
+                </HeroAnimated>
 
-                <AnimatedSection delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 border border-[#6b7280]/30">
+                <HeroAnimated delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 border border-[#6b7280]/30">
                   <h3 className="text-[#f9fafb] font-semibold mb-3 flex items-center text-base">
                     <i className="fas fa-trophy mr-2"></i>Key Achievements
                   </h3>
@@ -370,24 +371,11 @@ function Hero() {
                         </div>
                     ))}
                   </StaggeredContainer>
-                </AnimatedSection>
+                </HeroAnimated>
               </div>
-            </AnimatedSection>
+            </HeroAnimated>
           </div>
         </div>
-
-        {/* Explore My Work - Fixed at bottom with proper spacing */}
-        <AnimatedSection delay={1400} className="pb-8 flex justify-center">
-          <button
-              onClick={() => scrollToSection('experience')}
-              className="animate-bounce hover:animate-pulse transition-all duration-300 cursor-pointer group"
-          >
-            <div className="flex flex-col items-center space-y-2">
-              <span className="text-[#9ca3af] text-sm group-hover:text-[#f9fafb] transition-colors">Explore My Work</span>
-              <i className="fas fa-chevron-down text-[#9ca3af] text-xl group-hover:text-[#f9fafb] transition-colors"></i>
-            </div>
-          </button>
-        </AnimatedSection>
 
         {showResume && (
             <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
@@ -487,198 +475,6 @@ function Hero() {
             </div>
         )}
       </section>
-  );
-}
-
-
-function Experience() {
-  const containerRef = useRef(null);
-
-  // Variants for smoother, GPU-friendly animations
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-  };
-
-  const listVariants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -40, scale: 0.98 },
-    show: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-  };
-
-  const iconVariants = {
-    hidden: { rotate: 10, scale: 0.9 },
-    show: { rotate: 0, scale: 1, transition: { type: 'spring', stiffness: 260, damping: 20 } },
-    hover: { rotate: 6, transition: { type: 'spring', stiffness: 200, damping: 14 } },
-  };
-
-  const blockVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
-
-  const chipVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    show: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
-    hover: { scale: 1.06, y: -2, transition: { duration: 0.15 } },
-  };
-
-  const experiences = [
-    {
-      title: 'Web Development Internship',
-      organization: 'TMDD SLU',
-      period: 'Jan 2025 - May 2025',
-      description: 'Led development of a comprehensive inventory management system using PHP, featuring role-based access control and modern UI components.',
-      detailedTasks: [
-        { category: 'Database Architecture & Design', description: 'Designed and implemented a comprehensive MySQL database schema for inventory and asset management, ensuring optimal data structure and relationships for scalable operations.', icon: 'fas fa-database' },
-        { category: 'Security & Authentication', description: 'Developed a robust role-based access control (RBAC) system with secure session-based authentication, input sanitization, and encrypted password hashing to ensure data security and user access management.', icon: 'fas fa-shield-alt' },
-        { category: 'Frontend Development', description: 'Built responsive interfaces using Bootstrap, JavaScript, and CSS, featuring dynamic data tables with pagination, interactive modals, and intuitive navigation components.', icon: 'fas fa-laptop-code' },
-        { category: 'Backend Development', description: 'Implemented server-side logic using PHP with comprehensive CRUD operations, data validation, and secure API endpoints for seamless data flow between frontend and database.', icon: 'fas fa-server' },
-        { category: 'Real-time Table Updates', description: 'Automatically refreshed table data after each SQL CRUD operation to show changes instantly.', icon: 'fas fa-sync-alt' },
-        { category: 'Quality Assurance & Testing', description: 'Conducted thorough testing of website performance, CRUD functionality, user interface elements, error handling, and data flow validation to ensure optimal system reliability.', icon: 'fas fa-bug' },
-        { category: 'Advanced Integrations', description: 'Implemented document generation capabilities using DomPDF and PHPOffice libraries, and managed dependencies with Composer for enhanced functionality.', icon: 'fas fa-puzzle-piece' },
-        { category: 'Audit & Compliance', description: 'Developed comprehensive logging systems to track all CRUD operations and data changes, ensuring full audit trails for inventory management compliance.', icon: 'fas fa-clipboard-check' },
-        { category: 'UI/UX Enhancement', description: 'Designed user-friendly interfaces with Font Awesome icons, consistent spacing, and intuitive placement of elements, resulting in improved user engagement and workflow efficiency.', icon: 'fas fa-paint-brush' },
-      ],
-      skills: ['HTML', 'CSS', 'PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
-      icon: 'fas fa-briefcase',
-    },
-    {
-      title: 'Capstone Research Project',
-      organization: 'SAMCIS, Saint Louis University',
-      period: 'Aug 2024 - Dec 2024',
-      description: 'Designed and implemented NaviBot, an AI-powered chatbot utilizing generative AI and BART models for academic assistance with 72% accuracy rate.',
-      detailedTasks: [
-        { category: 'Data Engineering & Preprocessing', description: 'Executed comprehensive data cleaning, processing, and augmentation workflows to prepare high-quality training datasets for machine learning model development.', icon: 'fas fa-cogs' },
-        { category: 'Machine Learning Implementation', description: 'Fine-tuned a BART model using custom datasets, implementing transfer learning techniques for domain-specific enrollment queries.', icon: 'fas fa-brain' },
-        { category: 'Model Evaluation', description: 'Implemented validation using BERTScore, BLEU, and ROUGE metrics to ensure response accuracy and relevance.', icon: 'fas fa-chart-line' },
-      ],
-      skills: ['AI', 'Python', 'NLP', 'BART', 'Machine Learning', 'Data Science'],
-      icon: 'fas fa-robot',
-    },
-    {
-      title: 'Self-Directed Learning',
-      organization: 'Professional Development',
-      period: '2024 - Present',
-      description: 'Continuously expanding expertise in modern web development technologies through structured self-learning and project building.',
-      skills: ['React', 'Tailwind CSS', 'Vite', 'Git'],
-      icon: 'fas fa-code',
-    },
-  ];
-
-  const ExperienceItem = React.memo(({ exp }) => {
-    return (
-      <Motion.div
-        className="relative flex items-start group"
-        variants={itemVariants}
-        style={{ willChange: 'transform, opacity' }}
-      >
-        <Motion.div
-          className="flex-shrink-0 w-16 h-16 bg-[#374151] rounded-full flex items-center justify-center relative z-10 border-4 border-[#111827] transition-all duration-300 shadow-lg"
-          variants={iconVariants}
-          whileHover="hover"
-          style={{ willChange: 'transform' }}
-        >
-          <i className={`${exp.icon} text-[#f9fafb] text-xl`}></i>
-        </Motion.div>
-        <Motion.div
-          className="ml-8 bg-[#374151]/20 backdrop-blur-sm rounded-xl p-6 border border-[#6b7280]/30 flex-1 hover:border-[#9ca3af]/50 hover:bg-[#374151]/30 transition-all duration-300 hover:shadow-lg"
-          variants={blockVariants}
-          style={{ willChange: 'transform, opacity' }}
-        >
-          <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-2 mb-4">
-            <div className="min-w-0">
-              <h3 className="text-xl font-bold text-[#f9fafb] group-hover:text-[#9ca3af] transition-colors">{exp.title}</h3>
-              <p className="text-[#9ca3af] font-medium">{exp.organization}</p>
-            </div>
-            <span className="text-xs sm:text-sm px-2 py-0.5 sm:px-3 sm:py-1 text-[#9ca3af] bg-[#111827]/50 rounded-full whitespace-nowrap">{exp.period}</span>
-          </div>
-          <p className="text-[#9ca3af] mb-4 whitespace-pre-line">{exp.description}</p>
-
-          {exp.detailedTasks && (
-            <Motion.div className="space-y-4 mb-4" variants={listVariants}>
-              {exp.detailedTasks.map((task, i) => (
-                <Motion.div
-                  key={i}
-                  className="flex items-start space-x-3"
-                  variants={blockVariants}
-                  whileHover={{ x: 8, transition: { duration: 0.18 } }}
-                  style={{ willChange: 'transform, opacity' }}
-                >
-                  <Motion.i
-                    className={`${task.icon} text-[#9ca3af] mt-1 text-lg`}
-                    whileHover={{ scale: 1.15, color: '#f9fafb', transition: { duration: 0.18 } }}
-                    style={{ willChange: 'transform' }}
-                  />
-                  <div>
-                    <span className="text-[#f9fafb] font-medium text-sm">{task.category}</span>
-                    <p className="text-[#9ca3af] text-sm">{task.description}</p>
-                  </div>
-                </Motion.div>
-              ))}
-            </Motion.div>
-          )}
-
-          <Motion.div className="flex flex-wrap gap-2" variants={listVariants}>
-            {exp.skills.map(skill => (
-              <Motion.span
-                key={skill}
-                className="px-3 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-sm rounded-full border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
-                variants={chipVariants}
-                whileHover="hover"
-                style={{ willChange: 'transform, opacity' }}
-              >
-                {skill}
-              </Motion.span>
-            ))}
-          </Motion.div>
-        </Motion.div>
-      </Motion.div>
-    );
-  });
-
-  return (
-    <Motion.section
-      ref={containerRef}
-      id="experience"
-      className="py-20 relative"
-      variants={sectionVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ amount: 0.05, margin: '0px 0px -30% 0px', once: true }}
-      style={{ willChange: 'transform, opacity' }}
-    >
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
-      <div className="container mx-auto px-6 max-w-5xl">
-        <Motion.h2
-          className="text-4xl font-bold text-[#f9fafb] text-center mb-16"
-          variants={blockVariants}
-        >
-          Experience
-        </Motion.h2>
-        <div className="relative">
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#6b7280]/30 overflow-hidden origin-top">
-            <Motion.div
-              className="w-full h-full bg-gradient-to-b from-[#6b7280] via-[#9ca3af] to-[#6b7280] origin-top"
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ amount: 0.1, once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              style={{ willChange: 'transform' }}
-            />
-          </div>
-          <Motion.div className="space-y-12" variants={listVariants}>
-            {experiences.map((exp, i) => (
-              <ExperienceItem key={i} exp={exp} />
-            ))}
-          </Motion.div>
-        </div>
-      </div>
-    </Motion.section>
   );
 }
 
@@ -852,32 +648,73 @@ function Footer() {
   );
 }
 
+// Pre-import chunk promises so Vite bundles them eagerly
+const ExperienceChunk     = import('./components/Experience.jsx');
+const ProjectsChunk       = import('./components/Projects.jsx');
+const CertificationsChunk = import('./components/Certifications.jsx');
+
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+  // Single object so loading→false and appReady→true always happen in ONE render,
+  // preventing the one-frame flash where the hero is visible but still opacity-0.
+  const [phase, setPhase] = useState({ loading: true, appReady: false });
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const preloadImage = (src) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = img.onerror = resolve;
+        img.src = src;
+      });
+
+    const run = async () => {
+      setProgress(10);
+      const chunks = Promise.all([ExperienceChunk, ProjectsChunk, CertificationsChunk]);
+      setProgress(25);
+      const images = Promise.all([profileImageUrl].map(preloadImage));
+      setProgress(40);
+      await Promise.all([chunks, images]);
+      setProgress(75);
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      setProgress(90);
+      await new Promise((r) => setTimeout(r, 350));
+      setProgress(100);
+    };
+
+    run();
   }, []);
-  if (loading) return <LoadingScreen />;
+
+  // Called by LoadingScreen after its 500ms fade-out animation completes.
+  // Atomically removes the loading screen AND enables hero animations in one render.
+  const handleLoadDone = () => {
+    setPhase({ loading: false, appReady: true });
+  };
+
   return (
-    <StrictMode>
-      <div className="min-h-screen relative">
-        <InteractiveBackground />
-        <div className="relative z-10">
-          <Navigation />
-          <Hero />
-          <Experience />
-          <Suspense fallback={<div className="py-20 text-center text-[#9ca3af]">Loading projects…</div>}>
-            <Projects />
-          </Suspense>
-          <Suspense fallback={<div className="py-20 text-center text-[#9ca3af]">Loading certifications…</div>}>
-            <Certifications />
-          </Suspense>
-          <Contact />
-          <Footer />
+    <>
+      {phase.loading && <LoadingScreen progress={progress} onDone={handleLoadDone} />}
+
+      <AppReadyContext.Provider value={phase.appReady}>
+        <div className="min-h-screen relative">
+          <InteractiveBackground />
+          <div className="relative z-10">
+            <Navigation />
+            <Hero />
+            <Suspense fallback={null}>
+              <Experience />
+            </Suspense>
+            <Suspense fallback={null}>
+              <Projects />
+            </Suspense>
+            <Suspense fallback={null}>
+              <Certifications />
+            </Suspense>
+            <Contact />
+            <Footer />
+          </div>
         </div>
-      </div>
-    </StrictMode>
+      </AppReadyContext.Provider>
+    </>
   );
 }
 
