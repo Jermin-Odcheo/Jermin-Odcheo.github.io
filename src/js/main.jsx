@@ -230,25 +230,25 @@ function Hero() {
   };
 
   return (
-      <section id="hero" className="min-h-screen lg:h-screen flex flex-col relative overflow-visible lg:overflow-hidden">
-        <div className="flex-1 flex items-center container mx-auto px-8 lg:px-12 relative z-10 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center w-full max-w-7xl mx-auto">
-            <HeroAnimated animation="fadeInLeft" className="text-center lg:text-left space-y-6">
+      <section id="hero" className="min-h-screen flex flex-col relative overflow-visible">
+        <div className="flex-1 flex items-center container mx-auto px-4 sm:px-8 lg:px-12 relative z-10 py-8 sm:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start lg:items-center w-full max-w-7xl mx-auto">
+            <HeroAnimated animation="fadeInLeft" className="text-center lg:text-left space-y-5 sm:space-y-6">
               <HeroAnimated delay={200} className="flex justify-center lg:justify-start">
-                <div className="bg-green-500/20 border border-green-500/50 rounded-full px-5 py-2 flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                  <span className="text-green-400 font-medium text-sm">Available for Employment</span>
+                <div className="bg-green-500/20 border border-green-500/50 rounded-full px-4 py-1.5 sm:px-5 sm:py-2 flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping flex-shrink-0"></div>
+                  <span className="text-green-400 font-medium text-xs sm:text-sm">Available for Employment</span>
                 </div>
               </HeroAnimated>
 
-              <HeroAnimated animation="scaleIn" delay={400} className="flex justify-center lg:justify-start">
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300">
+              <HeroAnimated animation="scaleIn" delay={400} className="flex flex-wrap justify-center lg:justify-start items-center gap-4">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300 flex-shrink-0">
                   <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
                     <img src={profileImageUrl} alt="Profile" className="w-full h-full rounded-full object-cover" />
                   </div>
                 </div>
 
-                <HeroAnimated delay={600} className="flex items-center space-x-3 ml-5">
+                <HeroAnimated delay={600} className="flex items-center space-x-3">
                   {[
                     { icon: 'fab fa-github', href: 'https://github.com/Jermin-Odcheo', label: 'GitHub', color: 'hover:bg-gray-700' },
                     { icon: 'fab fa-linkedin', href: 'https://linkedin.com/in/jerminodcheo', label: 'LinkedIn', color: 'hover:bg-blue-600' },
@@ -260,19 +260,19 @@ function Hero() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={label}
-                          className={`w-11 h-11 rounded-full bg-[#374151] ${color} text-[#f9fafb] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl border border-[#6b7280]/30`}
+                          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#374151] ${color} text-[#f9fafb] flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl border border-[#6b7280]/30`}
                       >
-                        <i className={`${icon} text-base`}></i>
+                        <i className={`${icon} text-sm sm:text-base`}></i>
                       </a>
                   ))}
                 </HeroAnimated>
               </HeroAnimated>
 
               <HeroAnimated delay={500}>
-                <h1 className="text-4xl lg:text-5xl font-bold text-[#f9fafb] mb-2">Jermin Odcheo</h1>
-                <div className="h-[2px] bg-blue-50 mx-auto lg:mx-0 w-48 my-2"></div>
-                <p className="text-xl lg:text-2xl text-[#9ca3af] mb-3">Full-Stack Developer</p>
-                <div className="flex items-center justify-center lg:justify-start space-x-4 text-[#6b7280] text-sm">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f9fafb] mb-2">Jermin Odcheo</h1>
+                <div className="h-[2px] bg-blue-50 mx-auto lg:mx-0 w-40 sm:w-48 my-2"></div>
+                <p className="text-lg sm:text-xl lg:text-2xl text-[#9ca3af] mb-3">Full-Stack Developer</p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1 text-[#6b7280] text-xs sm:text-sm">
                   <div className="flex items-center space-x-1.5">
                     <i className="fas fa-map-marker-alt text-xs"></i>
                     <span>Philippines/Australia</span>
@@ -284,25 +284,25 @@ function Hero() {
                 </div>
               </HeroAnimated>
 
-              <HeroAnimated delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
-                <h3 className="text-[#f9fafb] font-semibold mb-2 flex items-center text-base">
+              <HeroAnimated delay={700} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-[#6b7280]/30">
+                <h3 className="text-[#f9fafb] font-semibold mb-2 flex items-center text-sm sm:text-base">
                   <i className="fas fa-user mr-2"></i>Summary
                 </h3>
-                <p className="text-[#9ca3af] leading-relaxed text-sm justify-center">
+                <p className="text-[#9ca3af] leading-relaxed text-xs sm:text-sm text-center lg:text-left">
                   IT graduate from Saint Louis University with hands-on full-stack and AI experience. Led the development of a production-ready inventory system with role-based access and real-time CRUD during my TMDD internship. I fine-tuned NaviBot, an AI chatbot using BART models to handle enrollment-related questions. Skilled in React, PHP, and Python, with experience in machine learning, data analytics, and scalable solutions.</p>
               </HeroAnimated>
 
-              <HeroAnimated delay={900} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <HeroAnimated delay={900} className="flex flex-col xs:flex-row gap-3 justify-center lg:justify-start">
                 <button
                     onClick={handleResumeView}
-                    className="flex items-center justify-center space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
+                    className="flex items-center justify-center space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] font-medium py-2.5 sm:py-3 px-5 sm:px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg text-sm sm:text-base"
                 >
                   <i className="fas fa-file-alt"></i>
                   <span>View Resume</span>
                 </button>
                 <button
                     onClick={handleResumeDownload}
-                    className="flex items-center justify-center space-x-2 bg-[#374151] hover:bg-[#6b7280] text-[#f9fafb] font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg border border-[#6b7280]/30"
+                    className="flex items-center justify-center space-x-2 bg-[#374151] hover:bg-[#6b7280] text-[#f9fafb] font-medium py-2.5 sm:py-3 px-5 sm:px-6 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg border border-[#6b7280]/30 text-sm sm:text-base"
                 >
                   <i className="fas fa-download"></i>
                   <span>Download Resume</span>
@@ -312,8 +312,8 @@ function Hero() {
 
             <HeroAnimated animation="fadeInRight" className="space-y-5">
               {/* --- Technical Skills (Compact) --- */}
-              <HeroAnimated delay={300} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-5 border border-[#6b7280]/30">
-                <h3 className="text-[#f9fafb] font-semibold mb-4 flex items-center text-base">
+              <HeroAnimated delay={300} className="bg-[#374151]/20 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-[#6b7280]/30">
+                <h3 className="text-[#f9fafb] font-semibold mb-4 flex items-center text-sm sm:text-base">
                   <i className="fas fa-code mr-2"></i>Technical Skills
                 </h3>
 
@@ -378,17 +378,17 @@ function Hero() {
         </div>
 
         {showResume && (
-            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-              <div className="bg-[#374151] rounded-xl max-w-6xl w-full max-h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl">
-                <div className="p-4 sm:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10">
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-[#f9fafb]">Resume - Jermin Odcheo</h3>
-                    <p className="text-[#9ca3af] text-sm">Full-Stack Developer</p>
+            <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-2 sm:p-4">
+              <div className="bg-[#374151] rounded-xl w-full max-w-6xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl flex flex-col">
+                <div className="p-3 sm:p-4 lg:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10 flex-shrink-0">
+                  <div className="min-w-0 mr-2">
+                    <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-[#f9fafb] truncate">Resume - Jermin Odcheo</h3>
+                    <p className="text-[#9ca3af] text-xs sm:text-sm hidden xs:block">Full-Stack Developer</p>
                   </div>
-                  <div className="flex items-center space-x-2 sm:space-x-4">
+                  <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
                     <button
                         onClick={handleResumeViewInNewTab}
-                        className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-sm"
+                        className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
                         title="Open in new tab"
                     >
                       <i className="fas fa-external-link-alt text-xs sm:text-sm"></i>
@@ -397,7 +397,7 @@ function Hero() {
 
                     <button
                         onClick={handleResumeDownload}
-                        className="flex items-center space-x-1 sm:space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] px-2 sm:px-4 py-2 rounded-lg transition-colors text-sm"
+                        className="flex items-center space-x-1 sm:space-x-2 bg-[#9ca3af] hover:bg-[#f9fafb] text-[#111827] px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
                     >
                       <i className="fas fa-download text-xs sm:text-sm"></i>
                       <span className="hidden sm:inline">Download</span>
@@ -405,14 +405,14 @@ function Hero() {
 
                     <button
                         onClick={() => setShowResume(false)}
-                        className="text-[#9ca3af] hover:text-[#f9fafb] text-xl sm:text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
+                        className="text-[#9ca3af] hover:text-[#f9fafb] text-lg sm:text-2xl p-2 rounded-lg hover:bg-[#6b7280]/30 transition-all"
                     >
                       <i className="fas fa-times"></i>
                     </button>
                   </div>
                 </div>
 
-                <div className="relative w-full h-[calc(95vh-80px)] bg-[#f9fafb]">
+                <div className="relative flex-1 min-h-0 bg-[#f9fafb]">
                   {/* Loading State */}
                   {isPdfLoading && !pdfLoadError && (
                       <div className="absolute inset-0 flex items-center justify-center bg-[#f9fafb]">
@@ -571,32 +571,32 @@ function Contact() {
   const isFormDisabled = isSubmitting || cooldownTime > 0;
 
   return (
-    <Motion.section ref={ref} id="contact" className="py-20 relative" initial="hidden" animate={isInView ? 'visible' : 'hidden'} variants={staggerContainer}>
+    <Motion.section ref={ref} id="contact" className="py-16 sm:py-20 relative" initial="hidden" animate={isInView ? 'visible' : 'hidden'} variants={staggerContainer}>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
-      <div className="container mx-auto px-6 max-w-6xl">
-        <Motion.div className="text-center mb-16" variants={fadeInUp}>
-          <h2 className="text-4xl font-bold text-[#f9fafb] mb-8">Let's Connect</h2>
-          <p className="text-[#9ca3af] text-lg mb-12">I'm actively seeking new opportunities and exciting projects to contribute to.</p>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <Motion.div className="text-center mb-10 sm:mb-16" variants={fadeInUp}>
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#f9fafb] mb-4 sm:mb-8">Let's Connect</h2>
+          <p className="text-[#9ca3af] text-base sm:text-lg mb-8 sm:mb-12">I'm actively seeking new opportunities and exciting projects to contribute to.</p>
         </Motion.div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <Motion.div className="space-y-8" variants={fadeInLeft}>
-            <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Get in Touch</h3>
-            <Motion.div className="grid grid-cols-1 md:grid-cols-1 gap-6" variants={staggerContainer}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <Motion.div className="space-y-6 sm:space-y-8" variants={fadeInLeft}>
+            <h3 className="text-xl sm:text-2xl font-semibold text-[#f9fafb] mb-4 sm:mb-6">Get in Touch</h3>
+            <Motion.div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 sm:gap-6" variants={staggerContainer}>
               {[
                 { href: 'mailto:jerminbodcheo@gmail.com', icon: 'fas fa-envelope', title: 'Email', description: 'jerminbodcheo@gmail.com' },
                 { href: 'https://linkedin.com/in/jerminodcheo', icon: 'fab fa-linkedin', title: 'LinkedIn', description: 'Connect with me', target: '_blank' },
                 { href: 'https://github.com/Jermin-Odcheo', icon: 'fab fa-github', title: 'GitHub', description: 'View my code', target: '_blank' },
               ].map((c, i) => (
-                <Motion.a key={c.title} href={c.href} target={c.target} rel={c.target ? 'noopener noreferrer' : undefined} className="group bg-[#374151]/20 backdrop-blur-sm p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300" variants={staggerItem} custom={i}>
-                  <i className={`${c.icon} text-3xl text-[#9ca3af] mb-4 group-hover:text-[#f9fafb] transition-colors`}></i>
-                  <h4 className="font-semibold text-[#f9fafb] mb-2">{c.title}</h4>
-                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors">{c.description}</p>
+                <Motion.a key={c.title} href={c.href} target={c.target} rel={c.target ? 'noopener noreferrer' : undefined} className="group bg-[#374151]/20 backdrop-blur-sm p-4 sm:p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300" variants={staggerItem} custom={i}>
+                  <i className={`${c.icon} text-2xl sm:text-3xl text-[#9ca3af] mb-3 sm:mb-4 group-hover:text-[#f9fafb] transition-colors`}></i>
+                  <h4 className="font-semibold text-[#f9fafb] mb-1 sm:mb-2 text-sm sm:text-base">{c.title}</h4>
+                  <p className="text-[#9ca3af] group-hover:text-[#f9fafb] transition-colors text-xs sm:text-sm break-all">{c.description}</p>
                 </Motion.a>
               ))}
             </Motion.div>
           </Motion.div>
-          <Motion.div className="bg-[#374151]/20 backdrop-blur-sm p-8 rounded-xl border border-[#6b7280]/30" variants={fadeInRight}>
-            <h3 className="text-2xl font-semibold text-[#f9fafb] mb-6">Send Message</h3>
+          <Motion.div className="bg-[#374151]/20 backdrop-blur-sm p-5 sm:p-8 rounded-xl border border-[#6b7280]/30" variants={fadeInRight}>
+            <h3 className="text-xl sm:text-2xl font-semibold text-[#f9fafb] mb-5 sm:mb-6">Send Message</h3>
             {cooldownTime > 0 && (
               <div className="mb-6 p-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
                 <div className="flex items-center justify-between">

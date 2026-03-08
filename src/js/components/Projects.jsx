@@ -169,19 +169,19 @@ export default function Projects() {
     <Motion.section
       ref={ref}
       id="projects"
-      className="py-20 relative"
+      className="py-16 sm:py-20 relative"
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={staggerContainer}
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
-      <div className="container mx-auto px-6 max-w-6xl">
-        <Motion.h2 className="text-4xl font-bold text-[#f9fafb] text-center mb-16" variants={fadeInUp}>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <Motion.h2 className="text-3xl sm:text-4xl font-bold text-[#f9fafb] text-center mb-10 sm:mb-16" variants={fadeInUp}>
           Featured Projects
         </Motion.h2>
 
-        <Motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" variants={staggerContainer}>
+        <Motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8" variants={staggerContainer}>
           {projects.map((project, index) => (
             <Motion.div key={project.id} className="group h-full" variants={fadeInUp} custom={index}>
               <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:shadow-2xl hover:scale-105 h-full flex flex-col">
@@ -234,11 +234,11 @@ export default function Projects() {
                   </div>
                 </div>
 
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold text-[#f9fafb] mb-3 group-hover:text-[#9ca3af] transition-colors">
+                <div className="p-4 sm:p-6 flex-1 flex flex-col">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#f9fafb] mb-2 sm:mb-3 group-hover:text-[#9ca3af] transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-[#9ca3af] mb-4 text-sm flex-1">{project.description}</p>
+                  <p className="text-[#9ca3af] mb-3 sm:mb-4 text-sm flex-1">{project.description}</p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech) => (
@@ -274,7 +274,7 @@ export default function Projects() {
       {/* Full-Screen Zoom Modal (zoom + pan) - 16:9 Aspect Ratio Container */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-2 sm:p-4"
           onClick={closeModal}
           role="dialog"
           aria-modal="true"
@@ -286,13 +286,13 @@ export default function Projects() {
             style={{ maxHeight: '90vh' }}
           >
             {/* Toolbar */}
-            <div className="mb-3 flex items-center justify-between gap-2 bg-black/70 rounded-lg p-3">
-              <div className="flex items-center gap-2 flex-wrap">
+            <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2 bg-black/70 rounded-lg p-2 sm:p-3 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                 <button
                   type="button"
                   onClick={() => applyZoom(zoomScale - ZOOM_STEP)}
                   disabled={zoomScale <= MIN_SCALE}
-                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-white/20 transition-colors font-medium text-sm sm:text-base"
                   aria-label="Zoom out"
                   title="Zoom out"
                 >
@@ -302,7 +302,7 @@ export default function Projects() {
                   type="button"
                   onClick={() => applyZoom(zoomScale + ZOOM_STEP)}
                   disabled={zoomScale >= MAX_SCALE}
-                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  className="text-white bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-white/20 transition-colors font-medium text-sm sm:text-base"
                   aria-label="Zoom in"
                   title="Zoom in"
                 >
@@ -311,14 +311,14 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={resetZoom}
-                  className="text-white bg-white/10 rounded-lg px-4 py-2 hover:bg-white/20 transition-colors font-medium"
+                  className="text-white bg-white/10 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-white/20 transition-colors font-medium text-sm sm:text-base"
                   aria-label="Reset zoom"
                   title="Reset zoom and position"
                 >
                   <i className="fas fa-undo-alt mr-1"></i>
-                  Reset
+                  <span className="hidden xs:inline">Reset</span>
                 </button>
-                <div className="text-white/90 text-sm bg-white/10 rounded-lg px-4 py-2 select-none font-mono">
+                <div className="text-white/90 text-xs sm:text-sm bg-white/10 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 select-none font-mono">
                   {Math.round(zoomScale * 100)}%
                 </div>
               </div>
@@ -326,12 +326,12 @@ export default function Projects() {
               <button
                 type="button"
                 onClick={closeModal}
-                className="text-white bg-red-600/80 rounded-lg px-4 py-2 hover:bg-red-600 transition-colors font-medium"
+                className="text-white bg-red-600/80 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-red-600 transition-colors font-medium text-sm sm:text-base"
                 aria-label="Close"
                 title="Close (ESC)"
               >
                 <i className="fas fa-times mr-1"></i>
-                Close
+                <span className="hidden xs:inline">Close</span>
               </button>
             </div>
 
@@ -340,7 +340,7 @@ export default function Projects() {
               className="relative w-full bg-[#1a1a1a] rounded-lg overflow-hidden shadow-2xl"
               style={{
                 aspectRatio: '16 / 9',
-                maxHeight: 'calc(90vh - 80px)',
+                maxHeight: 'calc(90vh - 60px)',
               }}
             >
               {/* Viewer surface with scroll capability */}
@@ -376,9 +376,10 @@ export default function Projects() {
               {/* Helper text overlay */}
               {zoomScale === 1 && (
                 <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
-                  <div className="inline-block bg-black/70 text-white/80 text-xs px-4 py-2 rounded-full backdrop-blur-sm">
-                    <i className="fas fa-info-circle mr-2"></i>
-                    Use zoom buttons or Ctrl+Wheel to zoom • Scroll to navigate • Click outside or ESC to close
+                  <div className="inline-block bg-black/70 text-white/80 text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm">
+                    <i className="fas fa-info-circle mr-1 sm:mr-2"></i>
+                    <span className="hidden sm:inline">Use zoom buttons or Ctrl+Wheel to zoom • Scroll to navigate • Click outside or ESC to close</span>
+                    <span className="sm:hidden">Zoom buttons or Ctrl+Wheel • ESC to close</span>
                   </div>
                 </div>
               )}

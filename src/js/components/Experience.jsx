@@ -133,7 +133,7 @@ export default function Experience() {
   return (
     <Motion.section
       id="experience"
-      className="py-20 relative"
+      className="py-16 sm:py-20 relative"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ amount: 0.05, once: true }}
@@ -141,11 +141,11 @@ export default function Experience() {
     >
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent" />
 
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
 
         {/* Heading */}
         <Motion.h2
-          className="text-4xl font-bold text-[#f9fafb] text-center mb-4"
+          className="text-3xl sm:text-4xl font-bold text-[#f9fafb] text-center mb-4"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -154,7 +154,7 @@ export default function Experience() {
           Experience
         </Motion.h2>
         <Motion.p
-          className="text-center text-[#6b7280] text-sm mb-14 tracking-wide"
+          className="text-center text-[#6b7280] text-sm mb-10 sm:mb-14 tracking-wide"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
