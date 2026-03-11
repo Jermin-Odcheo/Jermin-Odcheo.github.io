@@ -139,6 +139,7 @@ export default function Projects() {
       ],
       github:
         'https://github.com/Jermin-Odcheo/Anime-Manga-Fetch-API',
+      liveDemo: 'https://anime-manga-fetch-api.vercel.app/',
       category: 'Web App',
     },
     {
@@ -257,10 +258,21 @@ export default function Projects() {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2"
+                        className={`${project.liveDemo ? 'flex-[7]' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
                       >
                         <i className="fab fa-github"></i>
                         <span>View on GitHub</span>
+                      </a>
+                    )}
+                    {project.liveDemo && (
+                      <a
+                        href={project.liveDemo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-[3] bg-[#3b82f6]/30 hover:bg-[#3b82f6]/50 text-[#f9fafb] py-2 px-3 rounded-lg transition-all duration-300 border border-[#3b82f6]/30 hover:border-[#3b82f6]/60 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-1.5"
+                      >
+                        <i className="fas fa-external-link-alt text-xs"></i>
+                        <span className="whitespace-nowrap">Live</span>
                       </a>
                     )}
                   </div>
