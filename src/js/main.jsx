@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { motion as Motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { EMAILJS_CONFIG } from '../config/emailjs.js';
+import { scrollToPageSection } from '../config/scroll.js';
 import '../index.css';
 
 // Shared components/utilities
@@ -20,6 +21,7 @@ const Certifications = React.lazy(() => import('./components/Certifications.jsx'
 // Assets
 import profileImageUrl from '../assets/profile/profile.png';
 import resumePdf from '../assets/resume/odcheo_resume.pdf';
+
 
 function Navigation() {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,8 +42,7 @@ function Navigation() {
         const sectionTop = rect.top;
         const sectionHeight = rect.height;
 
-        // Section is considered active if its top is in the upper half of the viewport
-        // or if we're near the bottom of the page
+        // Section is considered active if its top is in the upper half of the viewport or if we're near the bottom of the page
         if (sectionTop <= window.innerHeight / 3 && sectionTop + sectionHeight > window.innerHeight / 3) {
           currentSection = section.id;
         }
@@ -67,19 +68,8 @@ function Navigation() {
     };
   }, []);
 
-  const scrollToSection = (sectionId, e) => {
-    e.preventDefault();
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80; // Offset for fixed navigation
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+  const scrollToSection = sectionId => {
+    scrollToPageSection(sectionId);
     setIsMobileMenuOpen(false);
   };
 
@@ -88,10 +78,10 @@ function Navigation() {
       <div className="bg-[#111827]/90 backdrop-blur-md rounded-full px-3 sm:px-6 py-2 sm:py-3 border border-[#374151] shadow-2xl">
         {/* Desktop */}
         <div className="hidden sm:flex items-center space-x-8">
-          <button onClick={e => scrollToSection('hero', e)} className="text-[#f9fafb] font-bold text-lg hover:text-[#9ca3af] transition-colors">Jermin</button>
+          <button onClick={() => scrollToSection('hero')} className="text-[#f9fafb] font-bold text-lg hover:text-[#9ca3af] transition-colors">Jermin</button>
           <div className="flex space-x-6">
             {['experience', 'projects', 'certifications', 'contact'].map(section => (
-              <button key={section} onClick={e => scrollToSection(section, e)} className={`px-3 py-1 rounded-full text-sm transition-all ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
+              <button key={section} onClick={() => scrollToSection(section)} className={`px-3 py-1 rounded-full text-sm transition-all ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
@@ -99,7 +89,7 @@ function Navigation() {
         </div>
         {/* Mobile */}
         <div className="sm:hidden flex items-center justify-between">
-          <button onClick={e => scrollToSection('hero', e)} className="text-[#f9fafb] font-bold text-base hover:text-[#9ca3af] transition-colors">Jermin</button>
+          <button onClick={() => scrollToSection('hero')} className="text-[#f9fafb] font-bold text-base hover:text-[#9ca3af] transition-colors">Jermin</button>
           <button onClick={() => setIsMobileMenuOpen(o => !o)} className="text-[#f9fafb] p-2 hover:text-[#9ca3af] transition-colors">
             <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
           </button>
@@ -108,7 +98,7 @@ function Navigation() {
       {isMobileMenuOpen && (
         <div className="sm:hidden absolute top-full left-0 right-0 mt-2 bg-[#111827]/95 backdrop-blur-md rounded-xl border border-[#374151] shadow-2xl overflow-hidden">
           {['experience', 'projects', 'certifications', 'contact'].map(section => (
-            <button key={section} onClick={e => scrollToSection(section, e)} className={`w-full text-left px-4 py-3 transition-all border-b border-[#374151]/50 last:border-b-0 ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
+            <button key={section} onClick={() => scrollToSection(section)} className={`w-full text-left px-4 py-3 transition-all border-b border-[#374151]/50 last:border-b-0 ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
               {section.charAt(0).toUpperCase() + section.slice(1)}
             </button>
           ))}
@@ -201,8 +191,7 @@ function Hero() {
     items: skills.filter(s => skillCategoryByName[s.name] === cat.key),
   }));
 
-  const scrollToSection = sectionId =>
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSection = sectionId => scrollToPageSection(sectionId);
 
   const handleResumeView = () => {
     setShowResume(true);

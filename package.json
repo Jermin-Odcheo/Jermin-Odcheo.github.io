@@ -22,6 +22,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
+    "react-scroll": "^1.9.3",
     "yallist": "^5.0.0"
   },
   "devDependencies": {

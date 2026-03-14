@@ -5,7 +5,7 @@
 
 /* Global smooth scrolling */
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
 }
 
 /* Prevent horizontal overflow on all devices */

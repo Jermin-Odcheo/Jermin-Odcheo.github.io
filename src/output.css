@@ -514,7 +514,7 @@
     overflow-x: auto;
   }
   .scroll-smooth {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
   }
   .rounded {
     border-radius: 0.25rem;
