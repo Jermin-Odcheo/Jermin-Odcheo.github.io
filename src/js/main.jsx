@@ -192,16 +192,12 @@ function Hero() {
   }));
 
   const scrollToSection = sectionId => scrollToPageSection(sectionId);
+  const resumePreviewUrl = `${resumePdf}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`;
 
   const handleResumeView = () => {
     setShowResume(true);
     setPdfLoadError(false);
     setIsPdfLoading(true);
-
-    // Check if PDF loaded after a timeout
-    setTimeout(() => {
-      setIsPdfLoading(false);
-    }, 2000);
   };
 
   const handleResumeDownload = () => {
@@ -368,7 +364,7 @@ function Hero() {
 
         {showResume && (
             <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-2 sm:p-4">
-              <div className="bg-[#374151] rounded-xl w-full max-w-6xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl flex flex-col">
+              <div className="bg-[#374151] rounded-xl w-full max-w-6xl h-[98vh] sm:h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl flex flex-col">
                 <div className="p-3 sm:p-4 lg:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10 flex-shrink-0">
                   <div className="min-w-0 mr-2">
                     <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-[#f9fafb] truncate">Resume - Jermin Odcheo</h3>
@@ -401,7 +397,7 @@ function Hero() {
                   </div>
                 </div>
 
-                <div className="relative flex-1 min-h-0 bg-[#f9fafb]">
+                <div className="relative flex-1 min-h-0 overflow-auto bg-[#f9fafb]">
                   {/* Loading State */}
                   {isPdfLoading && !pdfLoadError && (
                       <div className="absolute inset-0 flex items-center justify-center bg-[#f9fafb]">
@@ -412,23 +408,15 @@ function Hero() {
                       </div>
                   )}
 
-                  {/* PDF Viewer - Try object first, then iframe as fallback */}
+                  {/* PDF Viewer */}
                   {!pdfLoadError && (
-                      <object
-                          data={`${resumePdf}#toolbar=1&navpanes=1&scrollbar=1`}
-                          type="application/pdf"
+                      <iframe
+                          src={resumePreviewUrl}
                           className="w-full h-full"
+                          title="Resume PDF"
                           onLoad={() => setIsPdfLoading(false)}
                           onError={handlePdfError}
-                      >
-                        <iframe
-                            src={`${resumePdf}#toolbar=1&navpanes=1&scrollbar=1`}
-                            className="w-full h-full"
-                            title="Resume PDF"
-                            onLoad={() => setIsPdfLoading(false)}
-                            onError={handlePdfError}
-                        />
-                      </object>
+                      />
                   )}
 
                   {/* Fallback Message - Only shown when there's an actual error */}
@@ -673,8 +661,6 @@ function App() {
     run();
   }, []);
 
-  // Called by LoadingScreen after its 500ms fade-out animation completes.
-  // Atomically removes the loading screen AND enables hero animations in one render.
   const handleLoadDone = () => {
     setPhase({ loading: false, appReady: true });
   };
