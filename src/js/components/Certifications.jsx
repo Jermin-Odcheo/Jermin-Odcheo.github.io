@@ -188,11 +188,11 @@ export default function Certifications() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Scroll active item into view in the list
-  useEffect(() => {
-    const el = listRef.current?.querySelector('[data-active="true"]');
-    el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }, [activeIndex]);
+  const selectCertificate = (index, buttonEl) => {
+    setActiveIndex(index);
+    // Scroll only from explicit user interaction, never on mount.
+    buttonEl?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  };
 
   const active = certificates[activeIndex];
 
@@ -310,7 +310,7 @@ export default function Certifications() {
                     <button
                         key={cert.id}
                         data-active={isActive}
-                        onClick={() => setActiveIndex(i)}
+                        onClick={(e) => selectCertificate(i, e.currentTarget)}
                         className={[
                           'w-full text-left rounded-xl border flex items-center gap-3 p-2.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4b5563]',
                           isActive
@@ -347,7 +347,7 @@ export default function Certifications() {
             {certificates.map((_, i) => (
                 <button
                     key={i}
-                    onClick={() => setActiveIndex(i)}
+                    onClick={() => selectCertificate(i)}
                     aria-label={`Certificate ${i + 1}`}
                     className={[
                       'rounded-full transition-all duration-200',
