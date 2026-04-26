@@ -102,7 +102,7 @@ export default function Projects() {
       title: 'NaviBot AI Chatbot',
       description:
         'AI-powered chatbot utilizing generative AI to handle enrollment-related FAQs with 72% accuracy rate.',
-      technologies: ['AI', 'Python', 'BART', 'NLP'],
+      technologies: ['AI', 'Python', 'BART', 'NLP', 'BERT', 'ROUGE'],
       image: thesisHomepage,
       screenshots: [
         { src: thesisHomepage, title: 'NaviBot Homepage' },
@@ -117,7 +117,7 @@ export default function Projects() {
       title: 'Inventory Management System',
       description:
         'Comprehensive inventory management system with role-based access control and real-time updates.',
-      technologies: ['PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
+      technologies: ['HTML','CSS','PHP', 'JavaScript', 'MySQL', 'Bootstrap'],
       image: inventoryDashboard,
       screenshots: [
         { src: inventoryDashboard, title: 'Dashboard Overview' },
@@ -131,7 +131,7 @@ export default function Projects() {
       title: 'Anime Fetch API',
       description:
         'Web application that fetches and displays anime data using external APIs with modern UI design.',
-      technologies: ['JavaScript', 'REST API', 'HTML/CSS'],
+      technologies: ['JavaScript', 'REST API', 'HTML','CSS'],
       image: mediaArchive,
       screenshots: [
         { src: mediaArchive, title: 'MediaArchives Homepage' },
