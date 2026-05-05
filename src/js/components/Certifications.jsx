@@ -13,6 +13,7 @@ import certUdemyAI from '../../assets/certificates/UC-0497434b-3c91-4447-b8a1-90
 import certUdemyPython from '../../assets/certificates/UC-171e9dab-d53d-4b66-a57a-55e93a3cf0a5.pdf';
 import certUdemyWeb from '../../assets/certificates/UC-9ebeab56-a4f1-4d4f-a1a7-1cfbb0901a8a.pdf';
 import certIntern from '../../assets/certificates/COC.pdf';
+import certIBM from '../../assets/certificates/IBMDesign20260503-31-iopaax.pdf'
 
 // Modal animation variants
 const backdropVariants = {
@@ -29,6 +30,16 @@ const modalVariants = {
 
 // Base certificate data
 const baseCertificates = [
+  {
+    id: 'ibm-certificate',
+    platform: 'IBM',
+    title: 'Data Analytics',
+    file: certIBM,
+    icon: 'fas fa-lightbulb',
+    tag: 'Data Analytics',
+    colors: ['#6366f1', '#a855f7'],
+  description: 'IBM Data Analytics covering data analysis tools and techniques.'
+  },
   {
     id: 'internship',
     platform: 'Saint Louis University',
