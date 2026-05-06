@@ -1,5 +1,5 @@
 // src/js/components/Animated.jsx
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 // Convenience hook — consume anywhere to read the ready flag
 export function useAppReady() {
@@ -9,35 +9,97 @@ export function useAppReady() {
 // ─── App-ready context ────────────────────────────────────────────────────────
 export const AppReadyContext = createContext(false);
 
+const BASE_ANIMATION_CLASSES = 'transition-all duration-700 ease-out will-change-transform';
+
+const ANIMATION_PRESETS = {
+  section: {
+    hidden: {
+      fadeInUp: 'opacity-0 translate-y-16',
+      fadeInLeft: 'opacity-0 -translate-x-16',
+      fadeInRight: 'opacity-0 translate-x-16',
+      scaleIn: 'opacity-0 scale-90',
+    },
+    visible: {
+      fadeInUp: 'opacity-100 translate-y-0',
+      fadeInLeft: 'opacity-100 translate-x-0',
+      fadeInRight: 'opacity-100 translate-x-0',
+      scaleIn: 'opacity-100 scale-100',
+    },
+  },
+  hero: {
+    hidden: {
+      fadeInUp: 'opacity-0 translate-y-10',
+      fadeInLeft: 'opacity-0 -translate-x-10',
+      fadeInRight: 'opacity-0 translate-x-10',
+      scaleIn: 'opacity-0 scale-95',
+      fadeIn: 'opacity-0',
+    },
+    visible: {
+      fadeInUp: 'opacity-100 translate-y-0',
+      fadeInLeft: 'opacity-100 translate-x-0',
+      fadeInRight: 'opacity-100 translate-x-0',
+      scaleIn: 'opacity-100 scale-100',
+      fadeIn: 'opacity-100',
+    },
+  },
+};
+
+const getAnimationClass = (presetKey, isVisible, animation) => {
+  const preset = ANIMATION_PRESETS[presetKey] ?? ANIMATION_PRESETS.section;
+  const map = isVisible ? preset.visible : preset.hidden;
+  return map[animation] ?? map.fadeInUp;
+};
+
+function AnimatedBase({
+  children,
+  className = '',
+  delay = 0,
+  animation = 'fadeInUp',
+  preset = 'section',
+  isVisible,
+  delayWhenVisible = false,
+}) {
+  const delayValue = delayWhenVisible && !isVisible ? '0ms' : `${delay}ms`;
+
+  return (
+    <div
+      className={`${className} ${BASE_ANIMATION_CLASSES} ${getAnimationClass(preset, isVisible, animation)}`}
+      style={{ transitionDelay: delayValue }}
+    >
+      {children}
+    </div>
+  );
+}
+
 // Custom hook for scroll animations.
 // once=true  → stays visible after the first intersection (prevents hero blanking on scroll-up)
 // once=false → toggles on/off as the element enters/leaves the viewport
-export function useScrollAnimation(threshold = 0.1, once = true) {
+export function useScrollAnimation(threshold = 0.1, once = true, rootMargin = '50px') {
   const isReady = useContext(AppReadyContext);
   const [isVisible, setIsVisible] = useState(false);
+  const isVisibleRef = useRef(false);
   const ref = useRef(null);
-  const hasBeenVisible = useRef(false);
+
+  const observerOptions = useMemo(() => ({ threshold, rootMargin }), [threshold, rootMargin]);
 
   useEffect(() => {
-    // Don't attach until the app is ready — avoids immediately-visible
-    // sections skipping their entry animation.
     if (!isReady) return;
 
-    const show = () => {
-      hasBeenVisible.current = true;
-      setIsVisible(true);
+    const setVisible = (next) => {
+      isVisibleRef.current = next;
+      setIsVisible((prev) => (prev === next ? prev : next));
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          show();
-          if (once) observer.disconnect(); // no need to keep watching
-        } else if (!once) {
-          setIsVisible(false);
+          if (!isVisibleRef.current) setVisible(true);
+          if (once) observer.disconnect();
+        } else if (!once && isVisibleRef.current) {
+          setVisible(false);
         }
       },
-      { threshold, rootMargin: '50px' },
+      observerOptions,
     );
 
     if (ref.current) {
@@ -49,13 +111,13 @@ export function useScrollAnimation(threshold = 0.1, once = true) {
       // first paint is already in the visible state.
       const rect = ref.current.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
-        show();
+        setVisible(true);
         if (once) observer.disconnect();
       }
     }
 
     return () => observer.disconnect();
-  }, [isReady, threshold, once]);
+  }, [isReady, observerOptions, once]);
 
   return [ref, isVisible];
 }
@@ -64,31 +126,11 @@ export function useScrollAnimation(threshold = 0.1, once = true) {
 export function AnimatedSection({ children, className = '', delay = 0, animation = 'fadeInUp' }) {
   const [ref, isVisible] = useScrollAnimation();
 
-  const hiddenMap = {
-    fadeInUp:    'opacity-0 translate-y-16',
-    fadeInLeft:  'opacity-0 -translate-x-16',
-    fadeInRight: 'opacity-0 translate-x-16',
-    scaleIn:     'opacity-0 scale-90',
-  };
-
-  const visibleMap = {
-    fadeInUp:    'opacity-100 translate-y-0',
-    fadeInLeft:  'opacity-100 translate-x-0',
-    fadeInRight: 'opacity-100 translate-x-0',
-    scaleIn:     'opacity-100 scale-100',
-  };
-
   return (
-    <div
-      ref={ref}
-      className={`${className} transition-all duration-700 ease-out will-change-transform ${
-        isVisible
-          ? visibleMap[animation] ?? visibleMap.fadeInUp
-          : hiddenMap[animation] ?? hiddenMap.fadeInUp
-      }`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
+    <div ref={ref}>
+      <AnimatedBase className={className} delay={delay} animation={animation} preset="section" isVisible={isVisible}>
+        {children}
+      </AnimatedBase>
     </div>
   );
 }
@@ -101,7 +143,7 @@ export function StaggeredContainer({ children, className = '', staggerDelay = 10
     <div ref={ref} className={className}>
       {React.Children.map(children, (child, index) => (
         <div
-          className={`transition-all duration-700 ease-out will-change-transform ${
+          className={`${BASE_ANIMATION_CLASSES} ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionDelay: `${index * staggerDelay}ms` }}
@@ -114,38 +156,19 @@ export function StaggeredContainer({ children, className = '', staggerDelay = 10
 }
 
 // ─── HeroAnimated ─────────────────────────────────────────────────────────────
-// For the Hero section only — driven directly by appReady context, NOT by an
-// IntersectionObserver. Guarantees animation fires the moment the loading
-// screen is gone regardless of scroll position.
 export function HeroAnimated({ children, className = '', delay = 0, animation = 'fadeInUp' }) {
   const isReady = useAppReady();
 
-  const hiddenMap = {
-    fadeInUp:    'opacity-0 translate-y-10',
-    fadeInLeft:  'opacity-0 -translate-x-10',
-    fadeInRight: 'opacity-0 translate-x-10',
-    scaleIn:     'opacity-0 scale-95',
-    fadeIn:      'opacity-0',
-  };
-
-  const visibleMap = {
-    fadeInUp:    'opacity-100 translate-y-0',
-    fadeInLeft:  'opacity-100 translate-x-0',
-    fadeInRight: 'opacity-100 translate-x-0',
-    scaleIn:     'opacity-100 scale-100',
-    fadeIn:      'opacity-100',
-  };
-
   return (
-    <div
-      className={`${className} transition-all duration-700 ease-out will-change-transform ${
-        isReady
-          ? visibleMap[animation] ?? visibleMap.fadeInUp
-          : hiddenMap[animation] ?? hiddenMap.fadeInUp
-      }`}
-      style={{ transitionDelay: isReady ? `${delay}ms` : '0ms' }}
+    <AnimatedBase
+      className={className}
+      delay={delay}
+      animation={animation}
+      preset="hero"
+      isVisible={isReady}
+      delayWhenVisible
     >
       {children}
-    </div>
+    </AnimatedBase>
   );
 }

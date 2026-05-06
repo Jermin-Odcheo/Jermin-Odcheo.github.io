@@ -1,4 +1,4 @@
-import React, { StrictMode, useEffect, useRef, useState, Suspense } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useInView } from 'react-intersection-observer';
 import { motion as Motion } from 'framer-motion';
@@ -22,56 +22,167 @@ const Certifications = React.lazy(() => import('./components/Certifications.jsx'
 import profileImageUrl from '../assets/profile/profile.png';
 import resumePdf from '../assets/resume/odcheo_resume.pdf';
 
+const NAV_SECTIONS = ['experience', 'projects', 'certifications', 'contact'];
+
+const SOCIAL_LINKS = [
+  { icon: 'fab fa-github', href: 'https://github.com/Jermin-Odcheo', label: 'GitHub', color: 'hover:bg-gray-700' },
+  { icon: 'fab fa-linkedin', href: 'https://linkedin.com/in/jerminodcheo', label: 'LinkedIn', color: 'hover:bg-blue-600' },
+  { icon: 'fas fa-envelope', href: 'mailto:jerminbodcheo@gmail.com', label: 'Email', color: 'hover:bg-red-600' },
+];
+
+const CONTACT_LINKS = [
+  { href: 'mailto:jerminbodcheo@gmail.com', icon: 'fas fa-envelope', title: 'Email', description: 'jerminbodcheo@gmail.com' },
+  { href: 'https://linkedin.com/in/jerminodcheo', icon: 'fab fa-linkedin', title: 'LinkedIn', description: 'Connect with me', target: '_blank' },
+  { href: 'https://github.com/Jermin-Odcheo', icon: 'fab fa-github', title: 'GitHub', description: 'View my code', target: '_blank' },
+];
+
+const ACHIEVEMENTS = [
+  'AI chatbot with 72% accuracy',
+  'Led inventory system development',
+  'Full-stack web projects',
+];
+
+const SKILLS = [
+  { name: 'Python', icon: 'fab fa-python', color: 'from-blue-400 to-yellow-400' },
+  { name: 'Java', icon: 'fab fa-java', color: 'from-red-500 to-orange-500' },
+  { name: 'HTML5/CSS3', icon: 'fab fa-html5', color: 'from-orange-500 to-red-500' },
+  { name: 'JavaScript', icon: 'fab fa-js-square', color: 'from-yellow-400 to-yellow-600' },
+  { name: 'React', icon: 'fab fa-react', color: 'from-cyan-400 to-blue-500' },
+  { name: 'Node.js', icon: 'fab fa-node-js', color: 'from-green-500 to-green-700' },
+  { name: 'Tailwind CSS', icon: 'fas fa-wind', color: 'from-cyan-400 to-teal-500' },
+  { name: 'PHP', icon: 'fab fa-php', color: 'from-indigo-500 to-purple-600' },
+  { name: 'SQL', icon: 'fas fa-database', color: 'from-gray-500 to-gray-700' },
+  { name: 'Git', icon: 'fab fa-git-alt', color: 'from-orange-600 to-red-600' },
+  { name: 'WordPress', icon: 'fab fa-wordpress', color: 'from-blue-600 to-blue-800' },
+  { name: 'Jo', icon: 'fab fa-drupal', color: 'from-green-600 to-green-800' },
+  { name: 'Bootstrap', icon: 'fab fa-bootstrap', color: 'from-purple-600 to-indigo-700' },
+  { name: 'Express.js', icon: 'fab fa-node', color: 'from-green-500 to-green-700' },
+  { name: 'Flask', icon: 'fab fa-python', color: 'from-red-400 to-red-600' },
+  { name: 'REST API', icon: 'fas fa-cogs', color: 'from-blue-500 to-green-500' },
+  { name: 'MySQL', icon: 'fab fa-server', color: 'from-blue-500 to-blue-700' },
+  { name: 'pandas', icon: 'fab fa-python', color: 'from-green-400 to-green-600' },
+  { name: 'scikit-learn', icon: 'fab fa-python', color: 'from-yellow-500 to-orange-600' },
+  { name: 'PyTorch', icon: 'fab fa-python', color: 'from-red-600 to-pink-800' },
+  { name: 'XAMPP', icon: 'fab fa-x', color: 'from-red-500 to-black' },
+  { name: 'WAMP', icon: 'fab fa-w', color: 'from-yellow-400 to-yellow-600' },
+  { name: 'VirtualBox', icon: 'fab fa-box', color: 'from-indigo-600 to-blue-800' },
+];
+
+const SKILL_CATEGORY_BY_NAME = {
+  JavaScript: 'languages',
+  Python: 'languages',
+  Java: 'languages',
+  PHP: 'languages',
+
+  'HTML5/CSS3': 'frontend',
+  React: 'frontend',
+  'Tailwind CSS': 'frontend',
+  Bootstrap: 'frontend',
+
+  'Node.js': 'backend',
+  'Express.js': 'backend',
+  Flask: 'backend',
+  'REST API': 'backend',
+
+  MySQL: 'databases',
+  SQL: 'databases',
+
+  NumPy: 'data & ML',
+  pandas: 'data & ML',
+  'scikit-learn': 'data & ML',
+  PyTorch: 'data & ML',
+
+  Git: 'tools',
+  GitHub: 'tools',
+  'VS Code': 'tools',
+  'Jupyter Notebook': 'tools',
+
+  XAMPP: 'platforms',
+  WAMP: 'platforms',
+  WordPress: 'platforms',
+  Joomla: 'platforms',
+  VirtualBox: 'platforms',
+};
+
+const SKILL_CATEGORIES = [
+  { key: 'languages', title: 'Languages' },
+  { key: 'frontend', title: 'Frontend' },
+  { key: 'backend', title: 'Backend' },
+  { key: 'databases', title: 'Databases' },
+  { key: 'tools', title: 'Tools' },
+  { key: 'platforms', title: 'Platforms / CMS' },
+];
+
+const GROUPED_SKILLS = SKILL_CATEGORIES.map((cat) => ({
+  ...cat,
+  items: SKILLS.filter((s) => SKILL_CATEGORY_BY_NAME[s.name] === cat.key),
+}));
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 function Navigation() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const sectionsRef = useRef([]);
+  const lastVisibleRef = useRef(false);
+  const lastActiveRef = useRef('hero');
 
   useEffect(() => {
+    sectionsRef.current = Array.from(document.querySelectorAll('section[id]'));
+    let rafId = null;
+
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 100);
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
 
-      // Get all sections
-      const sections = document.querySelectorAll('section[id]');
-      let currentSection = 'hero';
+        const nextVisible = window.scrollY > 100;
+        if (lastVisibleRef.current !== nextVisible) {
+          lastVisibleRef.current = nextVisible;
+          setIsVisible(nextVisible);
+        }
 
-      // Find which section is currently in view
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        const sectionTop = rect.top;
-        const sectionHeight = rect.height;
+        const sections = sectionsRef.current;
+        let currentSection = 'hero';
 
-        // Section is considered active if its top is in the upper half of the viewport or if we're near the bottom of the page
-        if (sectionTop <= window.innerHeight / 3 && sectionTop + sectionHeight > window.innerHeight / 3) {
-          currentSection = section.id;
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          const sectionTop = rect.top;
+          const sectionHeight = rect.height;
+
+          if (sectionTop <= window.innerHeight / 3 && sectionTop + sectionHeight > window.innerHeight / 3) {
+            currentSection = section.id;
+          }
+        }
+
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+        if (pageHeight - scrollPosition < 100) {
+          currentSection = 'contact';
+        }
+
+        if (lastActiveRef.current !== currentSection) {
+          lastActiveRef.current = currentSection;
+          setActiveSection(currentSection);
         }
       });
-
-      // Handle the last section (contact) when near bottom of page
-      const scrollPosition = window.scrollY + window.innerHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      if (pageHeight - scrollPosition < 100) {
-        currentSection = 'contact';
-      }
-
-      setActiveSection(currentSection);
     };
 
-    // Initial check
     handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  const scrollToSection = sectionId => {
+  const scrollToSection = useCallback((sectionId) => {
     scrollToPageSection(sectionId);
     setIsMobileMenuOpen(false);
-  };
+  }, []);
 
   return (
     <nav className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 px-4 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
@@ -80,7 +191,7 @@ function Navigation() {
         <div className="hidden sm:flex items-center space-x-8">
           <button onClick={() => scrollToSection('hero')} className="text-[#f9fafb] font-bold text-lg hover:text-[#9ca3af] transition-colors">Jermin</button>
           <div className="flex space-x-6">
-            {['experience', 'projects', 'certifications', 'contact'].map(section => (
+            {NAV_SECTIONS.map((section) => (
               <button key={section} onClick={() => scrollToSection(section)} className={`px-3 py-1 rounded-full text-sm transition-all ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
@@ -97,7 +208,7 @@ function Navigation() {
       </div>
       {isMobileMenuOpen && (
         <div className="sm:hidden absolute top-full left-0 right-0 mt-2 bg-[#111827]/95 backdrop-blur-md rounded-xl border border-[#374151] shadow-2xl overflow-hidden">
-          {['experience', 'projects', 'certifications', 'contact'].map(section => (
+          {NAV_SECTIONS.map((section) => (
             <button key={section} onClick={() => scrollToSection(section)} className={`w-full text-left px-4 py-3 transition-all border-b border-[#374151]/50 last:border-b-0 ${activeSection === section ? 'bg-[#374151] text-[#f9fafb]' : 'text-[#9ca3af] hover:text-[#f9fafb] hover:bg-[#374151]/50'}`}>
               {section.charAt(0).toUpperCase() + section.slice(1)}
             </button>
@@ -113,106 +224,29 @@ function Hero() {
   const [pdfLoadError, setPdfLoadError] = useState(false);
   const [isPdfLoading, setIsPdfLoading] = useState(true);
 
-  const skills = [
-    { name: 'Python', icon: 'fab fa-python', color: 'from-blue-400 to-yellow-400' },
-    { name: 'Java', icon: 'fab fa-java', color: 'from-red-500 to-orange-500' },
-    { name: 'HTML5/CSS3', icon: 'fab fa-html5', color: 'from-orange-500 to-red-500' },
-    { name: 'JavaScript', icon: 'fab fa-js-square', color: 'from-yellow-400 to-yellow-600' },
-    { name: 'React', icon: 'fab fa-react', color: 'from-cyan-400 to-blue-500' },
-    { name: 'Node.js', icon: 'fab fa-node-js', color: 'from-green-500 to-green-700' },
-    { name: 'Tailwind CSS', icon: 'fas fa-wind', color: 'from-cyan-400 to-teal-500' },
-    { name: 'PHP', icon: 'fab fa-php', color: 'from-indigo-500 to-purple-600' },
-    { name: 'SQL', icon: 'fas fa-database', color: 'from-gray-500 to-gray-700' },
-    { name: 'Git', icon: 'fab fa-git-alt', color: 'from-orange-600 to-red-600' },
-    { name: 'WordPress', icon: 'fab fa-wordpress', color: 'from-blue-600 to-blue-800' },
-    { name: 'Jo', icon: 'fab fa-drupal', color: 'from-green-600 to-green-800' },
-    { name: 'Bootstrap', icon: 'fab fa-bootstrap', color: 'from-purple-600 to-indigo-700' },
-    { name: 'Express.js', icon: 'fab fa-node', color: 'from-green-500 to-green-700' },
-    { name: 'Flask', icon: 'fab fa-python', color: 'from-red-400 to-red-600' },
-    { name: 'REST API', icon: 'fas fa-cogs', color: 'from-blue-500 to-green-500' },
-    { name: 'MySQL', icon: 'fab fa-server', color: 'from-blue-500 to-blue-700' },
-    { name: 'pandas', icon: 'fab fa-python', color: 'from-green-400 to-green-600' },
-    { name: 'scikit-learn', icon: 'fab fa-python', color: 'from-yellow-500 to-orange-600' },
-    { name: 'PyTorch', icon: 'fab fa-python', color: 'from-red-600 to-pink-800' },
-    { name: 'XAMPP', icon: 'fab fa-x', color: 'from-red-500 to-black' },
-    { name: 'WAMP', icon: 'fab fa-w', color: 'from-yellow-400 to-yellow-600' },
-    { name: 'VirtualBox', icon: 'fab fa-box', color: 'from-indigo-600 to-blue-800' }
-  ];
+  const groupedSkills = GROUPED_SKILLS;
 
-  // --- Skill grouping (category by skill name) ---
-  const skillCategoryByName = {
-    JavaScript: 'languages',
-    Python: 'languages',
-    Java: 'languages',
-    PHP: 'languages',
-
-    'HTML5/CSS3': 'frontend',
-    React: 'frontend',
-    'Tailwind CSS': 'frontend',
-    Bootstrap: 'frontend',
-
-    'Node.js': 'backend',
-    'Express.js': 'backend',
-    Flask: 'backend',
-    'REST API': 'backend',
-
-    MySQL: 'databases',
-    SQL: 'databases',
-
-    NumPy: 'data & ML',
-    pandas: 'data & ML',
-    'scikit-learn': 'data & ML',
-    PyTorch: 'data & ML',
-
-    Git: 'tools',
-    GitHub: 'tools',
-    'VS Code': 'tools',
-    'Jupyter Notebook': 'tools',
-
-    XAMPP: 'platforms',
-    WAMP: 'platforms',
-    WordPress: 'platforms',
-    Joomla: 'platforms',
-    VirtualBox: 'platforms',
-  }
-
-
-  const categories = [
-    { key: 'languages', title: 'Languages' },
-    { key: 'frontend', title: 'Frontend' },
-    { key: 'backend', title: 'Backend' },
-    { key: 'databases', title: 'Databases' },
-    { key: 'tools', title: 'Tools' },
-    { key: 'platforms', title: 'Platforms / CMS' },
-  ];
-
-  const groupedSkills = categories.map(cat => ({
-    ...cat,
-    items: skills.filter(s => skillCategoryByName[s.name] === cat.key),
-  }));
-
-  const scrollToSection = sectionId => scrollToPageSection(sectionId);
   const resumePreviewUrl = `${resumePdf}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`;
 
-  const handleResumeView = () => {
+  const handleResumeView = useCallback(() => {
     setShowResume(true);
     setPdfLoadError(false);
     setIsPdfLoading(true);
-  };
+  }, []);
 
-  const handleResumeDownload = () => {
+  const handleResumeDownload = useCallback(() => {
     const link = document.createElement('a');
     link.href = resumePdf;
     link.download = 'odcheo_resume.pdf';
     link.click();
-  };
+  }, []);
 
-  const handleResumeViewInNewTab = () => window.open(resumePdf, '_blank');
+  const handleResumeViewInNewTab = useCallback(() => window.open(resumePdf, '_blank'), []);
 
-  const handlePdfError = () => {
+  const handlePdfError = useCallback(() => {
     setPdfLoadError(true);
     setIsPdfLoading(false);
-  };
+  }, []);
 
   return (
       <section id="hero" className="min-h-screen flex flex-col relative overflow-visible">
@@ -221,24 +255,20 @@ function Hero() {
             <HeroAnimated animation="fadeInLeft" className="text-center lg:text-left space-y-5 sm:space-y-6">
               <HeroAnimated delay={200} className="flex justify-center lg:justify-start">
                 <div className="bg-green-500/20 border border-green-500/50 rounded-full px-4 py-1.5 sm:px-5 sm:py-2 flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping shrink-0"></div>
                   <span className="text-green-400 font-medium text-xs sm:text-sm">Available for Employment</span>
                 </div>
               </HeroAnimated>
 
               <HeroAnimated animation="scaleIn" delay={400} className="flex flex-wrap justify-center lg:justify-start items-center gap-4">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-linear-to-br from-[#374151] to-[#6b7280] p-1 hover:scale-110 transition-transform duration-300 shrink-0">
                   <div className="w-full h-full rounded-full bg-[#f9fafb] flex items-center justify-center">
                     <img src={profileImageUrl} alt="Profile" className="w-full h-full rounded-full object-cover" />
                   </div>
                 </div>
 
                 <HeroAnimated delay={600} className="flex items-center space-x-3">
-                  {[
-                    { icon: 'fab fa-github', href: 'https://github.com/Jermin-Odcheo', label: 'GitHub', color: 'hover:bg-gray-700' },
-                    { icon: 'fab fa-linkedin', href: 'https://linkedin.com/in/jerminodcheo', label: 'LinkedIn', color: 'hover:bg-blue-600' },
-                    { icon: 'fas fa-envelope', href: 'mailto:jerminbodcheo@gmail.com', label: 'Email', color: 'hover:bg-red-600' },
-                  ].map(({ icon, href, label, color }) => (
+                  {SOCIAL_LINKS.map(({ icon, href, label, color }) => (
                       <a
                           key={label}
                           href={href}
@@ -255,7 +285,7 @@ function Hero() {
 
               <HeroAnimated delay={500}>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f9fafb] mb-2">Jermin Odcheo</h1>
-                <div className="h-[2px] bg-blue-50 mx-auto lg:mx-0 w-40 sm:w-48 my-2"></div>
+                <div className="h-0.5 bg-blue-50 mx-auto lg:mx-0 w-40 sm:w-48 my-2"></div>
                 <p className="text-lg sm:text-xl lg:text-2xl text-[#9ca3af] mb-3">Full-Stack Developer</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1 text-[#6b7280] text-xs sm:text-sm">
                   <div className="flex items-center space-x-1.5">
@@ -315,7 +345,7 @@ function Hero() {
                                       key={skill.name}
                                       className="group flex items-center space-x-2 bg-[#111827]/30 rounded-md px-2.5 py-1.5 hover:bg-[#6b7280]/30 transition-all duration-300"
                                   >
-                                    <div className={`w-5 h-5 rounded bg-gradient-to-r ${skill.color} flex items-center justify-center flex-shrink-0`}>
+                                    <div className={`w-5 h-5 rounded bg-linear-to-r ${skill.color} flex items-center justify-center shrink-0`}>
                                       <i className={`${skill.icon} text-white text-[11px]`}></i>
                                     </div>
                                     <span className="text-[#f9fafb] font-medium text-sm">{skill.name}</span>
@@ -345,11 +375,7 @@ function Hero() {
                     <i className="fas fa-trophy mr-2"></i>Key Achievements
                   </h3>
                   <StaggeredContainer className="space-y-2">
-                    {[
-                      'AI chatbot with 72% accuracy',
-                      'Led inventory system development',
-                      'Full-stack web projects',
-                    ].map((achievement, i) => (
+                    {ACHIEVEMENTS.map((achievement, i) => (
                         <div key={i} className="flex items-start space-x-2">
                           <i className="fas fa-check-circle text-green-400 mt-0.5 text-xs"></i>
                           <span className="text-[#9ca3af] text-xs">{achievement}</span>
@@ -365,12 +391,12 @@ function Hero() {
         {showResume && (
             <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-2 sm:p-4">
               <div className="bg-[#374151] rounded-xl w-full max-w-6xl h-[98vh] sm:h-[95vh] overflow-hidden border border-[#6b7280] shadow-2xl flex flex-col">
-                <div className="p-3 sm:p-4 lg:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10 flex-shrink-0">
+                <div className="p-3 sm:p-4 lg:p-6 border-b border-[#6b7280] flex justify-between items-center bg-[#374151] z-10 shrink-0">
                   <div className="min-w-0 mr-2">
                     <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-[#f9fafb] truncate">Resume - Jermin Odcheo</h3>
                     <p className="text-[#9ca3af] text-xs sm:text-sm hidden xs:block">Full-Stack Developer</p>
                   </div>
-                  <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
+                  <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
                     <button
                         onClick={handleResumeViewInNewTab}
                         className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
@@ -464,10 +490,18 @@ function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.1 });
 
+  const checkCooldown = useCallback(() => {
+    const last = localStorage.getItem('lastEmailSubmission');
+    if (!last) return;
+    const oneMinute = 60 * 1000;
+    const passed = Date.now() - Number(last);
+    if (passed < oneMinute) setCooldownTime(Math.ceil((oneMinute - passed) / 1000));
+  }, []);
+
   useEffect(() => {
     emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
     checkCooldown();
-  }, []);
+  }, [checkCooldown]);
 
   useEffect(() => {
     let interval;
@@ -477,16 +511,6 @@ function Contact() {
     return () => clearInterval(interval);
   }, [cooldownTime]);
 
-  const checkCooldown = () => {
-    const last = localStorage.getItem('lastEmailSubmission');
-    if (!last) return;
-    const oneMinute = 60 * 1000;
-    const passed = Date.now() - parseInt(last);
-    if (passed < oneMinute) setCooldownTime(Math.ceil((oneMinute - passed) / 1000));
-  };
-
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
   const validateForm = () => {
     const newErrors = {};
     if (formData.honeypot) return false;
@@ -495,7 +519,7 @@ function Contact() {
     else if (formData.name.trim().length > 50) newErrors.name = 'Name must be less than 50 characters';
 
     if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!emailRegex.test(formData.email.trim())) newErrors.email = 'Please enter a valid email address';
+    else if (!EMAIL_REGEX.test(formData.email.trim())) newErrors.email = 'Please enter a valid email address';
     else if (formData.email.trim().length > 100) newErrors.email = 'Email must be less than 100 characters';
 
     if (!formData.message.trim()) newErrors.message = 'Message is required';
@@ -549,7 +573,7 @@ function Contact() {
 
   return (
     <Motion.section ref={ref} id="contact" className="py-16 sm:py-20 relative" initial="hidden" animate={isInView ? 'visible' : 'hidden'} variants={staggerContainer}>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#6b7280] to-transparent"></div>
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <Motion.div className="text-center mb-10 sm:mb-16" variants={fadeInUp}>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#f9fafb] mb-4 sm:mb-8">Let's Connect</h2>
@@ -559,11 +583,7 @@ function Contact() {
           <Motion.div className="space-y-6 sm:space-y-8" variants={fadeInLeft}>
             <h3 className="text-xl sm:text-2xl font-semibold text-[#f9fafb] mb-4 sm:mb-6">Get in Touch</h3>
             <Motion.div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 sm:gap-6" variants={staggerContainer}>
-              {[
-                { href: 'mailto:jerminbodcheo@gmail.com', icon: 'fas fa-envelope', title: 'Email', description: 'jerminbodcheo@gmail.com' },
-                { href: 'https://linkedin.com/in/jerminodcheo', icon: 'fab fa-linkedin', title: 'LinkedIn', description: 'Connect with me', target: '_blank' },
-                { href: 'https://github.com/Jermin-Odcheo', icon: 'fab fa-github', title: 'GitHub', description: 'View my code', target: '_blank' },
-              ].map((c, i) => (
+              {CONTACT_LINKS.map((c, i) => (
                 <Motion.a key={c.title} href={c.href} target={c.target} rel={c.target ? 'noopener noreferrer' : undefined} className="group bg-[#374151]/20 backdrop-blur-sm p-4 sm:p-6 rounded-xl hover:bg-[#374151]/30 transition-all border border-[#6b7280]/30 hover:border-[#9ca3af]/50 hover:shadow-xl hover:scale-105 duration-300" variants={staggerItem} custom={i}>
                   <i className={`${c.icon} text-2xl sm:text-3xl text-[#9ca3af] mb-3 sm:mb-4 group-hover:text-[#f9fafb] transition-colors`}></i>
                   <h4 className="font-semibold text-[#f9fafb] mb-1 sm:mb-2 text-sm sm:text-base">{c.title}</h4>
