@@ -54,7 +54,7 @@ const SKILLS = [
   { name: 'SQL', icon: 'fas fa-database', color: 'from-gray-500 to-gray-700' },
   { name: 'Git', icon: 'fab fa-git-alt', color: 'from-orange-600 to-red-600' },
   { name: 'WordPress', icon: 'fab fa-wordpress', color: 'from-blue-600 to-blue-800' },
-  { name: 'Jo', icon: 'fab fa-drupal', color: 'from-green-600 to-green-800' },
+  { name: 'Joomla', icon: 'fab fa-drupal', color: 'from-green-600 to-green-800' },
   { name: 'Bootstrap', icon: 'fab fa-bootstrap', color: 'from-purple-600 to-indigo-700' },
   { name: 'Express.js', icon: 'fab fa-node', color: 'from-green-500 to-green-700' },
   { name: 'Flask', icon: 'fab fa-python', color: 'from-red-400 to-red-600' },
@@ -66,6 +66,7 @@ const SKILLS = [
   { name: 'XAMPP', icon: 'fab fa-x', color: 'from-red-500 to-black' },
   { name: 'WAMP', icon: 'fab fa-w', color: 'from-yellow-400 to-yellow-600' },
   { name: 'VirtualBox', icon: 'fab fa-box', color: 'from-indigo-600 to-blue-800' },
+  { name: 'Data Analytics', icon: 'fas fa-chart-line', color: 'from-emerald-500 to-teal-600' },
 ];
 
 const SKILL_CATEGORY_BY_NAME = {
@@ -91,6 +92,7 @@ const SKILL_CATEGORY_BY_NAME = {
   pandas: 'data & ML',
   'scikit-learn': 'data & ML',
   PyTorch: 'data & ML',
+  'Data Analytics': 'data & ML',
 
   Git: 'tools',
   GitHub: 'tools',
@@ -109,6 +111,7 @@ const SKILL_CATEGORIES = [
   { key: 'frontend', title: 'Frontend' },
   { key: 'backend', title: 'Backend' },
   { key: 'databases', title: 'Databases' },
+  { key: 'data & ML', title: 'Data & ML' },
   { key: 'tools', title: 'Tools' },
   { key: 'platforms', title: 'Platforms / CMS' },
 ];
