@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion as Motion } from 'framer-motion';
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// Data
 // Ordered Present → Past (most recent first)
-// To add a new entry just push/unshift an object here — no JSX changes needed.
 const experiences = [
   {
     year: '2025',
@@ -25,6 +24,27 @@ const experiences = [
       { icon: 'fas fa-file-export', text: 'PDF & Excel export via DomPDF / PHPOffice' },
     ],
     skills: ['PHP', 'MySQL', 'Bootstrap', 'JavaScript', 'HTML/CSS'],
+  },
+  {
+    year: '2025',
+    title: 'Self-Employed Freelance IT Technician & Technical Consultant',
+    organization: 'Independent',
+    period: 'Aug 2022 – Jun 2025',
+    type: 'Freelance',
+    typeColor: 'text-amber-300 border-amber-500/40',
+    dotColor: 'bg-amber-400',
+    glowColor: 'shadow-amber-500/40',
+    icon: 'fas fa-screwdriver-wrench',
+    iconGradient: 'from-amber-500 to-orange-400',
+    impact:
+      'Resolved Java and web project issues for 3+ clients while delivering reliable hardware service and custom PC builds.',
+    highlights: [
+      { icon: 'fas fa-bug',         text: 'Debugged Java, HTML, CSS & JavaScript codebases' },
+      { icon: 'fas fa-tools',       text: 'Hardware servicing: RAM upgrades, Re-paste & deep cleaning' },
+      { icon: 'fas fa-desktop',     text: 'Built custom PCs with compatibility and performance tuning' },
+      { icon: 'fas fa-user-check',  text: 'Repeat business with 3 of 8 clients returning' },
+    ],
+    skills: ['Java', 'HTML', 'CSS', 'JavaScript', 'Hardware Support'],
   },
   {
     year: '2024',
@@ -67,13 +87,13 @@ const experiences = [
   },
 ];
 
-// ─── TimelineCard ─────────────────────────────────────────────────────────────
+// TimelineCard
 function TimelineCard({ exp }) {
   return (
     <div className="bg-[#374151]/15 backdrop-blur-sm rounded-2xl border border-[#6b7280]/25 hover:border-[#9ca3af]/40 hover:bg-[#374151]/25 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 overflow-hidden group">
 
       {/* Top colour strip */}
-      <div className={`h-0.5 w-full bg-gradient-to-r ${exp.iconGradient}`} />
+      <div className={`h-0.5 w-full bg-linear-to-r ${exp.iconGradient}`} />
 
       <div className="p-5">
 
@@ -87,7 +107,7 @@ function TimelineCard({ exp }) {
 
         {/* Row 2 — Icon + Title + Org */}
         <div className="flex items-start gap-3 mb-3">
-          <div className={`flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br ${exp.iconGradient} flex items-center justify-center shadow-md`}>
+          <div className={`shrink-0 w-9 h-9 rounded-xl bg-linear-to-br ${exp.iconGradient} flex items-center justify-center shadow-md`}>
             <i className={`${exp.icon} text-white text-sm`} />
           </div>
           <div>
@@ -105,7 +125,7 @@ function TimelineCard({ exp }) {
         <ul className="space-y-1 mb-4">
           {exp.highlights.map((h, j) => (
             <li key={j} className="flex items-start gap-2">
-              <i className={`${h.icon} text-[#6b7280] text-[10px] mt-0.5 w-3 flex-shrink-0`} />
+              <i className={`${h.icon} text-[#6b7280] text-[10px] mt-0.5 w-3 shrink-0`} />
               <span className="text-[#d1d5db] text-xs leading-snug">{h.text}</span>
             </li>
           ))}
@@ -115,7 +135,7 @@ function TimelineCard({ exp }) {
         <div className="flex flex-wrap gap-1.5">
           {exp.skills.map(skill => (
             <span
-              key={skill}
+              key={String(skill)}
               className="px-2 py-0.5 bg-[#111827]/50 text-[#9ca3af] text-[10px] font-medium rounded-full border border-[#6b7280]/30"
             >
               {skill}
@@ -127,8 +147,7 @@ function TimelineCard({ exp }) {
     </div>
   );
 }
-
-// ─── Experience section ───────────────────────────────────────────────────────
+// Experience section
 export default function Experience() {
   return (
     <Motion.section
@@ -139,7 +158,7 @@ export default function Experience() {
       viewport={{ amount: 0.05, once: true }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#6b7280] to-transparent" />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
 
@@ -167,10 +186,10 @@ export default function Experience() {
         <div className="relative">
 
           {/* Desktop centre spine */}
-          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#6b7280]/60 via-[#6b7280]/30 to-transparent pointer-events-none" />
+          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-linear-to-b from-[#6b7280]/60 via-[#6b7280]/30 to-transparent pointer-events-none" />
 
           {/* Mobile left-edge spine */}
-          <div className="md:hidden absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-[#6b7280]/60 via-[#6b7280]/30 to-transparent pointer-events-none" />
+          <div className="md:hidden absolute left-3 top-0 bottom-0 w-px bg-linear-to-b from-[#6b7280]/60 via-[#6b7280]/30 to-transparent pointer-events-none" />
 
           <div className="space-y-8 md:space-y-6 pb-4">
             {experiences.map((exp, i) => {
@@ -207,7 +226,7 @@ export default function Experience() {
 
                   {/* ── Mobile single-column ── */}
                   <div className="md:hidden flex items-start gap-4 pl-1">
-                    <div className="flex flex-col items-center flex-shrink-0 pt-4">
+                    <div className="flex flex-col items-center shrink-0 pt-4">
                       <div className={`w-3 h-3 rounded-full border-2 border-[#111827] ${exp.dotColor} z-10`} />
                     </div>
                     <div className="flex-1 min-w-0 pb-2">
@@ -231,4 +250,3 @@ export default function Experience() {
     </Motion.section>
   );
 }
-

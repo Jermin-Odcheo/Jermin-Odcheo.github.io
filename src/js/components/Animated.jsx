@@ -155,7 +155,7 @@ export function StaggeredContainer({ children, className = '', staggerDelay = 10
   );
 }
 
-// ─── HeroAnimated ─────────────────────────────────────────────────────────────
+// HeroAnimated
 export function HeroAnimated({ children, className = '', delay = 0, animation = 'fadeInUp' }) {
   const isReady = useAppReady();
 

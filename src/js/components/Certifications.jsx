@@ -13,7 +13,7 @@ import certUdemyAI from '../../assets/certificates/UC-0497434b-3c91-4447-b8a1-90
 import certUdemyPython from '../../assets/certificates/UC-171e9dab-d53d-4b66-a57a-55e93a3cf0a5.pdf';
 import certUdemyWeb from '../../assets/certificates/UC-9ebeab56-a4f1-4d4f-a1a7-1cfbb0901a8a.pdf';
 import certIntern from '../../assets/certificates/COC.pdf';
-import certIBM from '../../assets/certificates/IBMDesign20260503-31-iopaax.pdf'
+import certIBM from '../../assets/certificates/IBMDesign20260503-31-iopaax.pdf';
 
 // Modal animation variants
 const backdropVariants = {
@@ -38,7 +38,7 @@ const baseCertificates = [
     icon: 'fas fa-lightbulb',
     tag: 'Data Analytics',
     colors: ['#6366f1', '#a855f7'],
-  description: 'IBM Data Analytics covering data analysis tools and techniques.'
+    description: 'IBM Data Analytics covering data analysis tools and techniques.',
   },
   {
     id: 'internship',
@@ -102,7 +102,7 @@ const baseCertificates = [
   },
 ];
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// Helpers
 const generatePlaceholder = (title, platform, accentFrom, accentTo) => {
   const canvas = document.createElement('canvas');
   canvas.width = 640;
@@ -206,6 +206,8 @@ export default function Certifications() {
   };
 
   const active = certificates[activeIndex];
+  const activeTags = /** @type {string[]} */ (active?.tags ?? []);
+  const previewTags = /** @type {string[]} */ (previewCert?.tags ?? []);
 
   return (
       <Motion.section
@@ -217,7 +219,7 @@ export default function Certifications() {
           variants={staggerContainer}
       >
         {/* Divider */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280]/40 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#6b7280]/40 to-transparent" />
 
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
 
@@ -265,12 +267,12 @@ export default function Certifications() {
                     loading="lazy"
                     className="relative z-10 w-full h-full object-contain p-1.5 sm:p-2 transition-transform duration-500 group-hover:scale-[1.01]"
                 />
-                <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/72 via-black/12 to-transparent" />
+                <div className="absolute inset-0 z-20 bg-linear-to-t from-black/72 via-black/12 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 z-30 p-5 sm:p-6 flex items-end justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <div
-                          className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0"
+                          className="w-5 h-5 rounded flex items-center justify-center shrink-0"
                           style={{ background: `linear-gradient(135deg, ${active?.colors[0]}, ${active?.colors[1]})` }}
                       >
                         <i className={`${active?.icon} text-white text-[9px]`} />
@@ -289,7 +291,7 @@ export default function Certifications() {
                       {active?.description}
                     </p>
                   </div>
-                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="shrink-0 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <i className="fas fa-expand-alt text-white text-xs" />
                   </div>
                 </div>
@@ -297,7 +299,7 @@ export default function Certifications() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-3.5">
-                {active?.tags.map((t) => (
+                {activeTags.map((t) => (
                     <span
                         key={t}
                         className="px-2.5 py-1 bg-[#1f2937]/70 text-[#d1d5db] text-xs rounded-full border border-[#374151]/60"
@@ -312,7 +314,7 @@ export default function Certifications() {
             <Motion.div
                 ref={listRef}
                 variants={fadeInUp}
-                className="flex flex-col gap-2 overflow-y-auto max-h-[380px] lg:max-h-none pr-0.5"
+                className="flex flex-col gap-2 overflow-y-auto max-h-95 lg:max-h-none pr-0.5"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#374151 transparent' }}
             >
               {certificates.map((cert, i) => {
@@ -329,7 +331,7 @@ export default function Certifications() {
                               : 'bg-transparent border-[#374151]/30 hover:bg-[#1f2937]/50 hover:border-[#374151]/70',
                         ].join(' ')}
                     >
-                      <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#374151]/30">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-[#374151]/30">
                         <img
                             src={cert.preview}
                             alt=""
@@ -343,7 +345,7 @@ export default function Certifications() {
                         </p>
                         <p className="text-[#6b7280] text-xs mt-0.5 truncate">{cert.platform}</p>
                       </div>
-                      <span className={['text-xs tabular-nums font-mono flex-shrink-0', isActive ? 'text-[#9ca3af]' : 'text-[#374151]'].join(' ')}>
+                      <span className={['text-xs tabular-nums font-mono shrink-0', isActive ? 'text-[#9ca3af]' : 'text-[#374151]'].join(' ')}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                     </button>
@@ -376,7 +378,7 @@ export default function Certifications() {
         <AnimatePresence>
           {previewCert && (
               <Motion.div
-                  className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[60] p-3 sm:p-6"
+                  className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-60 p-3 sm:p-6"
                   variants={backdropVariants}
                   initial="hidden"
                   animate="visible"
@@ -394,7 +396,7 @@ export default function Certifications() {
                   <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-[#1f2937]">
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                          className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                          className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
                           style={{ background: `linear-gradient(135deg, ${previewCert.colors[0]}, ${previewCert.colors[1]})` }}
                       >
                         <i className={`${previewCert.icon} text-white text-[11px]`} />
@@ -406,7 +408,7 @@ export default function Certifications() {
                     </div>
                     <button
                         onClick={() => setPreviewCert(null)}
-                        className="ml-3 flex-shrink-0 w-8 h-8 rounded-lg bg-[#1f2937] hover:bg-[#374151] flex items-center justify-center text-[#6b7280] hover:text-[#f9fafb] transition-colors"
+                        className="ml-3 shrink-0 w-8 h-8 rounded-lg bg-[#1f2937] hover:bg-[#374151] flex items-center justify-center text-[#6b7280] hover:text-[#f9fafb] transition-colors"
                         aria-label="Close preview"
                     >
                       <i className="fas fa-times text-xs" />
@@ -423,7 +425,7 @@ export default function Certifications() {
                   </div>
 
                   <div className="px-4 sm:px-5 py-3 border-t border-[#1f2937] flex items-center gap-2 flex-wrap">
-                    {previewCert.tags.map((t) => (
+                    {previewTags.map((t) => (
                         <span
                             key={t}
                             className="px-2 py-0.5 bg-[#1f2937] text-[#9ca3af] text-xs rounded-full border border-[#374151]/50"

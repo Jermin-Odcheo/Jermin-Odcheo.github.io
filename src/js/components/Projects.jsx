@@ -175,7 +175,7 @@ export default function Projects() {
       animate={isInView ? 'visible' : 'hidden'}
       variants={staggerContainer}
     >
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6b7280] to-transparent"></div>
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#6b7280] to-transparent"></div>
 
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <Motion.h2 className="text-3xl sm:text-4xl font-bold text-[#f9fafb] text-center mb-10 sm:mb-16" variants={fadeInUp}>
@@ -186,7 +186,7 @@ export default function Projects() {
           {projects.map((project, index) => (
             <Motion.div key={project.id} className="group h-full" variants={fadeInUp} custom={index}>
               <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:shadow-2xl hover:scale-105 h-full flex flex-col">
-                <div className="relative h-48 overflow-hidden flex-shrink-0">
+                <div className="relative h-48 overflow-hidden shrink-0">
                   {project.image ? (
                     <>
                       <img
@@ -204,7 +204,7 @@ export default function Projects() {
                       </div>
                     </>
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#374151] to-[#6b7280] flex flex-col items-center justify-center text-center p-6 group-hover:from-[#6b7280] group-hover:to-[#9ca3af] transition-all duration-300">
+                    <div className="w-full h-full bg-linear-to-br from-[#374151] to-[#6b7280] flex flex-col items-center justify-center text-center p-6 group-hover:from-[#6b7280] group-hover:to-[#9ca3af] transition-all duration-300">
                       <div className="bg-[#111827]/30 rounded-full p-4 mb-3 group-hover:bg-[#111827]/50 transition-all duration-300">
                         <i
                           className={`fas ${
@@ -258,7 +258,7 @@ export default function Projects() {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${project.liveDemo ? 'flex-[7]' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
+                        className={`${project.liveDemo ? 'flex-7' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
                       >
                         <i className="fab fa-github"></i>
                         <span>View on GitHub</span>
@@ -269,7 +269,7 @@ export default function Projects() {
                         href={project.liveDemo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-[3] bg-[#3b82f6]/30 hover:bg-[#3b82f6]/50 text-[#f9fafb] py-2 px-3 rounded-lg transition-all duration-300 border border-[#3b82f6]/30 hover:border-[#3b82f6]/60 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-1.5"
+                        className="flex-3 bg-[#3b82f6]/30 hover:bg-[#3b82f6]/50 text-[#f9fafb] py-2 px-3 rounded-lg transition-all duration-300 border border-[#3b82f6]/30 hover:border-[#3b82f6]/60 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-1.5"
                       >
                         <i className="fas fa-external-link-alt text-xs"></i>
                         <span className="whitespace-nowrap">Live</span>
@@ -374,7 +374,7 @@ export default function Projects() {
                   }}
                 >
                   <img
-                    src={zoomedImage}
+                    src={String(zoomedImage)}
                     alt="Zoomed view"
                     draggable={false}
                     className="max-w-full max-h-full object-contain select-none"
