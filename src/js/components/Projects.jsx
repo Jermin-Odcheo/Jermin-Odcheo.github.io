@@ -166,120 +166,298 @@ export default function Projects() {
     },
   ];
 
+  const featuredProject = projects[0];
+  const secondaryProject = projects[1];
+  const moreProjects = projects.slice(2);
+
+  const orbitOrbs = [
+    { id: 'orb-1', className: 'top-8 left-8', size: 'w-72 h-72', colors: 'from-[#60a5fa]/40 via-[#a78bfa]/30 to-transparent' },
+    { id: 'orb-2', className: 'bottom-10 right-6', size: 'w-80 h-80', colors: 'from-[#22d3ee]/30 via-[#f472b6]/20 to-transparent' },
+    { id: 'orb-3', className: 'top-1/3 -right-12', size: 'w-56 h-56', colors: 'from-[#34d399]/20 via-[#60a5fa]/25 to-transparent' },
+  ];
+
+  const lightStreaks = [
+    { id: 'streak-1', className: 'top-24 left-10 w-40', rotate: '-12deg' },
+    { id: 'streak-2', className: 'bottom-28 right-16 w-52', rotate: '10deg' },
+  ];
+
   return (
     <Motion.section
       ref={ref}
       id="projects"
-      className="py-16 sm:py-20 relative"
+      className="relative pt-20 pb-16 sm:pt-24 sm:pb-20 overflow-hidden"
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={staggerContainer}
     >
-      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#6b7280] to-transparent"></div>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative">
+        <div className="text-center mb-10 sm:mb-16">
+          <Motion.p
+            className="text-xs sm:text-sm uppercase tracking-[0.4em] text-[#9ca3af]"
+            variants={fadeInUp}
+          >
+            Selected Work
+          </Motion.p>
+          <Motion.h2
+            className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#f9fafb] mt-3"
+            variants={fadeInUp}
+          >
+            Featured Projects
+          </Motion.h2>
+          <Motion.p
+            className="mt-4 text-sm sm:text-base text-[#9ca3af] max-w-2xl mx-auto"
+            variants={fadeInUp}
+          >
+            Immersive, high-impact builds shaped by research, intelligent automation, and design-driven engineering.
+          </Motion.p>
+        </div>
 
-      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-        <Motion.h2 className="text-3xl sm:text-4xl font-bold text-[#f9fafb] text-center mb-10 sm:mb-16" variants={fadeInUp}>
-          Featured Projects
-        </Motion.h2>
+        <Motion.div
+          className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-start"
+          variants={staggerContainer}
+        >
+          <div className="grid gap-6">
+            {featuredProject && (
+              <Motion.article
+                className="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl shadow-[0_30px_90px_-40px_rgba(15,23,42,0.9)]"
+                variants={fadeInUp}
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/10 via-transparent to-[#22d3ee]/10" />
+                </div>
+                <div className="relative">
+                  <div className="relative h-52 sm:h-60 overflow-hidden">
+                    <img
+                      src={featuredProject.image}
+                      alt={featuredProject.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onClick={() => zoomImage(featuredProject.image)}
+                    />
+                    <div className="absolute top-4 left-4 flex items-center gap-2">
+                      <span className="px-3 py-1 text-[10px] text-white/80 bg-black/40 rounded-full border border-white/10 whitespace-nowrap">
+                        {featuredProject.category}
+                      </span>
+                    </div>
+                  </div>
 
-        <Motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8" variants={staggerContainer}>
-          {projects.map((project, index) => (
-            <Motion.div key={project.id} className="group h-full" variants={fadeInUp} custom={index}>
-              <div className="bg-[#374151]/20 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-[#374151]/30 transition-all duration-300 border border-[#6b7280]/30 hover:shadow-2xl hover:scale-105 h-full flex flex-col">
-                <div className="relative h-48 overflow-hidden shrink-0">
-                  {project.image ? (
-                    <>
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
-                        onClick={() => zoomImage(project.image)}
-                      />
-                      <div
-                        className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300"
-                        onClick={() => zoomImage(project.image)}
-                      >
-                        <i className="fas fa-search-plus text-white text-2xl"></i>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="w-full h-full bg-linear-to-br from-[#374151] to-[#6b7280] flex flex-col items-center justify-center text-center p-6 group-hover:from-[#6b7280] group-hover:to-[#9ca3af] transition-all duration-300">
-                      <div className="bg-[#111827]/30 rounded-full p-4 mb-3 group-hover:bg-[#111827]/50 transition-all duration-300">
-                        <i
-                          className={`fas ${
-                            project.category === 'Game'
-                              ? 'fa-gamepad'
-                              : project.category === 'AI/ML'
-                                ? 'fa-brain'
-                                : project.category === 'Web App'
-                                  ? 'fa-globe'
-                                  : project.category === 'Data Mining'
-                                    ? 'fa-chart-bar'
-                                    : 'fa-code'
-                          } text-3xl text-[#f9fafb]`}
-                        ></i>
-                      </div>
-                      <h4 className="text-[#f9fafb] font-bold text-lg mb-1">{project.title}</h4>
-                      <p className="text-[#9ca3af] text-sm">{project.category}</p>
-                      <div className="absolute bottom-3 right-3 text-[#9ca3af]/50 text-xs">
-                        <i className="fas fa-image"></i>
-                        <span className="ml-1">No preview</span>
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-2xl sm:text-3xl font-semibold text-white">
+                          {featuredProject.title}
+                        </h3>
+                        <p className="text-sm sm:text-base text-[#9ca3af] mt-2">
+                          {featuredProject.description}
+                        </p>
                       </div>
                     </div>
-                  )}
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-[#111827]/80 text-[#9ca3af] px-3 py-1 rounded-full text-sm">
-                      {project.category}
-                    </span>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {featuredProject.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 text-xs rounded-full bg-white/10 text-white/90 border border-white/10"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <a
+                        href={featuredProject.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm border border-white/20 hover:bg-white/20 transition"
+                      >
+                        <i className="fab fa-github"></i>
+                        Repository
+                      </a>
+                      {featuredProject.liveDemo && (
+                        <a
+                          href={featuredProject.liveDemo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3b82f6]/30 text-white text-sm border border-[#60a5fa]/50 hover:bg-[#3b82f6]/50 transition"
+                        >
+                          <i className="fas fa-external-link-alt text-xs"></i>
+                          Live Demo
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
+              </Motion.article>
+            )}
 
-                <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="text-lg sm:text-xl font-bold text-[#f9fafb] mb-2 sm:mb-3 group-hover:text-[#9ca3af] transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-[#9ca3af] mb-3 sm:mb-4 text-sm flex-1">{project.description}</p>
+            {secondaryProject && (
+              <Motion.article
+                className="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl"
+                variants={fadeInUp}
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute -inset-px bg-gradient-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
+                </div>
+                <div className="relative p-5 sm:p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="relative h-28 w-32 shrink-0 overflow-hidden rounded-xl border border-white/10">
+                      {secondaryProject.image ? (
+                        <img
+                          src={secondaryProject.image}
+                          alt={secondaryProject.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                          onClick={() => zoomImage(secondaryProject.image)}
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
+                          No preview
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech) => (
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                          {secondaryProject.title}
+                        </h3>
+                        <span className="text-[10px] text-white/60 bg-white/10 px-2 py-1 rounded-full shrink-0 whitespace-nowrap">
+                          {secondaryProject.category}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm text-[#9ca3af]">
+                        {secondaryProject.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {secondaryProject.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 bg-[#6b7280]/30 text-[#f9fafb] text-xs rounded border border-[#9ca3af]/20 hover:bg-[#6b7280]/50 transition-colors"
+                        className="px-2.5 py-1 text-[11px] rounded-full bg-white/10 text-white/80 border border-white/10"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
 
-                  <div className="flex gap-2">
-                    {project.github && (
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <a
+                      href={secondaryProject.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs border border-white/20 hover:bg-white/20 transition"
+                    >
+                      <i className="fab fa-github"></i>
+                      Repo
+                    </a>
+                    {secondaryProject.liveDemo && (
                       <a
-                        href={project.github}
+                        href={secondaryProject.liveDemo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${project.liveDemo ? 'flex-7' : 'flex-1'} bg-[#6b7280]/30 hover:bg-[#6b7280]/50 text-[#f9fafb] py-2 px-4 rounded-lg transition-all duration-300 border border-[#9ca3af]/20 hover:border-[#9ca3af]/40 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-2`}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#3b82f6]/30 text-white text-xs border border-[#60a5fa]/50 hover:bg-[#3b82f6]/50 transition"
                       >
-                        <i className="fab fa-github"></i>
-                        <span>View on GitHub</span>
+                        <i className="fas fa-external-link-alt text-[10px]"></i>
+                        Live
                       </a>
                     )}
+                  </div>
+                </div>
+              </Motion.article>
+            )}
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+            {moreProjects.map((project, index) => (
+              <Motion.article
+                key={project.id}
+                className="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl"
+                variants={fadeInUp}
+                custom={index}
+                whileHover={{ y: -6 }}
+                transition={{ type: 'spring', stiffness: 220, damping: 18 }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute -inset-px bg-gradient-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
+                </div>
+                <div className="relative p-5 sm:p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-xl border border-white/10">
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                          onClick={() => zoomImage(project.image)}
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
+                          No preview
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-lg sm:text-xl font-semibold text-white">
+                          {project.title}
+                        </h3>
+                        <span className="text-[10px] text-white/60 bg-white/10 px-2 py-1 rounded-full shrink-0 whitespace-nowrap">
+                          {project.category}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm text-[#9ca3af]">
+                        {project.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 text-[11px] rounded-full bg-white/10 text-white/80 border border-white/10"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs border border-white/20 hover:bg-white/20 transition"
+                    >
+                      <i className="fab fa-github"></i>
+                      Repo
+                    </a>
                     {project.liveDemo && (
                       <a
                         href={project.liveDemo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-3 bg-[#3b82f6]/30 hover:bg-[#3b82f6]/50 text-[#f9fafb] py-2 px-3 rounded-lg transition-all duration-300 border border-[#3b82f6]/30 hover:border-[#3b82f6]/60 hover:shadow-lg flex items-center justify-center text-sm sm:text-base gap-1.5"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#3b82f6]/30 text-white text-xs border border-[#60a5fa]/50 hover:bg-[#3b82f6]/50 transition"
                       >
-                        <i className="fas fa-external-link-alt text-xs"></i>
-                        <span className="whitespace-nowrap">Live</span>
+                        <i className="fas fa-external-link-alt text-[10px]"></i>
+                        Live
                       </a>
                     )}
                   </div>
                 </div>
-              </div>
-            </Motion.div>
-          ))}
+              </Motion.article>
+            ))}
+          </div>
         </Motion.div>
       </div>
 
