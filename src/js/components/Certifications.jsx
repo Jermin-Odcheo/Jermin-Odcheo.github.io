@@ -28,7 +28,35 @@ const modalVariants = {
   exit: { opacity: 0, scale: 0.96, y: 8, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } },
 };
 
+/**
+ * @typedef {Object} CertificateBase
+ * @property {string} id
+ * @property {string} platform
+ * @property {string} title
+ * @property {string} file
+ * @property {string} icon
+ * @property {string} tag
+ * @property {[string, string]} colors
+ * @property {string} description
+ */
+
+/**
+ * @typedef {CertificateBase & {
+ *  preview: string,
+ *  full: string | null,
+ *  tags: string[]
+ * }} CertificateState
+ */
+
+/**
+ * @typedef {Object} PdfRenderResult
+ * @property {string} id
+ * @property {string} preview
+ * @property {string} full
+ */
+
 // Base certificate data
+/** @type {CertificateBase[]} */
 const baseCertificates = [
   {
     id: 'ibm-certificate',
@@ -153,7 +181,8 @@ const renderPdfToDataUrl = async (fileUrl, scale = 1.2) => {
 
 // Component
 export default function Certifications() {
-  const { ref, inView } = useInView({ once: true, threshold: 0.1 });
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  /** @type {[CertificateState | null, React.Dispatch<React.SetStateAction<CertificateState | null>>]} */
   const [previewCert, setPreviewCert] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef(null);
@@ -168,7 +197,9 @@ export default function Certifications() {
     }
   }, []);
 
-  const [certificates, setCertificates] = useState(() =>
+  const [certificates, setCertificates] = useState(
+    /** @returns {CertificateState[]} */
+    () =>
       baseCertificates.map((c) => ({
         ...c,
         preview: generatePlaceholder(c.title, c.platform, c.colors[0], c.colors[1]),
@@ -180,23 +211,29 @@ export default function Certifications() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      /** @type {PromiseSettledResult<PdfRenderResult>[]} */
       const results = await Promise.allSettled(
-          baseCertificates.map(async (c) => ({
-            id: c.id,
-            preview: await renderPdfToDataUrl(c.file, 0.9),
-            full: await renderPdfToDataUrl(c.file, 1.8),
-          }))
+        baseCertificates.map(async (c) => ({
+          id: c.id,
+          preview: await renderPdfToDataUrl(c.file, 0.9),
+          full: await renderPdfToDataUrl(c.file, 1.8),
+        }))
       );
       if (cancelled) return;
       setCertificates((prev) =>
-          prev.map((c) => {
-            const r = results.find((x) => x.status === 'fulfilled' && x.value.id === c.id);
-            return r ? { ...c, preview: r.value.preview, full: r.value.full } : c;
-          })
+        prev.map((c) => {
+          const r = results.find(
+            (x) => x.status === 'fulfilled' && x.value.id === c.id
+          );
+          return r && r.status === 'fulfilled'
+            ? { ...c, preview: r.value.preview, full: r.value.full }
+            : c;
+        })
       );
     })();
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const selectCertificate = (index, buttonEl) => {
@@ -376,7 +413,7 @@ export default function Certifications() {
 
         {/* ── Modal ── */}
         <AnimatePresence>
-          {previewCert && (
+          {Boolean(previewCert) && (
               <Motion.div
                   className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-60 p-3 sm:p-6"
                   variants={backdropVariants}

@@ -18,6 +18,7 @@ export default function Projects() {
   // Restore in-view tracking used by the section (prevents ref/isInView undefined runtime crash)
   const { ref, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: true });
 
+  /** @type {[string | null, React.Dispatch<React.SetStateAction<string | null>>]} */
   const [zoomedImage, setZoomedImage] = useState(null);
 
   // Zoom state for the modal
@@ -96,7 +97,17 @@ export default function Projects() {
     applyZoom(next);
   };
 
-  const projects = [
+  const projects = /** @type {Array<{
+    id: string,
+    title: string,
+    description: string,
+    technologies: string[],
+    image: string,
+    screenshots: Array<{ src: string, title: string }>,
+    github: string,
+    liveDemo?: string,
+    category: string
+  }>} */ ([
     {
       id: 'navibot',
       title: 'NaviBot AI Chatbot',
@@ -164,22 +175,11 @@ export default function Projects() {
       github: 'https://github.com/Jermin-Odcheo/WordyGame',
       category: 'Game',
     },
-  ];
+  ]);
 
   const featuredProject = projects[0];
   const secondaryProject = projects[1];
   const moreProjects = projects.slice(2);
-
-  const orbitOrbs = [
-    { id: 'orb-1', className: 'top-8 left-8', size: 'w-72 h-72', colors: 'from-[#60a5fa]/40 via-[#a78bfa]/30 to-transparent' },
-    { id: 'orb-2', className: 'bottom-10 right-6', size: 'w-80 h-80', colors: 'from-[#22d3ee]/30 via-[#f472b6]/20 to-transparent' },
-    { id: 'orb-3', className: 'top-1/3 -right-12', size: 'w-56 h-56', colors: 'from-[#34d399]/20 via-[#60a5fa]/25 to-transparent' },
-  ];
-
-  const lightStreaks = [
-    { id: 'streak-1', className: 'top-24 left-10 w-40', rotate: '-12deg' },
-    { id: 'streak-2', className: 'bottom-28 right-16 w-52', rotate: '10deg' },
-  ];
 
   return (
     <Motion.section
@@ -190,28 +190,24 @@ export default function Projects() {
       animate={isInView ? 'visible' : 'hidden'}
       variants={staggerContainer}
     >
-      <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative">
-        <div className="text-center mb-10 sm:mb-16">
-          <Motion.p
-            className="text-xs sm:text-sm uppercase tracking-[0.4em] text-[#9ca3af]"
-            variants={fadeInUp}
-          >
-            Selected Work
-          </Motion.p>
-          <Motion.h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#f9fafb] mt-3"
-            variants={fadeInUp}
-          >
-            Featured Projects
-          </Motion.h2>
-          <Motion.p
-            className="mt-4 text-sm sm:text-base text-[#9ca3af] max-w-2xl mx-auto"
-            variants={fadeInUp}
-          >
-            Immersive, high-impact builds shaped by research, intelligent automation, and design-driven engineering.
-          </Motion.p>
-        </div>
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
 
+          <Motion.div
+            className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-12 sm:mb16"
+            variants={fadeInUp}
+          >
+          <div>
+            <p className="text-[#6b7280] text-xs tracking-[0.2em] uppercase font-medium mb-1.5">
+              Selected Work
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#f9fafb] mt-3"> Featured Projects</h2>
+            <p className="mt-4 text-sm sm:text-base text-[#9ca3af] max-w-2xl mx-auto">
+              Immersive, high-impact builds shaped by research, intelligent automation, and design-driven engineering. </p>
+          </div>
+            <span className="text-[#FFA500] text-sm font-mono tabular-nums">
+            {String(projects.length).padStart(2, '0')} Projects
+          </span>
+          </Motion.div>
         <Motion.div
           className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-start"
           variants={staggerContainer}
@@ -462,7 +458,7 @@ export default function Projects() {
       </div>
 
       {/* Full-Screen Zoom Modal (zoom + pan) - 16:9 Aspect Ratio Container */}
-      {zoomedImage && (
+      {Boolean(zoomedImage) && (
         <div
           className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-2 sm:p-4"
           onClick={closeModal}
@@ -552,7 +548,7 @@ export default function Projects() {
                   }}
                 >
                   <img
-                    src={String(zoomedImage)}
+                    src={String(zoomedImage ?? '')}
                     alt="Zoomed view"
                     draggable={false}
                     className="max-w-full max-h-full object-contain select-none"
