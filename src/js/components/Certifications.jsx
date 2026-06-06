@@ -33,7 +33,7 @@ const modalVariants = {
  * @property {string} id
  * @property {string} platform
  * @property {string} title
- * @property {string} file
+ * @property {string | {}} file
  * @property {string} icon
  * @property {string} tag
  * @property {[string, string]} colors
@@ -182,6 +182,7 @@ const renderPdfToDataUrl = async (fileUrl, scale = 1.2) => {
 // Component
 export default function Certifications() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+
   /** @type {[CertificateState | null, React.Dispatch<React.SetStateAction<CertificateState | null>>]} */
   const [previewCert, setPreviewCert] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -197,15 +198,16 @@ export default function Certifications() {
     }
   }, []);
 
+  // >>> FIXED TYPING HERE <<<
+  /** @type {[CertificateState[], React.Dispatch<React.SetStateAction<CertificateState[]>>]} */
   const [certificates, setCertificates] = useState(
-    /** @returns {CertificateState[]} */
-    () =>
-      baseCertificates.map((c) => ({
-        ...c,
-        preview: generatePlaceholder(c.title, c.platform, c.colors[0], c.colors[1]),
-        full: null,
-        tags: [c.platform, c.tag],
-      }))
+      () =>
+          baseCertificates.map((c) => ({
+            ...c,
+            preview: generatePlaceholder(c.title, c.platform, c.colors[0], c.colors[1]),
+            full: null,
+            tags: [c.platform, c.tag],
+          }))
   );
 
   useEffect(() => {
@@ -213,22 +215,22 @@ export default function Certifications() {
     (async () => {
       /** @type {PromiseSettledResult<PdfRenderResult>[]} */
       const results = await Promise.allSettled(
-        baseCertificates.map(async (c) => ({
-          id: c.id,
-          preview: await renderPdfToDataUrl(c.file, 0.9),
-          full: await renderPdfToDataUrl(c.file, 1.8),
-        }))
+          baseCertificates.map(async (c) => ({
+            id: c.id,
+            preview: await renderPdfToDataUrl(c.file, 0.9),
+            full: await renderPdfToDataUrl(c.file, 1.8),
+          }))
       );
       if (cancelled) return;
       setCertificates((prev) =>
-        prev.map((c) => {
-          const r = results.find(
-            (x) => x.status === 'fulfilled' && x.value.id === c.id
-          );
-          return r && r.status === 'fulfilled'
-            ? { ...c, preview: r.value.preview, full: r.value.full }
-            : c;
-        })
+          prev.map((c) => {
+            const r = results.find(
+                (x) => x.status === 'fulfilled' && x.value.id === c.id
+            );
+            return r && r.status === 'fulfilled'
+                ? { ...c, preview: r.value.preview, full: r.value.full }
+                : c;
+          })
       );
     })();
     return () => {
@@ -242,9 +244,12 @@ export default function Certifications() {
     buttonEl?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   };
 
+  /** @type {CertificateState | undefined} */
   const active = certificates[activeIndex];
-  const activeTags = /** @type {string[]} */ (active?.tags ?? []);
-  const previewTags = /** @type {string[]} */ (previewCert?.tags ?? []);
+  /** @type {string[]} */
+  const activeTags = active?.tags ? Array.from(active.tags) : [];
+  /** @type {string[]} */
+  const previewTags = previewCert?.tags ? Array.from(previewCert.tags) : [];
 
   return (
       <Motion.section
@@ -289,14 +294,14 @@ export default function Certifications() {
                   onClick={() => setPreviewCert(active)}
               >
                 <div
-                  className="absolute inset-0 opacity-60"
-                  style={{ background: `linear-gradient(135deg, ${active?.colors?.[0] || '#1f2937'}22, ${active?.colors?.[1] || '#374151'}22)` }}
+                    className="absolute inset-0 opacity-60"
+                    style={{ background: `linear-gradient(135deg, ${active?.colors?.[0] || '#1f2937'}22, ${active?.colors?.[1] || '#374151'}22)` }}
                 />
                 <img
-                  src={active?.preview}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover scale-105 blur-xl opacity-35"
+                    src={active?.preview}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover scale-105 blur-xl opacity-35"
                 />
                 <img
                     src={active?.preview}
@@ -319,8 +324,8 @@ export default function Certifications() {
                     </span>
                     </div>
                     <h3
-                      className="text-[#f9fafb] text-lg sm:text-xl font-bold leading-snug max-w-sm"
-                      style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)' }}
+                        className="text-[#f9fafb] text-lg sm:text-xl font-bold leading-snug max-w-sm"
+                        style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)' }}
                     >
                       {active?.title}
                     </h3>
@@ -336,7 +341,7 @@ export default function Certifications() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-3.5">
-                {activeTags.map((t) => (
+                {activeTags && activeTags.length > 0 && activeTags.map((t) => (
                     <span
                         key={t}
                         className="px-2.5 py-1 bg-[#1f2937]/70 text-[#d1d5db] text-xs rounded-full border border-[#374151]/60"
@@ -354,19 +359,23 @@ export default function Certifications() {
                 className="flex flex-col gap-2 overflow-y-auto max-h-95 lg:max-h-none pr-0.5"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#374151 transparent' }}
             >
-              {certificates.map((cert, i) => {
+              {
+                certificates.map((cert, i) => {
                 const isActive = i === activeIndex;
+                const buttonClass = [
+                  'w-full text-left rounded-xl border flex items-center gap-3 p-2.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4b5563]',
+                  isActive
+                      ? 'bg-[#1f2937]/90 border-[#4b5563]'
+                      : 'bg-transparent border-[#374151]/30 hover:bg-[#1f2937]/50 hover:border-[#374151]/70',
+                ].join(' ');
+                const titleClass = ['text-sm font-semibold leading-tight truncate', isActive ? 'text-[#f9fafb]' : 'text-[#d1d5db]'].join(' ');
+                const indexClass = ['text-xs tabular-nums font-mono shrink-0', isActive ? 'text-[#9ca3af]' : 'text-[#374151]'].join(' ');
                 return (
                     <button
                         key={cert.id}
                         data-active={isActive}
                         onClick={(e) => selectCertificate(i, e.currentTarget)}
-                        className={[
-                          'w-full text-left rounded-xl border flex items-center gap-3 p-2.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4b5563]',
-                          isActive
-                              ? 'bg-[#1f2937]/90 border-[#4b5563]'
-                              : 'bg-transparent border-[#374151]/30 hover:bg-[#1f2937]/50 hover:border-[#374151]/70',
-                        ].join(' ')}
+                        className={buttonClass}
                     >
                       <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-[#374151]/30">
                         <img
@@ -377,12 +386,12 @@ export default function Certifications() {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={['text-sm font-semibold leading-tight truncate', isActive ? 'text-[#f9fafb]' : 'text-[#d1d5db]'].join(' ')}>
+                        <p className={titleClass}>
                           {cert.title}
                         </p>
                         <p className="text-[#6b7280] text-xs mt-0.5 truncate">{cert.platform}</p>
                       </div>
-                      <span className={['text-xs tabular-nums font-mono shrink-0', isActive ? 'text-[#9ca3af]' : 'text-[#374151]'].join(' ')}>
+                      <span className={indexClass}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                     </button>
@@ -394,19 +403,22 @@ export default function Certifications() {
 
           {/* Mobile dot nav */}
           <div className="flex items-center justify-center gap-2 mt-5 lg:hidden">
-            {certificates.map((_, i) => (
-                <button
-                    key={i}
-                    onClick={() => selectCertificate(i)}
-                    aria-label={`Certificate ${i + 1}`}
-                    className={[
-                      'rounded-full transition-all duration-200',
-                      i === activeIndex
-                          ? 'w-5 h-1.5 bg-[#9ca3af]'
-                          : 'w-1.5 h-1.5 bg-[#374151] hover:bg-[#6b7280]',
-                    ].join(' ')}
-                />
-            ))}
+            {certificates.map((_, i) => {
+              const dotClass = [
+                'rounded-full transition-all duration-200',
+                i === activeIndex
+                    ? 'w-5 h-1.5 bg-[#9ca3af]'
+                    : 'w-1.5 h-1.5 bg-[#374151] hover:bg-[#6b7280]',
+              ].join(' ');
+              return (
+                  <button
+                      key={i}
+                      onClick={() => selectCertificate(i)}
+                      aria-label={`Certificate ${i + 1}`}
+                      className={dotClass}
+                  />
+              );
+            })}
           </div>
 
         </div>
@@ -462,7 +474,7 @@ export default function Certifications() {
                   </div>
 
                   <div className="px-4 sm:px-5 py-3 border-t border-[#1f2937] flex items-center gap-2 flex-wrap">
-                    {previewTags.map((t) => (
+                    {previewTags && previewTags.length > 0 && previewTags.map((t) => (
                         <span
                             key={t}
                             className="px-2 py-0.5 bg-[#1f2937] text-[#9ca3af] text-xs rounded-full border border-[#374151]/50"

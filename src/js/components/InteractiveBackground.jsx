@@ -72,7 +72,7 @@ export default function InteractiveBackground() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0">
       {/* Static gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#111827] via-[#1a202c] to-[#111827]" />
+      <div className="absolute inset-0 bg-linear-to-br from-[#111827] via-[#1a202c] to-[#111827]" />
 
       {/* Canvas-drawn particles — zero React re-renders */}
       <canvas ref={canvasRef} className="absolute inset-0" />

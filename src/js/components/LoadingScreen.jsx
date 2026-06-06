@@ -32,7 +32,7 @@ export default function LoadingScreen({ progress = 0, onDone }) {
   return (
     <div
       onTransitionEnd={handleTransitionEnd}
-      className="fixed inset-0 bg-[#111827] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 ease-out"
+      className="fixed inset-0 bg-[#111827] flex flex-col items-center justify-center z-9999 transition-opacity duration-500 ease-out"
       style={{ opacity: fading ? 0 : 1, pointerEvents: fading ? 'none' : 'auto' }}
     >
       {/* Logo */}
@@ -43,7 +43,7 @@ export default function LoadingScreen({ progress = 0, onDone }) {
       {/* Progress bar */}
       <div className="w-56 sm:w-72 h-1 bg-[#374151] rounded-full overflow-hidden mb-4">
         <div
-          className="h-full bg-gradient-to-r from-[#6b7280] to-[#f9fafb] rounded-full transition-all duration-300 ease-out"
+          className="h-full bg-linear-to-r from-[#6b7280] to-[#f9fafb] rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>

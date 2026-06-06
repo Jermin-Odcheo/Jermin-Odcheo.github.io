@@ -221,7 +221,7 @@ export default function Projects() {
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
               >
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/10 via-transparent to-[#22d3ee]/10" />
+                  <div className="absolute inset-0 bg-linear-to-br from-[#3b82f6]/10 via-transparent to-[#22d3ee]/10" />
                 </div>
                 <div className="relative">
                   <div className="relative h-52 sm:h-60 overflow-hidden">
@@ -297,7 +297,7 @@ export default function Projects() {
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
               >
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute -inset-px bg-gradient-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
+                  <div className="absolute -inset-px bg-linear-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
                 </div>
                 <div className="relative p-5 sm:p-6">
                   <div className="flex items-start gap-4">
@@ -311,7 +311,7 @@ export default function Projects() {
                           onClick={() => zoomImage(secondaryProject.image)}
                         />
                       ) : (
-                        <div className="h-full w-full bg-gradient-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
+                        <div className="h-full w-full bg-linear-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
                           No preview
                         </div>
                       )}
@@ -381,7 +381,7 @@ export default function Projects() {
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
               >
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute -inset-px bg-gradient-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
+                  <div className="absolute -inset-px bg-linear-to-r from-[#3b82f6]/40 via-transparent to-[#22d3ee]/40 rounded-2xl" />
                 </div>
                 <div className="relative p-5 sm:p-6">
                   <div className="flex items-start gap-4">
@@ -395,7 +395,7 @@ export default function Projects() {
                           onClick={() => zoomImage(project.image)}
                         />
                       ) : (
-                        <div className="h-full w-full bg-gradient-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
+                        <div className="h-full w-full bg-linear-to-br from-[#1f2937] to-[#374151] flex items-center justify-center text-white/60 text-xs">
                           No preview
                         </div>
                       )}
