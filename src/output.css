@@ -699,10 +699,10 @@
     text-align: left;
   }
   .font-mono {
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), serif;
   }
   .font-sans {
-    font-family: var(--font-sans);
+    font-family: var(--font-sans), serif;
   }
   .text-2xl {
     font-size: var(--text-2xl);
@@ -829,7 +829,7 @@
     font-style: italic;
   }
   .opacity-0 {
-    opacity: 0%;
+    opacity: 0;
   }
   .opacity-100 {
     opacity: 100%;
@@ -989,7 +989,7 @@
   .md\:border-0 {
     @media (width >= 48rem) {
       border-style: var(--tw-border-style);
-      border-width: 0px;
+      border-width: 0;
     }
   }
   .md\:p-0 {

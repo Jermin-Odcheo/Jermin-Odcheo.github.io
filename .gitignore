@@ -26,5 +26,8 @@ dist-ssr
 # Build output (docs folder for GitHub Pages)
 docs/
 
+# Generated CSS (Tailwind output)
+src/output.css
+
 # Profile image - keep original HD file secure
 src/assets/profile/profile.png
